@@ -1,65 +1,92 @@
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-export default function Home() {
+export default function LoginPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="flex min-h-screen font-sans">
+      {/* Left Area - Branding Gradient */}
+      <div className="hidden lg:flex flex-col justify-center w-1/2 bg-gradient-to-br from-indigo-600 via-blue-600 to-indigo-900 text-white p-12 relative overflow-hidden">
+        {/* Decorative background elements */}
+        <div className="absolute top-0 right-0 -translate-y-12 translate-x-12 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 translate-y-12 -translate-x-12 w-80 h-80 bg-blue-400/20 rounded-full blur-3xl"></div>
+        
+        <div className="max-w-lg mx-auto relative z-10">
+          <div className="bg-white p-4 rounded-xl inline-block mb-12 shadow-xl shadow-black/10">
+            <Image 
+              src="/logo.png" 
+              alt="Ensign Holdings" 
+              width={180} 
+              height={55} 
+              className="object-contain" 
+              priority
+            />
+          </div>
+          <h1 className="text-6xl font-extrabold mb-6 tracking-tight leading-tight">Hey, Hello!</h1>
+          <h2 className="text-2xl font-light mb-8 text-blue-100 opacity-90">
+            Welcome to the Ensign Holdings Centralized CRM Platform.
+          </h2>
+          <p className="text-blue-100/70 leading-relaxed text-lg">
+            We provide all the advantages that can simplify your data capture and analytics without any further requirements.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+      </div>
+
+      {/* Right Area - Login Form */}
+      <div className="flex flex-col justify-center w-full lg:w-1/2 bg-white px-8 sm:px-16 lg:px-24">
+        <div className="w-full max-w-md mx-auto space-y-10">
+          
+          {/* Mobile Logo Fallback */}
+          <div className="lg:hidden flex justify-center mb-10 mt-8">
+            <Image 
+              src="/logo.png" 
+              alt="Ensign Holdings" 
+              width={200} 
+              height={60} 
+              className="object-contain" 
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
+
+          <div className="text-center space-y-3">
+            <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight">Welcome Back</h2>
+            <p className="text-slate-500 font-medium">Let's get started with your workspace.</p>
+          </div>
+
+          <form className="space-y-6 mt-8">
+            <div className="space-y-3">
+              <Label htmlFor="email" className="text-slate-700 font-semibold ml-2">Email Address</Label>
+              <Input 
+                id="email" 
+                type="email" 
+                placeholder="manager@floragas.co.zw" 
+                required 
+                className="h-14 px-6 text-base rounded-full border-slate-200 focus:border-indigo-600 focus:ring-indigo-600 bg-slate-50/50 shadow-sm transition-all"
+              />
+            </div>
+            
+            <div className="space-y-3">
+              <Label htmlFor="password" className="text-slate-700 font-semibold ml-2">Password</Label>
+              <Input 
+                id="password" 
+                type="password"
+                placeholder="••••••••" 
+                required 
+                className="h-14 px-6 text-base rounded-full border-slate-200 focus:border-indigo-600 focus:ring-indigo-600 bg-slate-50/50 shadow-sm transition-all"
+              />
+              <div className="flex justify-end pt-1">
+                <a href="#" className="text-sm font-semibold text-indigo-600 hover:text-indigo-500 transition-colors">
+                  Forgot Password?
+                </a>
+              </div>
+            </div>
+
+            <Button className="w-full h-14 mt-4 text-lg rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold tracking-wide shadow-lg shadow-indigo-600/30 transition-all hover:-translate-y-0.5">
+              Login
+            </Button>
+          </form>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
