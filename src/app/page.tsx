@@ -1,7 +1,5 @@
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { LoginForm } from "@/components/login-form";
 
 export default function LoginPage() {
   return (
@@ -53,38 +51,9 @@ export default function LoginPage() {
             <p className="text-slate-500 font-medium">Let's get started with your workspace.</p>
           </div>
 
-          <form className="space-y-6 mt-8">
-            <div className="space-y-3">
-              <Label htmlFor="email" className="text-slate-700 font-semibold ml-2">Email Address</Label>
-              <Input 
-                id="email" 
-                type="email" 
-                placeholder="manager@floragas.co.zw" 
-                required 
-                className="h-14 px-6 text-base rounded-full border-slate-200 focus:border-indigo-600 focus:ring-indigo-600 bg-slate-50/50 shadow-sm transition-all"
-              />
-            </div>
-            
-            <div className="space-y-3">
-              <Label htmlFor="password" className="text-slate-700 font-semibold ml-2">Password</Label>
-              <Input 
-                id="password" 
-                type="password"
-                placeholder="••••••••" 
-                required 
-                className="h-14 px-6 text-base rounded-full border-slate-200 focus:border-indigo-600 focus:ring-indigo-600 bg-slate-50/50 shadow-sm transition-all"
-              />
-              <div className="flex justify-end pt-1">
-                <a href="#" className="text-sm font-semibold text-indigo-600 hover:text-indigo-500 transition-colors">
-                  Forgot Password?
-                </a>
-              </div>
-            </div>
-
-            <Button className="w-full h-14 mt-4 text-lg rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold tracking-wide shadow-lg shadow-indigo-600/30 transition-all hover:-translate-y-0.5">
-              Login
-            </Button>
-          </form>
+          {/* Interactive Form Component */}
+          <LoginForm />
+          
         </div>
       </div>
     </div>

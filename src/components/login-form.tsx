@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label'
 import { login } from '@/app/login/actions'
 
 const initialState = {
-  error: null,
+  error: "",
 }
 
 export function LoginForm() {
