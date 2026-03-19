@@ -1,114 +1,160 @@
-import Link from "next/link"
-import { LayoutDashboard, Users, Building2, Settings, LogOut, Search, Bell } from "lucide-react"
-import { logout } from "@/app/login/actions"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import Link from 'next/link'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+  LayoutDashboard,
+  Box,
+  ShoppingCart,
+  Users,
+  MessageSquare,
+  Mail,
+  Workflow,
+  BarChart,
+  Link2,
+  HelpCircle,
+  MessageCircle,
+  Settings,
+  ChevronLeft,
+  Search,
+  Command,
+  ChevronRight
+} from 'lucide-react'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-screen bg-slate-50 font-sans overflow-hidden">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col z-10 shadow-sm relative">
-        <div className="h-16 flex items-center px-6 border-b border-slate-100 shrink-0">
-          <span className="text-2xl font-black tracking-tight text-slate-900">
-            ENSIGN<span className="text-indigo-600">.</span>
-          </span>
+    <div className="min-h-screen bg-[#F0F2F5] p-2 sm:p-4 flex gap-4">
+      
+      {/* Sidebar - Matching Uxerflow Light Sidebar exactly */}
+      <aside className="w-[260px] bg-white border border-slate-200 flex flex-col hidden lg:flex shrink-0 rounded-2xl shadow-sm h-[calc(100vh-32px)]">
+        {/* Header */}
+        <div className="p-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold tracking-tighter">
+              EN
+            </div>
+            <div>
+              <h2 className="text-sm font-bold text-slate-900 leading-none mb-1">Ensign Inc.</h2>
+              <p className="text-[10px] text-slate-400 font-semibold bg-slate-100 w-max px-1.5 py-0.5 rounded-sm">Free Plan</p>
+            </div>
+          </div>
+          <button className="text-slate-400 hover:text-slate-600 transition">
+            <ChevronLeft size={16} />
+          </button>
         </div>
-        <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-          <p className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-4">Dashboard</p>
-          <Link href="/admin" className="flex items-center gap-3 px-3 py-2.5 bg-indigo-50/50 text-indigo-700 rounded-lg font-semibold transition-colors">
-            <LayoutDashboard className="w-5 h-5" />
-            Overview
+
+        {/* Search */}
+        <div className="px-4 py-2">
+          <div className="relative group">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 group-focus-within:text-slate-600" />
+            <input 
+              type="text" 
+              placeholder="Search" 
+              className="w-full bg-slate-50 hover:bg-slate-100 border border-slate-200/60 rounded-xl pl-9 pr-8 py-2 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all placeholder:text-slate-400"
+            />
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-0.5 text-[10px] font-bold text-slate-300 bg-white border border-slate-200 px-1 py-0.5 rounded uppercase">
+              <Command className="w-2.5 h-2.5"/> K
+            </div>
+          </div>
+        </div>
+
+        {/* Scrollable Nav Area */}
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-7 scrollbar-hide">
+          
+          {/* Main Menu */}
+          <div>
+            <h3 className="text-[10px] uppercase text-slate-400 font-bold mb-3 px-3 tracking-widest">Main Menu</h3>
+            <nav className="space-y-0.5">
+              <Link href="/admin" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+                <LayoutDashboard className="w-4 h-4" /> Dashboard
+              </Link>
+              {/* Active Item Example matching screenshot */}
+              <Link href="/admin/products" className="flex items-center gap-3 px-3 py-2 text-[13px] font-bold text-slate-900 bg-orange-50/80 border-l-2 border-[#FF5A20] rounded-r-lg relative -left-[1px]">
+                <Box className="w-4 h-4 text-[#FF5A20]" /> Subsidiaries
+              </Link>
+              <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+                <ShoppingCart className="w-4 h-4" /> Reports
+              </Link>
+              <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+                <Users className="w-4 h-4" /> Customers
+              </Link>
+              <Link href="#" className="flex items-center justify-between px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+                <div className="flex items-center gap-3">
+                  <MessageSquare className="w-4 h-4" /> Message
+                </div>
+                <div className="bg-slate-100 text-slate-500 text-[10px] font-bold px-1.5 py-0.5 rounded-full">33</div>
+              </Link>
+            </nav>
+          </div>
+
+          {/* Tools */}
+          <div>
+            <h3 className="text-[10px] uppercase text-slate-400 font-bold mb-3 px-3 tracking-widest">Tools</h3>
+            <nav className="space-y-0.5">
+              <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+                <Mail className="w-4 h-4" /> Email
+              </Link>
+              <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+                <Workflow className="w-4 h-4" /> Automation
+              </Link>
+              <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+                <BarChart className="w-4 h-4" /> Analytics
+              </Link>
+              <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+                <Link2 className="w-4 h-4" /> Integration
+              </Link>
+            </nav>
+          </div>
+
+          {/* Workspace */}
+          <div>
+            <h3 className="text-[10px] uppercase text-slate-400 font-bold mb-3 px-3 tracking-widest">Workspace</h3>
+            <nav className="space-y-0.5">
+              <Link href="#" className="flex items-center justify-between px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+                <div className="flex items-center gap-3">
+                  <span className="w-2 h-2 rounded bg-[#4F46E5] shadow-[0_0_8px_rgba(79,70,229,0.5)]"></span> Flora Gas
+                </div>
+                <div className="bg-slate-50 text-slate-400 text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-slate-100">5</div>
+              </Link>
+              <Link href="#" className="flex items-center justify-between px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+                <div className="flex items-center gap-3">
+                  <span className="w-2 h-2 rounded bg-[#EC4899] shadow-[0_0_8px_rgba(236,72,153,0.5)]"></span> Tarand IT
+                </div>
+                <div className="bg-slate-50 text-slate-400 text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-slate-100">4</div>
+              </Link>
+            </nav>
+          </div>
+        </div>
+
+        {/* Bottom Section */}
+        <div className="p-4 space-y-0.5">
+          <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-500 hover:bg-slate-50 rounded-lg transition-colors">
+            <HelpCircle className="w-4 h-4" /> Help center
           </Link>
-          <Link href="/admin/organizations" className="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-lg font-medium transition-colors">
-            <Building2 className="w-5 h-5 opacity-70" />
-            Subsidiaries
+          <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-500 hover:bg-slate-50 rounded-lg transition-colors">
+            <MessageCircle className="w-4 h-4" /> Feedback
           </Link>
-          <Link href="/admin/users" className="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-lg font-medium transition-colors">
-            <Users className="w-5 h-5 opacity-70" />
-            Staff & Users
+          <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-500 hover:bg-slate-50 rounded-lg transition-colors">
+            <Settings className="w-4 h-4" /> Settings
           </Link>
           
-          <p className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 mt-8">Configuration</p>
-          <Link href="/admin/settings" className="flex items-center gap-3 px-3 py-2.5 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-lg font-medium transition-colors">
-            <Settings className="w-5 h-5 opacity-70" />
-            General Settings
-          </Link>
-        </nav>
-
-        {/* User Card at bottom of sidebar */}
-        <div className="p-4 border-t border-slate-100 m-2 mt-auto">
-          <div className="flex items-center gap-3 bg-slate-50 rounded-lg p-2 ring-1 ring-slate-200/50">
-            <Avatar className="h-9 w-9 border border-white shadow-sm">
-              <AvatarImage src="" />
-              <AvatarFallback className="bg-indigo-600 text-white font-bold text-xs">SA</AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-slate-900 truncate">Chief Admin</p>
-              <p className="text-xs text-slate-500 truncate">admin@ensign.co</p>
+          {/* Upgrade Card */}
+          <div className="mt-4 bg-[#FFF5F0] border border-[#FFE8E0] rounded-2xl p-3 flex items-center justify-between group cursor-pointer hover:bg-[#FFEAE0] transition-colors">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-[#FF5A20] flex items-center justify-center text-white shadow-sm">
+                <Workflow className="w-[14px] h-[14px]" />
+              </div>
+              <div className="flex flex-col">
+                <p className="text-[11px] font-bold text-slate-900 leading-tight">Upgrade & unlock</p>
+                <p className="text-[10px] text-slate-500 font-medium">all features</p>
+              </div>
             </div>
+            <ChevronRight className="w-3.5 h-3.5 text-[#FF5A20] group-hover:translate-x-0.5 transition-transform" />
           </div>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
-        {/* Top Header */}
-        <header className="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200/60 flex items-center justify-between px-6 shrink-0 sticky top-0 z-20">
-          <div className="flex items-center flex-1 max-w-md">
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-              <Input
-                type="search"
-                placeholder="Search branches, accounts..."
-                className="w-full pl-9 bg-slate-100/50 border-transparent focus:border-indigo-500 focus:bg-white rounded-full h-9 transition-all text-sm"
-              />
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-4 ml-4">
-            <button className="text-slate-400 hover:text-slate-600 relative p-2 transition-colors rounded-full hover:bg-slate-100">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-            </button>
-            <div className="w-px h-6 bg-slate-200 mx-1"></div>
-            
-            <DropdownMenu>
-              <DropdownMenuTrigger className="focus:outline-none flex items-center gap-2 hover:bg-slate-50 p-1 pr-2 rounded-full transition-colors border border-transparent hover:border-slate-200">
-                <Avatar className="h-8 w-8 shadow-sm">
-                  <AvatarImage src="" />
-                  <AvatarFallback className="bg-indigo-100 text-indigo-700 text-xs font-bold">SA</AvatarFallback>
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 mt-2 rounded-xl shadow-xl shadow-slate-200/20 ring-1 ring-slate-200/50 border-none p-1">
-                <DropdownMenuLabel className="font-semibold px-3 py-2 text-slate-800">My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-slate-100 mx-2" />
-                <DropdownMenuItem className="rounded-lg mx-1 text-slate-600 font-medium cursor-pointer hover:text-slate-900 focus:bg-slate-50">Profile Settings</DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-slate-100 mx-2" />
-                <form action={logout} className="mx-1 mt-1">
-                  <button type="submit" className="flex w-full items-center text-red-600 bg-red-50/50 hover:bg-red-50 px-2 py-2 rounded-lg transition-colors font-medium">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Secure Log Out</span>
-                  </button>
-                </form>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </header>
-
-        {/* Page Content */}
-        <div className="flex-1 overflow-auto p-6 md:p-8 bg-slate-50/50">
-          <div className="max-w-6xl mx-auto">
-            {children}
-          </div>
+      {/* Main Content Area */}
+      <main className="flex-1 flex flex-col h-[calc(100vh-32px)] bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden relative">
+        <div className="flex-1 overflow-y-auto px-8 py-8">
+          {children}
         </div>
       </main>
     </div>
