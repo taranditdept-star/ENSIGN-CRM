@@ -6,12 +6,12 @@ import { revalidatePath } from 'next/cache'
 export async function captureCustomer(subsidiaryId: string, prevState: unknown, formData: FormData) {
   const supabase = await createClient()
 
-  // Extract core structured fields
+  // Map frontend input names to physical PostgreSQL column names gracefully
   const first_name = (formData.get('first_name') as string) || ''
-  const last_name = (formData.get('last_name') as string) || ''
-  const phone_number = (formData.get('phone_number') as string) || ''
+  const surname = (formData.get('last_name') as string) || ''
+  const phone = (formData.get('phone_number') as string) || ''
 
-  if (!first_name || !phone_number) {
+  if (!first_name || !phone) {
     return { error: 'First Name and Phone Number are required.' }
   }
 
@@ -25,18 +25,30 @@ export async function captureCustomer(subsidiaryId: string, prevState: unknown, 
     }
   })
 
-  // Hack for POC: If the ID is a mock string ("1" or "2"), insert with a NULL foreign key 
-  // since Postgres UUID validation will reject "1" for the subsidiary_id column.
-  const isMockId = subsidiaryId === "1" || subsidiaryId === "2"
+  // Handle Mock ID logic to satisfy PostgreSQL strict UUID / FK constraints
+  let validSubId = subsidiaryId
+  if (subsidiaryId === "1" || subsidiaryId === "2") {
+    const { data: existingSubs } = await supabase.from('subsidiaries').select('id').limit(1)
+    if (existingSubs && existingSubs.length > 0) {
+      validSubId = existingSubs[0].id
+    } else {
+      // Need to dynamically scaffold related hierarchies to respect Postgres ON DELETE RESTRICT foreign keys
+      const { data: org } = await supabase.from('organizations').insert([{ name: 'Mock HQ' }]).select().single()
+      if (org) {
+        const { data: sub } = await supabase.from('subsidiaries').insert([{ organization_id: org.id, name: 'Mock Branch' }]).select().single()
+        if (sub) validSubId = sub.id
+      }
+    }
+  }
 
   const { error } = await supabase
     .from('customers')
     .insert([
       {
-        subsidiary_id: isMockId ? null : subsidiaryId,
+        subsidiary_id: validSubId,
         first_name,
-        last_name,
-        phone_number,
+        surname,
+        phone,
         customer_metadata: metadata
       }
     ])
@@ -46,5 +58,5 @@ export async function captureCustomer(subsidiaryId: string, prevState: unknown, 
   }
 
   revalidatePath(`/workspace/${subsidiaryId}/capture`)
-  return { success: true, message: `Successfully captured data for ${first_name} ${last_name}` }
+  return { success: true, message: `Successfully structured and committed ${first_name} ${surname}!` }
 }
