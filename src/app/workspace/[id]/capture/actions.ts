@@ -10,7 +10,6 @@ export async function captureCustomer(subsidiaryId: string, prevState: unknown, 
   const first_name = (formData.get('first_name') as string) || ''
   const last_name = (formData.get('last_name') as string) || ''
   const phone_number = (formData.get('phone_number') as string) || ''
-  const email = (formData.get('email') as string) || ''
 
   if (!first_name || !phone_number) {
     return { error: 'First Name and Phone Number are required.' }
@@ -20,8 +19,8 @@ export async function captureCustomer(subsidiaryId: string, prevState: unknown, 
   const metadata: Record<string, unknown> = {}
   
   formData.forEach((value, key) => {
-    // Next.js injects $ACTION strings into formData, securely ignore them and standard fields
-    if (!['first_name', 'last_name', 'phone_number', 'email'].includes(key) && !key.startsWith('$ACTION')) {
+    // Next.js injects $ACTION strings into formData, securely ignore them and core strict fields
+    if (!['first_name', 'last_name', 'phone_number'].includes(key) && !key.startsWith('$ACTION')) {
       metadata[key] = value
     }
   })
@@ -38,7 +37,6 @@ export async function captureCustomer(subsidiaryId: string, prevState: unknown, 
         first_name,
         last_name,
         phone_number,
-        email,
         customer_metadata: metadata
       }
     ])
