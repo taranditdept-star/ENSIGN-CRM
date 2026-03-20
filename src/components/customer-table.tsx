@@ -8,7 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
 import { MoreHorizontal, User, Phone, MapPin, Calendar, ExternalLink } from "lucide-react"
 import {
   DropdownMenu,
@@ -20,7 +19,21 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 
-export function CustomerTable({ customers }: { customers: any[] }) {
+export type Customer = {
+  id: string
+  first_name: string
+  surname: string
+  phone: string
+  physical_address: string | null
+  created_at: string
+  customer_metadata?: {
+    customerType?: string
+    tier?: string
+    [key: string]: any
+  }
+}
+
+export function CustomerTable({ customers }: { customers: Customer[] }) {
   if (!customers || customers.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-12 bg-white rounded-2xl border-2 border-dashed border-slate-100 text-center">
@@ -51,7 +64,8 @@ export function CustomerTable({ customers }: { customers: any[] }) {
               <TableCell className="py-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold shadow-sm group-hover:bg-indigo-100 transition-colors">
-                    {cust.first_name[0]}{cust.surname[0]}
+                    {(cust.first_name?.[0] || 'U').toUpperCase()}
+                    {(cust.surname?.[0] || '').toUpperCase()}
                   </div>
                   <div className="flex flex-col">
                     <span className="text-slate-900 font-bold text-[15px]">{cust.first_name} {cust.surname}</span>
@@ -91,10 +105,8 @@ export function CustomerTable({ customers }: { customers: any[] }) {
               </TableCell>
               <TableCell className="py-4 text-right">
                 <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-indigo-600 transition-colors">
-                      <MoreHorizontal className="w-4 h-4" />
-                    </Button>
+                  <DropdownMenuTrigger className="h-8 w-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-slate-100 transition-colors outline-none">
+                    <MoreHorizontal className="w-4 h-4" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-48 rounded-xl shadow-xl border-slate-100">
                     <DropdownMenuLabel className="font-bold text-slate-800">Actions</DropdownMenuLabel>

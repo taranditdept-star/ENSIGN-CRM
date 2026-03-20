@@ -1,7 +1,8 @@
 import { createClient } from "@/utils/supabase/server"
 import { CustomerTable } from "@/components/customer-table"
 import { CustomerFilters } from "@/components/customer-filters"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import { PlusCircle, Download } from "lucide-react"
 import Link from "next/link"
 
@@ -57,11 +58,15 @@ export default async function CustomersPage({
           <Button variant="outline" className="h-10 px-5 rounded-lg border-slate-200 text-slate-600 font-semibold hover:bg-slate-50">
             <Download className="mr-2 w-4 h-4" /> Export CSV
           </Button>
-          <Button asChild className="h-10 px-5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-sm transition-all active:scale-[0.98]">
-            <Link href={`/workspace/${id}/capture`}>
-              <PlusCircle className="mr-2 w-4 h-4" /> New Capture
-            </Link>
-          </Button>
+          <Link 
+            href={`/workspace/${id}/capture`}
+            className={cn(
+              buttonVariants({ variant: "default" }), 
+              "h-10 px-5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-sm transition-all active:scale-[0.98]"
+            )}
+          >
+            <PlusCircle className="mr-2 w-4 h-4" /> New Capture
+          </Link>
         </div>
       </div>
 
