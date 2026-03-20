@@ -1,21 +1,17 @@
 import Link from 'next/link'
 import {
   LayoutDashboard,
-  Box,
-  ShoppingCart,
   Users,
-  MessageSquare,
-  Mail,
-  Workflow,
   BarChart,
-  Link2,
   HelpCircle,
   MessageCircle,
   Settings,
-  ChevronLeft,
+  History,
+  Building2,
+  Fingerprint,
+  Download,
   Search,
-  Command,
-  ChevronRight
+  Command
 } from 'lucide-react'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -31,13 +27,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               EN
             </div>
             <div>
-              <h2 className="text-sm font-bold text-slate-900 leading-none mb-1">Ensign Inc.</h2>
-              <p className="text-[10px] text-slate-400 font-semibold bg-slate-100 w-max px-1.5 py-0.5 rounded-sm">Free Plan</p>
+              <h2 className="text-sm font-bold text-slate-900 leading-none mb-1">Ensign Holdings</h2>
+              <p className="text-[10px] text-slate-400 font-semibold bg-slate-100 w-max px-1.5 py-0.5 rounded-sm">Centralized CRM</p>
             </div>
           </div>
-          <button className="text-slate-400 hover:text-slate-600 transition">
-            <ChevronLeft size={16} />
-          </button>
         </div>
 
         {/* Search */}
@@ -63,23 +56,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <h3 className="text-[10px] uppercase text-slate-400 font-bold mb-3 px-3 tracking-widest">Main Menu</h3>
             <nav className="space-y-0.5">
               <Link href="/admin" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <LayoutDashboard className="w-4 h-4" /> Dashboard
+                <LayoutDashboard className="w-4 h-4" /> Global Dashboard
               </Link>
-              {/* Active Item Example matching screenshot */}
-              <Link href="/admin/products" className="flex items-center gap-3 px-3 py-2 text-[13px] font-bold text-slate-900 bg-orange-50/80 border-l-2 border-[#FF5A20] rounded-r-lg relative -left-[1px]">
-                <Box className="w-4 h-4 text-[#FF5A20]" /> Subsidiaries
-              </Link>
-              <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <ShoppingCart className="w-4 h-4" /> Reports
+              <Link href="/admin/subsidiaries" className="flex items-center gap-3 px-3 py-2 text-[13px] font-bold text-slate-900 bg-orange-50/80 border-l-2 border-[#FF5A20] rounded-r-lg relative -left-[1px]">
+                <Building2 className="w-4 h-4 text-[#FF5A20]" /> Subsidiaries
               </Link>
               <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <Users className="w-4 h-4" /> Customers
+                <BarChart className="w-4 h-4" /> Global Analytics
               </Link>
-              <Link href="#" className="flex items-center justify-between px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <div className="flex items-center gap-3">
-                  <MessageSquare className="w-4 h-4" /> Message
-                </div>
-                <div className="bg-slate-100 text-slate-500 text-[10px] font-bold px-1.5 py-0.5 rounded-full">33</div>
+              <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+                <Users className="w-4 h-4" /> Master Customer List
+              </Link>
+              <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+                <History className="w-4 h-4" /> Audit Trails
               </Link>
             </nav>
           </div>
@@ -89,16 +78,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <h3 className="text-[10px] uppercase text-slate-400 font-bold mb-3 px-3 tracking-widest">Tools</h3>
             <nav className="space-y-0.5">
               <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <Mail className="w-4 h-4" /> Email
+                <Fingerprint className="w-4 h-4" /> Data Deduplication
               </Link>
               <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <Workflow className="w-4 h-4" /> Automation
+                <Download className="w-4 h-4" /> Export Engine
               </Link>
               <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <BarChart className="w-4 h-4" /> Analytics
-              </Link>
-              <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <Link2 className="w-4 h-4" /> Integration
+                <MessageCircle className="w-4 h-4 text-[#25D366]" /> WhatsApp Marketing
               </Link>
             </nav>
           </div>
@@ -134,20 +120,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-500 hover:bg-slate-50 rounded-lg transition-colors">
             <Settings className="w-4 h-4" /> Settings
           </Link>
-          
-          {/* Upgrade Card */}
-          <div className="mt-4 bg-[#FFF5F0] border border-[#FFE8E0] rounded-2xl p-3 flex items-center justify-between group cursor-pointer hover:bg-[#FFEAE0] transition-colors">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-[#FF5A20] flex items-center justify-center text-white shadow-sm">
-                <Workflow className="w-[14px] h-[14px]" />
-              </div>
-              <div className="flex flex-col">
-                <p className="text-[11px] font-bold text-slate-900 leading-tight">Upgrade & unlock</p>
-                <p className="text-[10px] text-slate-500 font-medium">all features</p>
-              </div>
-            </div>
-            <ChevronRight className="w-3.5 h-3.5 text-[#FF5A20] group-hover:translate-x-0.5 transition-transform" />
-          </div>
         </div>
       </aside>
 
