@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { SectionDefinition } from "@/lib/schemas"
-import { captureCustomer } from "@/app/workspace/[id]/capture/actions"
+import { captureCustomer, ActionState } from "@/app/workspace/[id]/capture/actions"
 import { toast } from "sonner"
 import { Loader2, UserPlus } from "lucide-react"
 
@@ -30,7 +30,7 @@ export function DynamicCaptureForm({
   const [state, formAction, isPending] = useActionState(captureCustomer, {
     error: "",
     success: false
-  })
+  } as ActionState)
 
   // Toast notifications for success or failure
   useEffect(() => {

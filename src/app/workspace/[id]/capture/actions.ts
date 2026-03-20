@@ -10,7 +10,7 @@ export type ActionState = {
   message?: string;
 }
 
-export async function captureCustomer(prevState: ActionState, formData: FormData) {
+export async function captureCustomer(prevState: ActionState, formData: FormData): Promise<ActionState> {
   const supabase = await createClient()
   const subsidiaryId = formData.get('subsidiaryId') as string
 
