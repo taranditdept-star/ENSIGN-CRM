@@ -31,9 +31,13 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // RBAC Routing Logic
-  if (user && request.nextUrl.pathname === '/') {
-    // Determine the exact role to perform redirection
+  // Authentication & Public Route Logic
+  const isAuthPage = request.nextUrl.pathname === '/'
+  const isCapturePage = request.nextUrl.pathname.startsWith('/capture')
+  const isPublicRoute = isAuthPage || isCapturePage
+
+  // 1. Redirection for logged-in users on the landing page
+  if (user && isAuthPage) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('role, subsidiary_id')
@@ -44,16 +48,17 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(new URL('/admin', request.url))
     } else if (profile?.subsidiary_id) {
       return NextResponse.redirect(new URL(`/workspace/${profile.subsidiary_id}`, request.url))
-    } else {
-      return NextResponse.redirect(new URL('/workspace', request.url))
     }
+    // Fallback if no specific role/branch is found
+    return NextResponse.redirect(new URL('/workspace', request.url))
   }
 
-  // Authentication Boundary Setup
-  // All URLs require auth except the home page '/'
-  if (!user && request.nextUrl.pathname !== '/') {
+  // 2. Protection Boundary: All non-public routes require authentication
+  if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone()
     url.pathname = '/'
+    // Optional: add a redirect parameter to return here after login
+    // url.searchParams.set('next', request.nextUrl.pathname)
     return NextResponse.redirect(url)
   }
 
