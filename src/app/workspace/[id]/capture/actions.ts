@@ -2,6 +2,7 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { isValidZimbabwePhone } from '@/lib/utils'
 
 export type ActionState = {
   error?: string;
@@ -22,6 +23,10 @@ export async function captureCustomer(prevState: ActionState, formData: FormData
 
   if (!first_name || !phone) {
     return { error: 'First Name and Phone Number are required.' }
+  }
+
+  if (!isValidZimbabwePhone(phone)) {
+    return { error: 'Invalid Zimbabwe phone number format. Use 07... or +263...' }
   }
 
   // Pack remaining subsidiary-specific fields into JSONB metadata

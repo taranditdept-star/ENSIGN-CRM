@@ -1,3 +1,5 @@
+import { createClient } from "@/utils/supabase/server"
+import { QrCaptureCard } from "@/components/qr-capture-card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Users, FileText, Target, PlusCircle, MoreHorizontal } from "lucide-react"
 import {
@@ -10,21 +12,39 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 
-const recentCustomers = [
-  { id: 1, name: "Grace Ncube", phone: "+263 77 123 4567", tier: "Gold", date: "10 mins ago" },
-  { id: 2, name: "Tariro Moyo", phone: "+263 71 987 6543", tier: "Standard", date: "1 hour ago" },
-  { id: 3, name: "John Smith", phone: "+263 78 456 1230", tier: "Premium", date: "3 hours ago" },
-  { id: 4, name: "Rutendo Ndlovu", phone: "+263 73 321 0987", tier: "Standard", date: "Yesterday" },
-]
+export default async function WorkspaceOverview({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const supabase = await createClient()
 
-export default function WorkspaceOverview() {
+  // Fetch real count
+  const { count: registeredCount } = await supabase
+    .from('customers')
+    .select('*', { count: 'exact', head: true })
+    .eq('subsidiary_id', id)
+
+  // Fetch branch name
+  const { data: subData } = await supabase
+    .from('subsidiaries')
+    .select('name')
+    .eq('id', id)
+    .single()
+
+  // Fetch recent customers
+  const { data: recentCustomers } = await supabase
+    .from('customers')
+    .select('*')
+    .eq('subsidiary_id', id)
+    .order('created_at', { ascending: false })
+    .limit(5)
+
+  const branchName = subData?.name || "Flora Gas"
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">Branch Overview</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">{branchName} Overview</h1>
           <p className="text-slate-500 mt-1 font-medium">Your daily localized metrics and customer flow.</p>
         </div>
         <div className="flex gap-3">
@@ -44,9 +64,9 @@ export default function WorkspaceOverview() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-black text-slate-900">1,248</div>
+            <div className="text-3xl font-black text-slate-900">{registeredCount?.toLocaleString() || "0"}</div>
             <p className="text-sm text-slate-500 mt-2 font-medium flex items-center">
-              <span className="text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded-md mr-2">+12</span> onboarded today
+              Registered in this branch
             </p>
           </CardContent>
         </Card>
@@ -83,7 +103,10 @@ export default function WorkspaceOverview() {
       </div>
 
       {/* Main Content Area */}
-      <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-1">
+      <div className="grid gap-6 md:grid-cols-12">
+        
+        {/* Left Column: Table (Span 8) */}
+        <div className="md:col-span-8">
         
         {/* Recent Customers Table */}
         <Card className="border-slate-200 shadow-sm bg-white">
@@ -105,22 +128,20 @@ export default function WorkspaceOverview() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {recentCustomers.map((customer) => (
+                {recentCustomers?.map((customer) => (
                   <TableRow key={customer.id} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
                     <TableCell className="font-bold text-slate-800 py-4">
-                      {customer.name}
+                      {customer.first_name} {customer.surname}
                     </TableCell>
                     <TableCell className="text-slate-600 font-medium">{customer.phone}</TableCell>
                     <TableCell>
-                      <span className={`inline-flex items-center px-2.5 py-1 ${
-                        customer.tier === 'Gold' ? 'bg-amber-100 text-amber-800' : 
-                        customer.tier === 'Premium' ? 'bg-indigo-100 text-indigo-800' : 
-                        'bg-slate-100 text-slate-700'
-                      } rounded-md text-xs font-bold tracking-wide`}>
-                        {customer.tier}
+                      <span className="inline-flex items-center px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md text-xs font-bold tracking-wide">
+                        {customer.customer_metadata?.customerType || 'Domestic'}
                       </span>
                     </TableCell>
-                    <TableCell className="text-right text-slate-500 font-medium pr-6">{customer.date}</TableCell>
+                    <TableCell className="text-right text-slate-500 font-medium pr-6">
+                      {new Date(customer.created_at).toLocaleDateString()}
+                    </TableCell>
                     <TableCell>
                       <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-indigo-600">
                         <MoreHorizontal className="h-4 w-4" />
@@ -132,8 +153,14 @@ export default function WorkspaceOverview() {
             </Table>
           </CardContent>
         </Card>
-
       </div>
+
+      {/* Right Column: QR Code (Span 4) */}
+      <div className="md:col-span-4">
+        <QrCaptureCard subsidiaryId={id} />
+      </div>
+
     </div>
+  </div>
   )
 }
