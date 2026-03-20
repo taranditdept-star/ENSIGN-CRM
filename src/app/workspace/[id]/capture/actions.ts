@@ -3,13 +3,22 @@
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 
-export async function captureCustomer(subsidiaryId: string, prevState: unknown, formData: FormData) {
+export type ActionState = {
+  error?: string;
+  success?: boolean;
+  message?: string;
+}
+
+export async function captureCustomer(prevState: ActionState, formData: FormData) {
   const supabase = await createClient()
+  const subsidiaryId = formData.get('subsidiaryId') as string
 
   // Map frontend input names to physical PostgreSQL column names gracefully
-  const first_name = (formData.get('first_name') as string) || ''
-  const surname = (formData.get('last_name') as string) || ''
-  const phone = (formData.get('phone_number') as string) || ''
+  const first_name = (formData.get('firstName') as string) || ''
+  const surname = (formData.get('surname') as string) || ''
+  const phone = (formData.get('phone') as string) || ''
+  const gender = (formData.get('gender') as string) || null
+  const physical_address = (formData.get('physicalAddress') as string) || null
 
   if (!first_name || !phone) {
     return { error: 'First Name and Phone Number are required.' }
@@ -19,9 +28,10 @@ export async function captureCustomer(subsidiaryId: string, prevState: unknown, 
   const metadata: Record<string, unknown> = {}
   
   formData.forEach((value, key) => {
+    const coreFields = ['firstName', 'surname', 'phone', 'gender', 'physicalAddress', 'subsidiaryId']
     // Next.js injects $ACTION strings into formData, securely ignore them and core strict fields
-    if (!['first_name', 'last_name', 'phone_number'].includes(key) && !key.startsWith('$ACTION')) {
-      metadata[key] = value
+    if (!coreFields.includes(key) && !key.startsWith('$ACTION')) {
+      metadata[key] = value === 'true' ? true : value === 'false' ? false : value
     }
   })
 
@@ -49,6 +59,8 @@ export async function captureCustomer(subsidiaryId: string, prevState: unknown, 
         first_name,
         surname,
         phone,
+        gender,
+        physical_address,
         customer_metadata: metadata
       }
     ])
