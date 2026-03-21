@@ -1,4 +1,5 @@
-import { createClient } from "@/utils/supabase/server"
+'use client'
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -19,7 +20,7 @@ export default function ForgotPasswordPage() {
                 <Mail className="w-8 h-8 text-indigo-600" />
             </div>
             <h1 className="text-3xl font-black text-slate-900 tracking-tight">Forgot Password?</h1>
-            <p className="text-slate-500 mt-2 font-medium">No worries! Enter your email and we'll send you a reset link.</p>
+            <p className="text-slate-500 mt-2 font-medium">No worries! Enter your email and we&apos;ll send you a reset link.</p>
         </div>
 
         <form action={formAction} className="bg-white p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 space-y-6">
