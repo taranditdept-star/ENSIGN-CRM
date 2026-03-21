@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { login } from '@/app/login/actions'
+import Link from 'next/link'
 
 const initialState = {
   error: "",
@@ -43,9 +44,9 @@ export function LoginForm() {
           className="h-14 px-6 text-base rounded-full border-slate-200 focus:border-indigo-600 focus:ring-indigo-600 bg-slate-50/50 shadow-sm transition-all"
         />
         <div className="flex justify-end pt-1">
-          <a href="#" className="text-sm font-semibold text-indigo-600 hover:text-indigo-500 transition-colors">
+          <Link href="/forgot-password" className="text-sm font-semibold text-indigo-600 hover:text-indigo-500 transition-colors">
             Forgot Password?
-          </a>
+          </Link>
         </div>
       </div>
 
