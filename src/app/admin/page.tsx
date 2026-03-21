@@ -1,25 +1,17 @@
 import { createClient } from "@/utils/supabase/server"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Switch } from "@/components/ui/switch"
 import { AdminSearchBar } from "@/components/admin-search-bar"
 import {
-  Bell,
-  Share,
   Users,
-  LayoutGrid,
-  Filter,
   ArrowUpDown,
-  Settings2,
-  Download,
   Plus,
   Star,
   MoreHorizontal,
-  HelpCircle,
   Building2,
   Calendar,
   Zap
 } from "lucide-react"
+import { CopyLinkButton } from "@/components/copy-link-button"
 
 export default async function AdminDashboard({ 
   searchParams 
@@ -32,12 +24,10 @@ export default async function AdminDashboard({
   // Fetch Global Metrics
   const [
     { count: subsCount },
-    { count: customersCount },
-    { data: recentCaptures }
+    { count: customersCount }
   ] = await Promise.all([
     supabase.from('subsidiaries').select('*', { count: 'exact', head: true }),
-    supabase.from('customers').select('*', { count: 'exact', head: true }),
-    supabase.from('customers').select('id, created_at, subsidiary_id').order('created_at', { ascending: false }).limit(10)
+    supabase.from('customers').select('*', { count: 'exact', head: true })
   ])
 
   // Build Subsidiaries Query
@@ -54,11 +44,9 @@ export default async function AdminDashboard({
 
   // Final Data Mapping
   const branchData = (subsidiaries || []).map((sub, index) => {
-    // Determine branch location (mocking for now based on ID or index)
     const locations = ["Harare", "Bulawayo", "Mutare", "Gweru", "Kwekwe", "Masvingo"]
     const location = locations[index % locations.length]
     
-    // Calculate registrations
     const totalCaptures = sub.customers ? sub.customers.length : 0
     const lastCapture = sub.customers && sub.customers.length > 0 
       ? new Date(sub.customers[0].created_at).toLocaleDateString()
@@ -70,15 +58,13 @@ export default async function AdminDashboard({
       location,
       totalCaptures,
       lastCapture,
-      status: totalCaptures > 0 ? "Active" : "New",
-      checked: false
+      status: totalCaptures > 0 ? "Active" : "New"
     }
   })
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 h-full">
       
-      {/* Top Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-black text-slate-900 tracking-tight">Global Dashboard</h1>
@@ -93,7 +79,6 @@ export default async function AdminDashboard({
         </div>
       </div>
 
-      {/* Global Statistics Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
           { title: "Active Branches", val: subsCount || 0, icon: <Building2 className="w-4 h-4 text-indigo-600" />, bg: "bg-indigo-50", suffix: "Live" },
@@ -115,7 +100,6 @@ export default async function AdminDashboard({
         ))}
       </div>
 
-      {/* Database Driven Subsidiaries List */}
       <div className="bg-white rounded-3xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden">
         <div className="p-6 border-b border-slate-50 flex items-center justify-between">
           <h2 className="text-lg font-bold text-slate-900">Registered Subsidiaries</h2>
@@ -134,13 +118,14 @@ export default async function AdminDashboard({
                 <th className="px-8 py-4">Customer Captures</th>
                 <th className="px-8 py-4">Last Activity</th>
                 <th className="px-8 py-4">Status</th>
+                <th className="px-8 py-4">Capture Link</th>
                 <th className="px-8 py-4 text-right pr-12">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50 text-slate-700 font-bold">
               {branchData.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="text-center py-20 text-slate-400 font-medium italic">
+                  <td colSpan={8} className="text-center py-20 text-slate-400 font-medium italic">
                     {q ? `No branches matching "${q}" found.` : "No subsidiaries found in the database."}
                   </td>
                 </tr>
@@ -162,8 +147,8 @@ export default async function AdminDashboard({
                   </td>
                   <td className="px-8 py-5 text-slate-500 font-semibold tabular-nums">
                     <div className="flex items-center gap-2">
-                      <Calendar className="w-3.5 h-3.5 text-slate-300" />
-                      {row.lastCapture}
+                       <Calendar className="w-3.5 h-3.5 text-slate-300" />
+                       {row.lastCapture}
                     </div>
                   </td>
                   <td className="px-8 py-5">
@@ -172,6 +157,11 @@ export default async function AdminDashboard({
                     }`}>
                       {row.status}
                     </span>
+                  </td>
+                  <td className="px-8 py-5">
+                    <div className="flex items-center gap-2">
+                       <CopyLinkButton url={`${process.env.NEXT_PUBLIC_APP_URL || 'https://ensign-crm.vercel.app'}/capture/${row.id}`} />
+                    </div>
                   </td>
                   <td className="px-8 py-5 text-right pr-12">
                     <button className="text-slate-300 hover:text-[#FF5A20] transition-colors">

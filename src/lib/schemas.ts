@@ -50,6 +50,79 @@ export const subsidiarySchemas: Record<string, SectionDefinition[]> = {
       ]
     }
   ],
+  // Ecomatt Foods (Sbali/Chitsano) - Roller Meal
+  "sbali": [
+    {
+      title: "PERSONAL INFORMATION",
+      fields: [
+        { id: "firstName", label: "FIRST NAME", type: "text", required: true, colSpan: 6 },
+        { id: "surname", label: "SURNAME", type: "text", required: true, colSpan: 6 },
+        { id: "phone", label: "PHONE NUMBER", type: "text", required: true, colSpan: 6 },
+        { id: "location", label: "LOCATION", type: "text", required: true, placeholder: "e.g. Mbare, Harare", colSpan: 6 }
+      ]
+    },
+    {
+      title: "ORDER DETAILS",
+      fields: [
+        { id: "quantityKg", label: "QUANTITY (KG)", type: "number", required: true, placeholder: "e.g. 50", colSpan: 6 },
+        { id: "customerType", label: "USER TYPE", type: "select", options: [{label: "Retail", value: "Retail"}, {label: "Wholesale", value: "Wholesale"}], colSpan: 6 }
+      ]
+    }
+  ],
+  // Continental Treasures Mining - Gold
+  "mining": [
+    {
+      title: "OPERATOR INFORMATION",
+      fields: [
+        { id: "firstName", label: "OPERATOR NAME", type: "text", required: true, colSpan: 6 },
+        { id: "licenseNumber", label: "MINING LICENSE #", type: "text", required: true, colSpan: 6 },
+        { id: "phone", label: "CONTACT PHONE", type: "text", required: true, colSpan: 12 }
+      ]
+    },
+    {
+      title: "PRODUCTION TRACKING",
+      fields: [
+        { id: "siteLocation", label: "SITE/SHAFT LOCATION", type: "text", required: true, colSpan: 12 },
+        { id: "volumeGrams", label: "ESTIMATED VOLUME (GRAMS)", type: "number", colSpan: 6 },
+        { id: "equipmentCount", label: "STAMP MILLS / EQUIPMENT", type: "number", colSpan: 6 }
+      ]
+    }
+  ],
+  // Granite Haven Bakery - Pies
+  "bakery": [
+    {
+      title: "CUSTOMER INFO",
+      fields: [
+        { id: "firstName", label: "NAME", type: "text", required: true, colSpan: 6 },
+        { id: "phone", label: "PHONE", type: "text", required: true, colSpan: 6 }
+      ]
+    },
+    {
+      title: "PIE SELECTION",
+      fields: [
+        { id: "pieType", label: "PIE FLAVOUR", type: "select", options: [{label: "Beef", value: "Beef"}, {label: "Chicken", value: "Chicken"}, {label: "Steak & Kidney", value: "Steak & Kidney"}], colSpan: 6 },
+        { id: "quantity", label: "QTY", type: "number", colSpan: 4 }
+      ]
+    }
+  ],
+  // Global Energies Africa - Fuel
+  "fuel": [
+    {
+      title: "ORDER INFO",
+      fields: [
+        { id: "firstName", label: "CLIENT NAME", type: "text", required: true, colSpan: 6 },
+        { id: "phone", label: "PHONE", type: "text", required: true, colSpan: 6 }
+      ]
+    },
+    {
+      title: "FUEL SPECS",
+      fields: [
+        { id: "fuelType", label: "FUEL TYPE", type: "select", options: [{label: "Petrol (E50)", value: "Petrol"}, {label: "Diesel (50ppm)", value: "Diesel"}], colSpan: 6 },
+        { id: "volumeLitres", label: "VOLUME (LITRES)", type: "number", required: true, colSpan: 6 },
+        { id: "deliveryMethod", label: "METHOD", type: "select", options: [{label: "Bulk Delivery", value: "Delivery"}, {label: "Pump Pickup", value: "Pickup"}], colSpan: 12 }
+      ]
+    }
+  ],
   // Fallback map format for any other branches
   "fallback": [
     {
