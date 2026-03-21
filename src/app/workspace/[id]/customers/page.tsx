@@ -3,8 +3,9 @@ import { CustomerTable } from "@/components/customer-table"
 import { CustomerFilters } from "@/components/customer-filters"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { PlusCircle, Download } from "lucide-react"
+import { PlusCircle } from "lucide-react"
 import Link from "next/link"
+import { ExportDataButton } from "@/components/export-data-button"
 
 export default async function CustomersPage({ 
   params,
@@ -43,7 +44,7 @@ export default async function CustomersPage({
     query = query.contains('customer_metadata', { customerType: type })
   }
 
-  const { data: customers, count, error } = await query
+  const { data: customers, count } = await query
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -55,9 +56,7 @@ export default async function CustomersPage({
           <p className="text-slate-500 mt-1 font-medium">Viewing {count || 0} registered customers for {branchName}.</p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" className="h-10 px-5 rounded-lg border-slate-200 text-slate-600 font-semibold hover:bg-slate-50">
-            <Download className="mr-2 w-4 h-4" /> Export CSV
-          </Button>
+          <ExportDataButton data={customers} filename={`${branchName.toLowerCase().replace(/\s/g, '-')}-customers.csv`} />
           <Link 
             href={`/workspace/${id}/capture`}
             className={cn(
@@ -75,7 +74,7 @@ export default async function CustomersPage({
         <CustomerFilters />
 
         {/* The Data Table */}
-        <CustomerTable customers={customers || []} />
+        <CustomerTable customers={customers || []} subsidiaryId={id} />
         
         {/* Pagination placeholder */}
         {customers && customers.length > 0 && (

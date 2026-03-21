@@ -9,31 +9,39 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { MoreHorizontal, User, Phone, MapPin, Calendar, ExternalLink } from "lucide-react"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
+import { useState } from "react"
+import { EditCustomerModal } from "./edit-customer-modal"
 
 export type Customer = {
   id: string
   first_name: string
   surname: string
   phone: string
+  gender: string | null
   physical_address: string | null
   created_at: string
-  customer_metadata?: {
-    customerType?: string
-    tier?: string
-    [key: string]: any
-  }
+  customer_metadata?: Record<string, any>
 }
 
-export function CustomerTable({ customers }: { customers: Customer[] }) {
+export function CustomerTable({ 
+  customers, 
+  subsidiaryId 
+}: { 
+  customers: Customer[], 
+  subsidiaryId: string 
+}) {
+  const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   if (!customers || customers.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-12 bg-white rounded-2xl border-2 border-dashed border-slate-100 text-center">
@@ -47,84 +55,99 @@ export function CustomerTable({ customers }: { customers: Customer[] }) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-      <Table>
-        <TableHeader className="bg-slate-50 border-b border-slate-200">
-          <TableRow className="hover:bg-transparent">
-            <TableHead className="w-[280px] font-bold text-slate-600 uppercase text-[10px] tracking-widest h-12">Customer Details</TableHead>
-            <TableHead className="font-bold text-slate-600 uppercase text-[10px] tracking-widest h-12">Contact & Location</TableHead>
-            <TableHead className="font-bold text-slate-600 uppercase text-[10px] tracking-widest h-12">Tier / Type</TableHead>
-            <TableHead className="font-bold text-slate-600 uppercase text-[10px] tracking-widest h-12 text-right pr-8">Registered</TableHead>
-            <TableHead className="w-16 h-12"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {customers.map((cust) => (
-            <TableRow key={cust.id} className="group hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0 font-medium">
-              <TableCell className="py-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold shadow-sm group-hover:bg-indigo-100 transition-colors">
-                    {(cust.first_name?.[0] || 'U').toUpperCase()}
-                    {(cust.surname?.[0] || '').toUpperCase()}
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-slate-900 font-bold text-[15px]">{cust.first_name} {cust.surname}</span>
-                    <span className="text-slate-400 text-xs font-medium tabular-nums">#{cust.id.slice(0, 8)}</span>
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell className="py-4">
-                <div className="flex flex-col gap-1.5">
-                  <div className="flex items-center gap-2 text-[13px] text-slate-600">
-                    <Phone className="w-3.5 h-3.5 text-slate-400" />
-                    {cust.phone}
-                  </div>
-                  <div className="flex items-center gap-2 text-[13px] text-slate-500 truncate max-w-[200px]">
-                    <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                    {cust.physical_address || 'No address provided'}
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell className="py-4">
-                <div className="flex gap-2">
-                  <Badge variant="outline" className="rounded-lg font-bold tracking-tight bg-slate-50 text-slate-700 border-slate-200">
-                    {cust.customer_metadata?.customerType || 'Domestic'}
-                  </Badge>
-                  {cust.customer_metadata?.tier && (
-                    <Badge className="rounded-lg font-bold tracking-tight bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
-                      {cust.customer_metadata.tier}
-                    </Badge>
-                  )}
-                </div>
-              </TableCell>
-              <TableCell className="py-4 text-right pr-8">
-                <div className="flex items-center justify-end gap-2 text-slate-500 font-semibold text-[13px]">
-                  <Calendar className="w-3.5 h-3.5 text-slate-300" />
-                  {new Date(cust.created_at).toLocaleDateString()}
-                </div>
-              </TableCell>
-              <TableCell className="py-4 text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="h-8 w-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-slate-100 transition-colors outline-none">
-                    <MoreHorizontal className="w-4 h-4" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48 rounded-xl shadow-xl border-slate-100">
-                    <DropdownMenuLabel className="font-bold text-slate-800">Actions</DropdownMenuLabel>
-                    <DropdownMenuSeparator className="bg-slate-50"/>
-                    <DropdownMenuItem className="flex items-center gap-2 hover:bg-slate-50 cursor-pointer font-medium p-2.5 rounded-lg transition-colors">
-                      <ExternalLink className="w-4 h-4 text-slate-400" /> View Profile
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="flex items-center gap-2 hover:bg-slate-50 cursor-pointer font-medium p-2.5 rounded-lg transition-colors">
-                      <User className="w-4 h-4 text-slate-400" /> Edit Record
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+    <>
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <Table>
+          <TableHeader className="bg-slate-50 border-b border-slate-200">
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="w-[280px] font-bold text-slate-600 uppercase text-[10px] tracking-widest h-12">Customer Details</TableHead>
+              <TableHead className="font-bold text-slate-600 uppercase text-[10px] tracking-widest h-12">Contact & Location</TableHead>
+              <TableHead className="font-bold text-slate-600 uppercase text-[10px] tracking-widest h-12">Tier / Type</TableHead>
+              <TableHead className="font-bold text-slate-600 uppercase text-[10px] tracking-widest h-12 text-right pr-8">Registered</TableHead>
+              <TableHead className="w-16 h-12"></TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+          </TableHeader>
+          <TableBody>
+            {customers.map((cust) => (
+              <TableRow key={cust.id} className="group hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0 font-medium">
+                <TableCell className="py-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold shadow-sm group-hover:bg-indigo-100 transition-colors">
+                      {(cust.first_name?.[0] || 'U').toUpperCase()}
+                      {(cust.surname?.[0] || '').toUpperCase()}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-slate-900 font-bold text-[15px]">{cust.first_name} {cust.surname}</span>
+                      <span className="text-slate-400 text-xs font-medium tabular-nums">#{cust.id.slice(0, 8)}</span>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell className="py-4">
+                  <div className="flex flex-col gap-1.5">
+                    <div className="flex items-center gap-2 text-[13px] text-slate-600">
+                      <Phone className="w-3.5 h-3.5 text-slate-400" />
+                      {cust.phone}
+                    </div>
+                    <div className="flex items-center gap-2 text-[13px] text-slate-500 truncate max-w-[200px]">
+                      <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                      {cust.physical_address || 'No address provided'}
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell className="py-4">
+                  <div className="flex gap-2">
+                    <Badge variant="outline" className="rounded-lg font-bold tracking-tight bg-slate-50 text-slate-700 border-slate-200">
+                      {cust.customer_metadata?.customerType || 'Domestic'}
+                    </Badge>
+                    {cust.customer_metadata?.tier && (
+                      <Badge className="rounded-lg font-bold tracking-tight bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+                        {cust.customer_metadata.tier}
+                      </Badge>
+                    )}
+                  </div>
+                </TableCell>
+                <TableCell className="py-4 text-right pr-8">
+                  <div className="flex items-center justify-end gap-2 text-slate-500 font-semibold text-[13px]">
+                    <Calendar className="w-3.5 h-3.5 text-slate-300" />
+                    {new Date(cust.created_at).toLocaleDateString()}
+                  </div>
+                </TableCell>
+                <TableCell className="py-4 text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="h-8 w-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-slate-100 transition-colors outline-none">
+                      <MoreHorizontal className="w-4 h-4" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48 rounded-xl shadow-xl border-slate-100">
+                      <DropdownMenuLabel className="font-bold text-slate-800">Actions</DropdownMenuLabel>
+                      <DropdownMenuSeparator className="bg-slate-50"/>
+                      <DropdownMenuItem className="flex items-center gap-2 hover:bg-slate-50 cursor-pointer font-medium p-2.5 rounded-lg transition-colors">
+                        <ExternalLink className="w-4 h-4 text-slate-400" /> View Profile
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        className="flex items-center gap-2 hover:bg-slate-50 cursor-pointer font-medium p-2.5 rounded-lg transition-colors"
+                        onClick={() => {
+                          setEditingCustomer(cust)
+                          setIsModalOpen(true)
+                        }}
+                      >
+                        <User className="w-4 h-4 text-slate-400" /> Edit Record
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      <EditCustomerModal 
+        customer={editingCustomer}
+        subsidiaryId={subsidiaryId}
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+      />
+    </>
   )
 }
 
