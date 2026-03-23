@@ -7,26 +7,22 @@ export default async function CapturePage({ params }: { params: Promise<{ id: st
   const { id } = await params
   const supabase = await createClient()
 
-  // For testing purposes, if ID is '1', we know the schema mapped is specific.
-  // Actually get the real subsidiary name and live customer count to make the UI "Real"
-  
-  // Safe parsing of UUID for realtime dashboard integration
-  const isValidUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
-  
-  // Fetch real count
-  const { count: registeredCount } = isValidUUID 
-    ? await supabase.from('customers').select('*', { count: 'exact', head: true }).eq('subsidiary_id', id)
-    : { count: 0 }
+  // Fetch subsidiary details including schema_type
+  const { data: subsidiary } = await supabase
+    .from('subsidiaries')
+    .select('name, schema_type')
+    .eq('id', id)
+    .single()
 
-  // Fallback name if mock id '1'
-  let branchName = "Flora Gas"
-  if (isValidUUID) {
-    const { data } = await supabase.from('subsidiaries').select('name').eq('id', id).single()
-    if (data?.name) branchName = data.name
-  }
+  // Fetch real registration count
+  const { count: registeredCount } = await supabase
+    .from('customers')
+    .select('*', { count: 'exact', head: true })
+    .eq('subsidiary_id', id)
 
-  // Load the structured multi-column layout schema
-  const schema = subsidiarySchemas[id] || subsidiarySchemas["fallback"]
+  const branchName = subsidiary?.name || (id === "1" ? "Flora Gas" : "Ensign Branch")
+  const schemaType = subsidiary?.schema_type || (id === "1" ? "lpg" : "fallback")
+  const schema = subsidiarySchemas[schemaType] || subsidiarySchemas.fallback
 
   return (
     <div className="min-h-screen bg-[#F0F2F5] flex flex-col font-sans">

@@ -30,7 +30,12 @@ export default async function SubsidiariesPage() {
                 <Building2 className="w-6 h-6 text-[#FF5A20]" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-900 leading-tight">{sub.name}</h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-lg font-bold text-slate-900 leading-tight">{sub.name}</h3>
+                  <span className="text-[9px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase tracking-tighter">
+                    {sub.schema_type || 'fallback'}
+                  </span>
+                </div>
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{sub.location || 'Central'}</p>
               </div>
             </div>

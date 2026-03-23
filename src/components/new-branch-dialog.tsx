@@ -15,6 +15,13 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { createSubsidiary, type SubsidiaryActionState } from "@/app/admin/actions"
 import { toast } from "sonner"
 
@@ -69,6 +76,24 @@ export function NewBranchDialog() {
               placeholder="e.g. Bulawayo, CBD"
               className="h-12 rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 font-bold text-slate-900"
             />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="schema_type" className="text-xs font-black text-slate-400 uppercase tracking-widest pl-1">
+              Business Type (Registration Form)
+            </Label>
+            <Select name="schema_type" defaultValue="fallback">
+              <SelectTrigger className="h-12 rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 font-bold text-slate-900 bg-white">
+                <SelectValue placeholder="Select business type..." />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl border-slate-100 shadow-xl">
+                <SelectItem value="lpg">LPG Gas (Flora Gas Style)</SelectItem>
+                <SelectItem value="mining">Mining & Operations</SelectItem>
+                <SelectItem value="bakery">Bakery & Retail</SelectItem>
+                <SelectItem value="fuel">Fuel & Logistics</SelectItem>
+                <SelectItem value="sbali">Ecomatt / Roller Meal</SelectItem>
+                <SelectItem value="fallback">Generic / Standard</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <DialogFooter className="pt-4">
             <Button 

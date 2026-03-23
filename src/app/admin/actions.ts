@@ -13,6 +13,7 @@ export async function createSubsidiary(state: SubsidiaryActionState, formData: F
   
   const name = formData.get('name') as string
   const location = formData.get('location') as string
+  const schema_type = formData.get('schema_type') as string
 
   if (!name) {
     return { error: 'Name is required', success: false }
@@ -20,7 +21,7 @@ export async function createSubsidiary(state: SubsidiaryActionState, formData: F
 
   const { error } = await supabase
     .from('subsidiaries')
-    .insert({ name, location })
+    .insert({ name, location, schema_type: schema_type || 'fallback' })
 
   if (error) {
     return { error: error.message, success: false }

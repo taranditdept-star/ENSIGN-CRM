@@ -56,6 +56,7 @@ export default async function AdminDashboard({
     return {
       id: sub.id,
       name: sub.name,
+      schema_type: sub.schema_type,
       location,
       totalCaptures,
       lastCapture,
@@ -113,6 +114,7 @@ export default async function AdminDashboard({
               <tr>
                 <th className="px-8 py-4 w-12 text-center">ID</th>
                 <th className="px-8 py-4">Subsidiary Name</th>
+                <th className="px-8 py-4">Type</th>
                 <th className="px-8 py-4">Location</th>
                 <th className="px-8 py-4">Customer Captures</th>
                 <th className="px-8 py-4">Last Activity</th>
@@ -138,6 +140,11 @@ export default async function AdminDashboard({
                     <Link href={`/admin/subsidiaries/${row.id}`}>
                       <span className="text-slate-900 font-extrabold text-[15px] hover:text-[#FF5A20] transition-colors">{row.name}</span>
                     </Link>
+                  </td>
+                  <td className="px-8 py-5">
+                    <span className="text-[10px] font-black bg-slate-100 text-slate-500 px-2 py-1 rounded uppercase tracking-tighter">
+                      {row.schema_type || 'fallback'}
+                    </span>
                   </td>
                   <td className="px-8 py-5 text-slate-500 font-semibold">{row.location}</td>
                   <td className="px-8 py-5">

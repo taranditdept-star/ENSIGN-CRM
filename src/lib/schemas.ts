@@ -15,7 +15,7 @@ export type SectionDefinition = {
 
 export const subsidiarySchemas: Record<string, SectionDefinition[]> = {
   // Flora Gas specific mapping per UX design
-  "1": [
+  "lpg": [
     {
       title: "PERSONAL INFORMATION",
       fields: [
