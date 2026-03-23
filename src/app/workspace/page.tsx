@@ -9,11 +9,15 @@ export default async function GenericWorkspace() {
   const { data: { user } } = await supabase.auth.getUser()
   
   // Fetch profile to check role
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('role')
     .eq('id', user?.id)
     .single()
+
+  if (profileError) {
+    console.error('Error fetching profile:', profileError)
+  }
 
   // Fetch only subsidiaries that the user is allowed to see (RLS will filter this)
   const { data: subsidiaries } = await supabase

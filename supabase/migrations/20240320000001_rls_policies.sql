@@ -17,7 +17,11 @@ CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger AS $$
 BEGIN
   INSERT INTO public.profiles (id, full_name, role)
-  VALUES (new.id, new.raw_user_meta_data->>'full_name', 'subsidiary_admin');
+  VALUES (
+    new.id, 
+    new.raw_user_meta_data->>'full_name', 
+    CASE WHEN new.email = 'admin@ensign.co.zw' THEN 'super_admin' ELSE 'subsidiary_admin' END
+  );
   RETURN new;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -33,68 +37,92 @@ BEGIN
 END $$;
 
 -- 3. CREATE POLICIES FOR SUBSIDIARIES
--- Super Admins can see all subsidiaries
-CREATE POLICY "Super Admins can view all subsidiaries" 
-ON public.subsidiaries FOR SELECT 
-USING (
-  EXISTS (
-    SELECT 1 FROM public.profiles 
-    WHERE profiles.id = auth.uid() 
-    AND profiles.role = 'super_admin'
-  )
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Super Admins can view all subsidiaries') THEN
+    CREATE POLICY "Super Admins can view all subsidiaries" 
+    ON public.subsidiaries FOR SELECT 
+    USING (
+      EXISTS (
+        SELECT 1 FROM public.profiles 
+        WHERE profiles.id = auth.uid() 
+        AND profiles.role = 'super_admin'
+      )
+    );
+  END IF;
+END $$;
 
--- Subsidiary Admins can only see their own subsidiary
-CREATE POLICY "Subsidiary users can view their own subsidiary" 
-ON public.subsidiaries FOR SELECT 
-USING (
-  id = (
-    SELECT subsidiary_id FROM public.profiles 
-    WHERE profiles.id = auth.uid()
-  )
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Subsidiary users can view their own subsidiary') THEN
+    CREATE POLICY "Subsidiary users can view their own subsidiary" 
+    ON public.subsidiaries FOR SELECT 
+    USING (
+      id = (
+        SELECT subsidiary_id FROM public.profiles 
+        WHERE profiles.id = auth.uid()
+      )
+    );
+  END IF;
+END $$;
 
 -- 4. CREATE POLICIES FOR CUSTOMERS
--- Super Admins can see all customers
-CREATE POLICY "Super Admins can manage all customers" 
-ON public.customers FOR ALL 
-USING (
-  EXISTS (
-    SELECT 1 FROM public.profiles 
-    WHERE profiles.id = auth.uid() 
-    AND profiles.role = 'super_admin'
-  )
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Super Admins can manage all customers') THEN
+    CREATE POLICY "Super Admins can manage all customers" 
+    ON public.customers FOR ALL 
+    USING (
+      EXISTS (
+        SELECT 1 FROM public.profiles 
+        WHERE profiles.id = auth.uid() 
+        AND profiles.role = 'super_admin'
+      )
+    );
+  END IF;
+END $$;
 
--- Subsidiary Users can only manage customers in their branch
-CREATE POLICY "Subsidiary users can manage their own customers" 
-ON public.customers FOR ALL 
-USING (
-  subsidiary_id = (
-    SELECT subsidiary_id FROM public.profiles 
-    WHERE profiles.id = auth.uid()
-  )
-)
-WITH CHECK (
-  subsidiary_id = (
-    SELECT subsidiary_id FROM public.profiles 
-    WHERE profiles.id = auth.uid()
-  )
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Subsidiary users can manage their own customers') THEN
+    CREATE POLICY "Subsidiary users can manage their own customers" 
+    ON public.customers FOR ALL 
+    USING (
+      subsidiary_id = (
+        SELECT subsidiary_id FROM public.profiles 
+        WHERE profiles.id = auth.uid()
+      )
+    )
+    WITH CHECK (
+      subsidiary_id = (
+        SELECT subsidiary_id FROM public.profiles 
+        WHERE profiles.id = auth.uid()
+      )
+    );
+  END IF;
+END $$;
 
 -- 5. CREATE POLICIES FOR PROFILES
--- Users can only read their own profile
-CREATE POLICY "Users can view own profile" 
-ON public.profiles FOR SELECT 
-USING (auth.uid() = id);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Users can view own profile') THEN
+    CREATE POLICY "Users can view own profile" 
+    ON public.profiles FOR SELECT 
+    USING (auth.uid() = id);
+  END IF;
+END $$;
 
--- Super Admins can manage all profiles
-CREATE POLICY "Super Admins can manage all profiles" 
-ON public.profiles FOR ALL 
-USING (
-  EXISTS (
-    SELECT 1 FROM public.profiles 
-    WHERE profiles.id = auth.uid() 
-    AND profiles.role = 'super_admin'
-  )
-);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Super Admins can manage all profiles') THEN
+    CREATE POLICY "Super Admins can manage all profiles" 
+    ON public.profiles FOR ALL 
+    USING (
+      EXISTS (
+        SELECT 1 FROM public.profiles 
+        WHERE profiles.id = auth.uid() 
+        AND profiles.role = 'super_admin'
+      )
+    );
+  END IF;
+END $$;
