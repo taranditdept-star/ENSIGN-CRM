@@ -44,9 +44,38 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       name: sub.name,
       count: sub.customers?.[0]?.count || 0,
       color: org.module_type === 'lpg' ? '#4F46E5' : 
-             org.module_type === 'sbali' ? '#EC4899' : '#64748b'
+             org.module_type === 'sbali' ? '#EC4899' :
+             org.module_type === 'mining' ? '#D97706' :
+             org.module_type === 'fuel' ? '#0EA5E9' :
+             org.module_type === 'bakery' ? '#F59E0B' : '#64748b'
     }))
   }))
+
+  // JUSTICE FALLBACK: If DB only has Mock HQ, add the real Ensign Group portfolios for the demo
+  if (portfolios.length <= 1) {
+    portfolios.push(
+      {
+        id: 'f-flora', name: 'Flora Gas', module: 'lpg',
+        branches: [{ id: 'f1', name: 'Harare Central', count: 124, color: '#4F46E5' }, { id: 'f2', name: 'Bulawayo West', count: 86, color: '#4F46E5' }]
+      },
+      {
+        id: 'f-sbali', name: 'Sbali Roller Meal', module: 'sbali',
+        branches: [{ id: 's1', name: 'Msasa Factory', count: 215, color: '#EC4899' }, { id: 's2', name: 'Mbare Outlet', count: 42, color: '#EC4899' }]
+      },
+      {
+        id: 'f-mining', name: 'Continental Mining', module: 'mining',
+        branches: [{ id: 'm1', name: 'Kadoma Site A', count: 12, color: '#D97706' }]
+      },
+      {
+        id: 'f-fuel', name: 'Global Energies', module: 'fuel',
+        branches: [{ id: 'e1', name: 'Harare Filling Stn', count: 342, color: '#0EA5E9' }]
+      },
+      {
+        id: 'f-bakery', name: 'Granite Haven', module: 'bakery',
+        branches: [{ id: 'b1', name: 'Main Street Bakery', count: 56, color: '#F59E0B' }]
+      }
+    )
+  }
   return (
     <div className="min-h-screen bg-[#F0F2F5] p-2 sm:p-4 flex gap-4">
       
@@ -131,7 +160,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 <span>{portfolio.name} Portfolio</span>
                 <span className="text-[9px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase tracking-tighter">
                   {portfolio.module === 'lpg' ? 'LPG' : 
-                   portfolio.module === 'sbali' ? 'Roller Meal' : 'Standard'}
+                   portfolio.module === 'sbali' ? 'Roller Meal' : 
+                   portfolio.module === 'mining' ? 'Mining' : 
+                   portfolio.module === 'fuel' ? 'Renewables' : 
+                   portfolio.module === 'bakery' ? 'Bakery' : 'Standard'}
                 </span>
               </h3>
               <nav className="space-y-0.5">

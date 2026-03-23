@@ -91,57 +91,87 @@ export const subsidiarySchemas: Record<string, SectionDefinition[]> = {
       ]
     }
   ],
-  // Continental Treasures Mining - Gold
+  // Continental Treasures Mining - Gold (Ref: Image inspiration)
   "mining": [
     {
-      title: "OPERATOR INFORMATION",
+      title: "OPERATOR IDENTIFICATION",
       fields: [
-        { id: "firstName", label: "OPERATOR NAME", type: "text", required: true, colSpan: 6 },
-        { id: "licenseNumber", label: "MINING LICENSE #", type: "text", required: true, colSpan: 6 },
-        { id: "phone", label: "CONTACT PHONE", type: "text", required: true, colSpan: 12 }
+        { id: "operatorName", label: "SITE OPERATOR NAME", type: "text", required: true, placeholder: "e.g. Blessing Makore", colSpan: 6 },
+        { id: "licenseNumber", label: "MINING LICENSE NUMBER", type: "text", required: true, placeholder: "e.g. ZW-MIN-2024-88", colSpan: 6 },
+        { id: "phone", label: "OPERATOR PHONE", type: "text", required: true, placeholder: "+263 771 999 000", colSpan: 12 }
       ]
     },
     {
-      title: "PRODUCTION TRACKING",
+      title: "PRODUCTION & SITE DATA",
       fields: [
-        { id: "siteLocation", label: "SITE/SHAFT LOCATION", type: "text", required: true, colSpan: 12 },
-        { id: "volumeGrams", label: "ESTIMATED VOLUME (GRAMS)", type: "number", colSpan: 6 },
-        { id: "equipmentCount", label: "STAMP MILLS / EQUIPMENT", type: "number", colSpan: 6 }
+        { id: "siteLocation", label: "SHAFT / SITE LOCATION", type: "text", required: true, placeholder: "e.g. Kadoma West, Section B", colSpan: 12 },
+        { id: "volumeGrams", label: "EST. MONTHLY VOLUME (GRAMS)", type: "number", placeholder: "e.g. 500", colSpan: 6 },
+        { id: "equipmentCount", label: "STAMP MILLS / CONVEYORS", type: "number", placeholder: "e.g. 2", colSpan: 6 },
+        { id: "oreGrade", label: "ORE GRADE ESTIMATE", type: "select", options: [{label: "High (Free Gold)", value: "High"}, {label: "Medium", value: "Medium"}, {label: "Low (Sulphide)", value: "Low"}], colSpan: 12 }
       ]
     }
   ],
-  // Granite Haven Bakery - Pies
+  // Granite Haven Bakery - Fresh Produce
   "bakery": [
     {
-      title: "CUSTOMER INFO",
+      title: "CUSTOMER CONTACT",
+      fields: [
+        { id: "firstName", label: "CUSTOMER NAME", type: "text", required: true, placeholder: "e.g. Mrs. Chido", colSpan: 6 },
+        { id: "phone", label: "CONTACT PHONE", type: "text", required: true, placeholder: "+263 711 222 333", colSpan: 6 }
+      ]
+    },
+    {
+      title: "ORDER SELECTION",
+      fields: [
+        { id: "productType", label: "PASTRY / PIE SELECTION", type: "select", required: true, options: [
+          {label: "Prime Beef Pie", value: "Beef"}, 
+          {label: "Chicken & Mushroom", value: "Chicken"}, 
+          {label: "Sausage Roll (Bulk)", value: "SausageRoll"},
+          {label: "Standard White Loaf", value: "Bread"}
+        ], colSpan: 12 },
+        { id: "quantity", label: "QUANTITY (UNITS)", type: "number", placeholder: "e.g. 12", colSpan: 6 },
+        { id: "deliveryTime", label: "PREFFERED PICKUP TIME", type: "select", options: [{label: "Morning (08:00)", value: "Morning"}, {label: "Afternoon (13:00)", value: "Afternoon"}, {label: "Evening (17:00)", value: "Evening"}], colSpan: 6 }
+      ]
+    }
+  ],
+  // Global Energies Africa - Fuel Logistics
+  "fuel": [
+    {
+      title: "VEHICLE & DRIVER INFO",
+      fields: [
+        { id: "vehicleReg", label: "VEHICLE REGISTRATION", type: "text", required: true, placeholder: "e.g. AGE 1234", colSpan: 6 },
+        { id: "firstName", label: "DRIVER NAME", type: "text", required: true, placeholder: "e.g. Farai", colSpan: 6 },
+        { id: "phone", label: "DRIVER PHONE", type: "text", placeholder: "+263 774 000 111", colSpan: 12 }
+      ]
+    },
+    {
+      title: "FUEL SPECIFICATIONS",
+      fields: [
+        { id: "fuelType", label: "FUEL TYPE", type: "select", required: true, options: [{label: "Diesel (50ppm)", value: "Diesel"}, {label: "Petrol (E50 Unltd)", value: "Petrol"}], colSpan: 6 },
+        { id: "volumeLitres", label: "REFUEL VOLUME (LITRES)", type: "number", required: true, placeholder: "e.g. 60", colSpan: 6 },
+        { id: "pumpNumber", label: "PUMP NUMBER", type: "select", options: [{label: "Pump 1", value: "1"}, {label: "Pump 2", value: "2"}, {label: "Pump 3", value: "3"}], colSpan: 12 }
+      ]
+    }
+  ],
+  // Ecomatt Foods / Butcheries
+  "food": [
+    {
+      title: "CUSTOMER IDENTIFICATION",
       fields: [
         { id: "firstName", label: "NAME", type: "text", required: true, colSpan: 6 },
         { id: "phone", label: "PHONE", type: "text", required: true, colSpan: 6 }
       ]
     },
     {
-      title: "PIE SELECTION",
+      title: "MEAT SELECTION & PREP",
       fields: [
-        { id: "pieType", label: "PIE FLAVOUR", type: "select", options: [{label: "Beef", value: "Beef"}, {label: "Chicken", value: "Chicken"}, {label: "Steak & Kidney", value: "Steak & Kidney"}], colSpan: 6 },
-        { id: "quantity", label: "QTY", type: "number", colSpan: 4 }
-      ]
-    }
-  ],
-  // Global Energies Africa - Fuel
-  "fuel": [
-    {
-      title: "ORDER INFO",
-      fields: [
-        { id: "firstName", label: "CLIENT NAME", type: "text", required: true, colSpan: 6 },
-        { id: "phone", label: "PHONE", type: "text", required: true, colSpan: 6 }
-      ]
-    },
-    {
-      title: "FUEL SPECS",
-      fields: [
-        { id: "fuelType", label: "FUEL TYPE", type: "select", options: [{label: "Petrol (E50)", value: "Petrol"}, {label: "Diesel (50ppm)", value: "Diesel"}], colSpan: 6 },
-        { id: "volumeLitres", label: "VOLUME (LITRES)", type: "number", required: true, colSpan: 6 },
-        { id: "deliveryMethod", label: "METHOD", type: "select", options: [{label: "Bulk Delivery", value: "Delivery"}, {label: "Pump Pickup", value: "Pickup"}], colSpan: 12 }
+        { id: "meatType", label: "MEAT CATEGORY", type: "select", required: true, options: [
+          {label: "Beef (Commercial)", value: "Beef"}, 
+          {label: "Pork", value: "Pork"}, 
+          {label: "Poultry / Chicken", value: "Chicken"}
+        ], colSpan: 12 },
+        { id: "weightKg", label: "WEIGHT (KG)", type: "number", required: true, placeholder: "e.g. 5.5", colSpan: 6 },
+        { id: "cutPreference", label: "CUT PREFERENCE", type: "select", options: [{label: "Steak", value: "Steak"}, {label: "Mince", value: "Mince"}, {label: "Stewing", value: "Stewing"}], colSpan: 6 }
       ]
     }
   ],

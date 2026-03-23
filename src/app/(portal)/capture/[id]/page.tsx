@@ -22,20 +22,33 @@ export default async function CapturePage({ params }: { params: Promise<{ id: st
 
   const branchName = subsidiary?.name || 
     (id.startsWith('f') ? "Flora Gas" : 
-     id.startsWith('s') ? "Sbali Roller Meal" : "Ensign Branch")
+     id.startsWith('s') ? "Sbali Roller Meal" : 
+     id.startsWith('m') ? "Continental Mining" :
+     id.startsWith('e') ? "Global Energies Fuel" :
+     id.startsWith('b') ? "Granite Haven Bakery" :
+     id.startsWith('fo') ? "Ecomatt Foods" : "Ensign Branch")
   
   const schemaType = subsidiary?.schema_type || 
     (id.startsWith('f') ? "lpg" : 
-     id.startsWith('s') ? "sbali" : "fallback")
+     id.startsWith('s') ? "sbali" : 
+     id.startsWith('m') ? "mining" :
+     id.startsWith('e') ? "fuel" :
+     id.startsWith('b') ? "bakery" :
+     id.startsWith('fo') ? "food" : "fallback")
 
   const schema = subsidiarySchemas[schemaType] || subsidiarySchemas.fallback
 
-  // Dynamic Theme Logic matching Images 4 & 5
-  // SBALI/ECOMATT (Image 4) is Dark
-  // FLORA GAS (Image 5) is Light
-  const isDark = schemaType === 'sbali'
+  // Dynamic Theme Logic matching Images 4 & 5 + New Sectors
+  const isDark = schemaType === 'sbali' || schemaType === 'mining' || schemaType === 'fuel'
   const bgColor = isDark ? 'bg-[#0F172A]' : 'bg-[#F0F2F5]'
-  const accentColor = schemaType === 'lpg' ? '#EA580C' : '#6366F1'
+  
+  // Custom Accents
+  const accentColor = 
+    schemaType === 'lpg' ? '#EA580C' : 
+    schemaType === 'sbali' ? '#6366F1' :
+    schemaType === 'mining' ? '#D97706' : 
+    schemaType === 'fuel' ? '#0EA5E9' : '#EA580C'
+
   const headerBg = isDark ? 'bg-[#1E293B]' : (schemaType === 'lpg' ? 'bg-[#1e3a5f]' : 'bg-slate-900')
 
   return (

@@ -41,10 +41,10 @@ export default async function AdminDashboard() {
     .select('*, subsidiaries(*, customers(count))')
     .order('name')
 
-  let organizations = (orgs || []).map(o => ({ id: o.id, name: o.name }))
+  const organizations = (orgs || []).map(o => ({ id: o.id, name: o.name }))
 
   // Build Portfolios for the Dashboard
-  let dashboardPortfolios = (orgs as unknown as DashboardPortfolio[] || []).map(org => ({
+  const dashboardPortfolios = (orgs as unknown as DashboardPortfolio[] || []).map(org => ({
     id: org.id,
     name: org.name,
     module: org.module_type || 'standard',
@@ -82,6 +82,40 @@ export default async function AdminDashboard() {
       branches: [
         { id: 's1', name: 'Sbali Msasa Factory', captures: 215, status: 'Active', color: '#EC4899' },
         { id: 's2', name: 'Sbali Mbare Outlet', captures: 42, status: 'New', color: '#EC4899' }
+      ]
+    })
+  }
+
+  // New Industry Portfolios
+  if (!dashboardPortfolios.some(p => p.name.includes('Mining'))) {
+    dashboardPortfolios.push({
+      id: 'fallback-mining',
+      name: 'Continental Mining',
+      module: 'mining',
+      branches: [
+        { id: 'm1', name: 'Kadoma Site A', captures: 12, status: 'Active', color: '#D97706' }
+      ]
+    })
+  }
+
+  if (!dashboardPortfolios.some(p => p.name.includes('Energy'))) {
+    dashboardPortfolios.push({
+      id: 'fallback-fuel',
+      name: 'Global Energies',
+      module: 'fuel',
+      branches: [
+        { id: 'e1', name: 'Harare Filling Station', captures: 342, status: 'Active', color: '#0EA5E9' }
+      ]
+    })
+  }
+
+  if (!dashboardPortfolios.some(p => p.name.includes('Bakery'))) {
+    dashboardPortfolios.push({
+      id: 'fallback-bakery',
+      name: 'Granite Haven Bakery',
+      module: 'bakery',
+      branches: [
+        { id: 'b1', name: 'Main Street Bakery', captures: 56, status: 'Active', color: '#F59E0B' }
       ]
     })
   }
