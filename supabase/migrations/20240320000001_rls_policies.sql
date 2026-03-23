@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   role text CHECK (role IN ('super_admin', 'subsidiary_admin', 'clerk')) DEFAULT 'subsidiary_admin',
   subsidiary_id uuid REFERENCES public.subsidiaries(id),
   full_name text,
+  email text NOT NULL,
   updated_at timestamp with time zone DEFAULT timezone('utc'::text, now())
 );
 
@@ -16,11 +17,12 @@ ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger AS $$
 BEGIN
-  INSERT INTO public.profiles (id, full_name, role)
+  INSERT INTO public.profiles (id, full_name, role, email)
   VALUES (
     new.id, 
     new.raw_user_meta_data->>'full_name', 
-    CASE WHEN new.email = 'admin@ensign.co.zw' THEN 'super_admin' ELSE 'subsidiary_admin' END
+    CASE WHEN new.email = 'admin@ensign.co.zw' THEN 'super_admin' ELSE 'subsidiary_admin' END,
+    new.email
   );
   RETURN new;
 END;

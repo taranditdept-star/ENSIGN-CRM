@@ -40,7 +40,7 @@ export default async function GenericWorkspace() {
           
           {user?.email === 'admin@ensign.co.zw' && (
             <div className="text-[10px] font-mono text-slate-300 mt-1">
-              Debug: ID={user.id.slice(0,8)} | Role={profile?.role || 'NONE'} | Error={profileError ? 'YES' : 'NO'}
+              Debug: ID={user.id.slice(0,8)} | Role={profile?.role || 'NONE'} | Err={profileError ? profileError.message : 'NO'}
             </div>
           )}
         </div>
