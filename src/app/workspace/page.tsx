@@ -1,9 +1,19 @@
 import { createClient } from "@/utils/supabase/server"
-import { Building2, ChevronRight } from "lucide-react"
+import { Building2, ChevronRight, LayoutDashboard } from "lucide-react"
 import Link from "next/link"
+import { LogoutButton } from "@/components/logout-button"
 
 export default async function GenericWorkspace() {
   const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  // Fetch profile to check role
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user?.id)
+    .single()
 
   // Fetch only subsidiaries that the user is allowed to see (RLS will filter this)
   const { data: subsidiaries } = await supabase
@@ -46,17 +56,33 @@ export default async function GenericWorkspace() {
               </Link>
             ))
           ) : (
-            <div className="p-12 bg-white rounded-3xl border border-dashed border-slate-200 text-center space-y-2">
-              <p className="text-slate-900 font-bold">No workspaces found.</p>
-              <p className="text-slate-500 text-sm">You haven&apos;t been assigned to any subsidiary branch yet.</p>
+            <div className="p-12 bg-white rounded-3xl border border-dashed border-slate-200 text-center space-y-4">
+              <div className="space-y-1">
+                <p className="text-slate-900 font-bold text-lg">No workspaces found.</p>
+                <p className="text-slate-500 text-sm">You haven&apos;t been assigned to any subsidiary branch yet.</p>
+              </div>
+
+              {profile?.role === 'super_admin' ? (
+                <div className="pt-2">
+                  <Link 
+                    href="/admin" 
+                    className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-sm"
+                  >
+                    <LayoutDashboard className="w-4 h-4" />
+                    Go to Admin Dashboard
+                  </Link>
+                </div>
+              ) : (
+                <p className="text-xs font-bold text-indigo-600 bg-indigo-50 px-4 py-2 rounded-lg inline-block">
+                  Please contact a system administrator for access.
+                </p>
+              )}
             </div>
           )}
         </div>
 
         <div className="text-center">
-            <Link href="/" className="text-sm font-bold text-slate-400 hover:text-slate-900 transition-colors">
-                Back to Login
-            </Link>
+            <LogoutButton />
         </div>
 
       </div>
