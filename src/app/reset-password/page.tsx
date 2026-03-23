@@ -44,7 +44,7 @@ export default function ResetPasswordPage() {
           {!state.success && (
             <>
               <div className="space-y-3">
-                <Label htmlFor="password" name="password" className="text-slate-700 font-bold ml-1 text-sm uppercase tracking-wider">New Password</Label>
+                <Label htmlFor="password" className="text-slate-700 font-bold ml-1 text-sm uppercase tracking-wider">New Password</Label>
                 <Input 
                   id="password" 
                   name="password"
@@ -56,7 +56,7 @@ export default function ResetPasswordPage() {
               </div>
 
               <div className="space-y-3">
-                <Label htmlFor="confirmPassword" name="confirmPassword" className="text-slate-700 font-bold ml-1 text-sm uppercase tracking-wider">Confirm Password</Label>
+                <Label htmlFor="confirmPassword" className="text-slate-700 font-bold ml-1 text-sm uppercase tracking-wider">Confirm Password</Label>
                 <Input 
                   id="confirmPassword" 
                   name="confirmPassword"
