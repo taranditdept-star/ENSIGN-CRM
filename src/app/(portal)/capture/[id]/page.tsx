@@ -20,8 +20,14 @@ export default async function CapturePage({ params }: { params: Promise<{ id: st
     .select('*', { count: 'exact', head: true })
     .eq('subsidiary_id', id)
 
-  const branchName = subsidiary?.name || (id === "1" ? "Flora Gas" : "Ensign Branch")
-  const schemaType = subsidiary?.schema_type || (id === "1" ? "lpg" : "fallback")
+  const branchName = subsidiary?.name || 
+    (id.startsWith('f') ? "Flora Gas" : 
+     id.startsWith('s') ? "Sbali Roller Meal" : "Ensign Branch")
+  
+  const schemaType = subsidiary?.schema_type || 
+    (id.startsWith('f') ? "lpg" : 
+     id.startsWith('s') ? "sbali" : "fallback")
+
   const schema = subsidiarySchemas[schemaType] || subsidiarySchemas.fallback
 
   // Dynamic Theme Logic matching Images 4 & 5
@@ -30,7 +36,7 @@ export default async function CapturePage({ params }: { params: Promise<{ id: st
   const isDark = schemaType === 'sbali'
   const bgColor = isDark ? 'bg-[#0F172A]' : 'bg-[#F0F2F5]'
   const accentColor = schemaType === 'lpg' ? '#EA580C' : '#6366F1'
-  const headerBg = isDark ? 'bg-[#1E293B]' : 'bg-[#1e3a5f]'
+  const headerBg = isDark ? 'bg-[#1E293B]' : (schemaType === 'lpg' ? 'bg-[#1e3a5f]' : 'bg-slate-900')
 
   return (
     <div className={`min-h-screen ${bgColor} flex flex-col font-sans transition-colors duration-500`}>

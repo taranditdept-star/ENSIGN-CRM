@@ -21,9 +21,7 @@ export const subsidiarySchemas: Record<string, SectionDefinition[]> = {
       fields: [
         { id: "firstName", label: "FIRST NAME", type: "text", required: true, placeholder: "e.g. Nyasha", colSpan: 6 },
         { id: "surname", label: "SURNAME", type: "text", required: true, placeholder: "e.g. Zhou", colSpan: 6 },
-        { id: "phone", label: "PHONE NUMBER", type: "text", required: true, placeholder: "e.g. 0774 555 666", colSpan: 6 },
-        { id: "gender", label: "GENDER", type: "select", required: true, options: [{label: "Male", value: "Male"}, {label: "Female", value: "Female"}], colSpan: 6 },
-        { id: "physicalAddress", label: "PHYSICAL ADDRESS", type: "text", required: true, placeholder: "e.g. 24 Samora Machel Ave, Harare", colSpan: 12 }
+        { id: "phone", label: "PHONE NUMBER", type: "text", required: true, placeholder: "e.g. 0774 555 666", colSpan: 12 }
       ]
     },
     {
@@ -65,15 +63,13 @@ export const subsidiarySchemas: Record<string, SectionDefinition[]> = {
       fields: [
         { id: "firstName", label: "FIRST NAME", type: "text", required: true, placeholder: "e.g. Tendai", colSpan: 6 },
         { id: "surname", label: "SURNAME", type: "text", required: true, placeholder: "e.g. Chivasa", colSpan: 6 },
-        { id: "phone", label: "PHONE NUMBER", type: "text", required: true, placeholder: "+263 772 123 456", colSpan: 6 },
-        { id: "gender", label: "GENDER", type: "select", required: true, options: [{label: "Male", value: "Male"}, {label: "Female", value: "Female"}], colSpan: 6 }
+        { id: "phone", label: "PHONE NUMBER", type: "text", required: true, placeholder: "+263 772 123 456", colSpan: 12 }
       ]
     },
     {
       title: "LOCATION & CLASSIFICATION",
       fields: [
-        { id: "physicalAddress", label: "RESIDENTIAL ADDRESS", type: "text", required: true, placeholder: "e.g. 1564 Section 5, Kambuzuma", colSpan: 12 },
-        { id: "location", label: "REGION / DEPOT", type: "select", required: true, options: [
+        { id: "location", label: "LOCATION / DEPOT", type: "select", required: true, options: [
           {label: "Harare Central", value: "Harare"},
           {label: "Bulawayo Depot", value: "Bulawayo"},
           {label: "Gweru Branch", value: "Gweru"},
@@ -81,7 +77,7 @@ export const subsidiarySchemas: Record<string, SectionDefinition[]> = {
           {label: "Chinhoyi", value: "Chinhoyi"},
           {label: "Masvingo", value: "Masvingo"}
         ], colSpan: 6 },
-        { id: "customerType", label: "CUSTOMER CATEGORY", type: "select", required: true, options: [
+        { id: "customerType", label: "CUSTOMER TYPE", type: "select", required: true, options: [
           {label: "Retail Consumer", value: "Retail"},
           {label: "Wholesale / Tuckshop", value: "Wholesale"},
           {label: "Corporate / NGO", value: "Corporate"}
@@ -91,13 +87,7 @@ export const subsidiarySchemas: Record<string, SectionDefinition[]> = {
     {
       title: "ORDER SPECIFICATIONS",
       fields: [
-        { id: "productType", label: "PRODUCT TYPE", type: "select", required: true, options: [
-          {label: "Sbali Roller Meal (10kg)", value: "RM10"},
-          {label: "Sbali Roller Meal (20kg)", value: "RM20"},
-          {label: "Sbali Super Refined (5kg)", value: "SR5"},
-          {label: "Sbali Super Refined (10kg)", value: "SR10"}
-        ], colSpan: 12 },
-        { id: "quantity", label: "ESTIMATED MONTHLY CONSUMPTION (UNITS)", type: "number", required: true, placeholder: "e.g. 5", colSpan: 12 }
+        { id: "quantity", label: "QUANTITY (KG)", type: "number", required: true, placeholder: "e.g. 10", colSpan: 12 }
       ]
     }
   ],
