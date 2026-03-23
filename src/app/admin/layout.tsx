@@ -96,13 +96,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               <Link href="/admin/subsidiaries" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
                 <Users className="w-4 h-4" /> Registered Branches
               </Link>
-              <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+              <Link href="/admin/analytics" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
                 <BarChart className="w-4 h-4" /> Global Analytics
               </Link>
-              <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+              <Link href="/admin/customers" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
                 <Users className="w-4 h-4" /> Master Customer List
               </Link>
-              <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+              <Link href="/admin/audit" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
                 <History className="w-4 h-4" /> Audit Trails
               </Link>
             </nav>
