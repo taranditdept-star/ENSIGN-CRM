@@ -1,10 +1,10 @@
 import { createClient } from "@/utils/supabase/server"
 import { Button } from "@/components/ui/button"
 import { AdminSearchBar } from "@/components/admin-search-bar"
+import Link from "next/link"
 import {
   Users,
   ArrowUpDown,
-  Plus,
   Star,
   MoreHorizontal,
   Building2,
@@ -12,6 +12,7 @@ import {
   Zap
 } from "lucide-react"
 import { CopyLinkButton } from "@/components/copy-link-button"
+import { NewBranchDialog } from "@/components/new-branch-dialog"
 
 export default async function AdminDashboard({ 
   searchParams 
@@ -73,9 +74,7 @@ export default async function AdminDashboard({
         
         <div className="flex items-center gap-3">
           <AdminSearchBar />
-          <Button variant="outline" className="h-10 border-slate-200 text-slate-700 font-bold gap-2 rounded-xl shadow-sm">
-            <Plus className="w-4 h-4 text-[#FF5A20]" /> New Branch
-          </Button>
+          <NewBranchDialog />
         </div>
       </div>
 
@@ -136,7 +135,9 @@ export default async function AdminDashboard({
                     {row.id.toString().slice(0, 4)}
                   </td>
                   <td className="px-8 py-5">
-                    <span className="text-slate-900 font-extrabold text-[15px]">{row.name}</span>
+                    <Link href={`/admin/subsidiaries/${row.id}`}>
+                      <span className="text-slate-900 font-extrabold text-[15px] hover:text-[#FF5A20] transition-colors">{row.name}</span>
+                    </Link>
                   </td>
                   <td className="px-8 py-5 text-slate-500 font-semibold">{row.location}</td>
                   <td className="px-8 py-5">

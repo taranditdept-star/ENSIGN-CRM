@@ -3,23 +3,18 @@ import { Building2, ChevronRight, LayoutDashboard } from "lucide-react"
 import Link from "next/link"
 import { LogoutButton } from "@/components/logout-button"
 
-export const dynamic = 'force-dynamic'
-
 export default async function GenericWorkspace() {
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
   
   // Fetch profile to check role
-  const { data: profile, error: profileError } = await supabase
+  const { data: profile } = await supabase
     .from('profiles')
     .select('role')
     .eq('id', user?.id)
     .single()
 
-  if (profileError) {
-    console.error('Error fetching profile:', profileError)
-  }
 
   // Fetch only subsidiaries that the user is allowed to see (RLS will filter this)
   const { data: subsidiaries } = await supabase
@@ -38,11 +33,6 @@ export default async function GenericWorkspace() {
           <h1 className="text-4xl font-black text-slate-900 tracking-tight">Select Workspace</h1>
           <p className="text-slate-500 font-medium">Please select a subsidiary branch to enter your workspace.</p>
           
-          {user?.email === 'admin@ensign.co.zw' && (
-            <div className="text-[10px] font-mono text-slate-300 mt-1">
-              Debug: ID={user.id.slice(0,8)} | Role={profile?.role || 'NONE'} | Err={profileError ? profileError.message : 'NO'}
-            </div>
-          )}
         </div>
 
         <div className="grid gap-3">

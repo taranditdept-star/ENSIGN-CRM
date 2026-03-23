@@ -38,19 +38,24 @@ BEGIN
   END IF;
 END $$;
 
--- 3. CREATE POLICIES FOR SUBSIDIARIES
+-- 3. HELPER FUNCTIONS
+CREATE OR REPLACE FUNCTION public.is_super_admin()
+RETURNS boolean AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE id = auth.uid() AND role = 'super_admin'
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 4. CREATE POLICIES FOR SUBSIDIARIES
 DO $$
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Super Admins can view all subsidiaries') THEN
     CREATE POLICY "Super Admins can view all subsidiaries" 
     ON public.subsidiaries FOR SELECT 
-    USING (
-      EXISTS (
-        SELECT 1 FROM public.profiles 
-        WHERE profiles.id = auth.uid() 
-        AND profiles.role = 'super_admin'
-      )
-    );
+    USING (public.is_super_admin());
   END IF;
 END $$;
 
@@ -74,13 +79,7 @@ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Super Admins can manage all customers') THEN
     CREATE POLICY "Super Admins can manage all customers" 
     ON public.customers FOR ALL 
-    USING (
-      EXISTS (
-        SELECT 1 FROM public.profiles 
-        WHERE profiles.id = auth.uid() 
-        AND profiles.role = 'super_admin'
-      )
-    );
+    USING (public.is_super_admin());
   END IF;
 END $$;
 
@@ -119,12 +118,6 @@ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Super Admins can manage all profiles') THEN
     CREATE POLICY "Super Admins can manage all profiles" 
     ON public.profiles FOR ALL 
-    USING (
-      EXISTS (
-        SELECT 1 FROM public.profiles 
-        WHERE profiles.id = auth.uid() 
-        AND profiles.role = 'super_admin'
-      )
-    );
+    USING (public.is_super_admin());
   END IF;
 END $$;

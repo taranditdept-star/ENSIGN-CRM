@@ -11,10 +11,25 @@ import {
   Fingerprint,
   Download,
   Search,
-  Command
+  Command,
 } from 'lucide-react'
+import { createClient } from '@/utils/supabase/server'
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient()
+
+  // Fetch all subsidiaries with their customer counts for the sidebar
+  const { data: subsidiaries } = await supabase
+    .from('subsidiaries')
+    .select('*, customers(id)')
+    .order('name', { ascending: true })
+
+  const workspaceData = (subsidiaries || []).map(sub => ({
+    id: sub.id,
+    name: sub.name,
+    count: sub.customers?.length || 0,
+    color: sub.name.toLowerCase().includes('flora') ? '#4F46E5' : '#EC4899' // Dynamic-ish colors
+  }))
   return (
     <div className="min-h-screen bg-[#F0F2F5] p-2 sm:p-4 flex gap-4">
       
@@ -93,18 +108,27 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div>
             <h3 className="text-[10px] uppercase text-slate-400 font-bold mb-3 px-3 tracking-widest">Workspace</h3>
             <nav className="space-y-0.5">
-              <Link href="#" className="flex items-center justify-between px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <div className="flex items-center gap-3">
-                  <span className="w-2 h-2 rounded bg-[#4F46E5] shadow-[0_0_8px_rgba(79,70,229,0.5)]"></span> Flora Gas
-                </div>
-                <div className="bg-slate-50 text-slate-400 text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-slate-100">5</div>
-              </Link>
-              <Link href="#" className="flex items-center justify-between px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <div className="flex items-center gap-3">
-                  <span className="w-2 h-2 rounded bg-[#EC4899] shadow-[0_0_8px_rgba(236,72,153,0.5)]"></span> Tarand IT
-                </div>
-                <div className="bg-slate-50 text-slate-400 text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-slate-100">4</div>
-              </Link>
+              {workspaceData.length === 0 && (
+                <p className="px-3 py-2 text-[11px] text-slate-400 italic">No workspaces yet</p>
+              )}
+              {workspaceData.map((sub) => (
+                <Link 
+                  key={sub.id}
+                  href={`/admin/subsidiaries/${sub.id}`} 
+                  className="group flex items-center justify-between px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <span 
+                      className="w-2 h-2 rounded shadow-[0_0_8px_rgba(0,0,0,0.2)]"
+                      style={{ backgroundColor: sub.color }}
+                    ></span> 
+                    {sub.name}
+                  </div>
+                  <div className="bg-slate-50 text-slate-400 text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-slate-100 group-hover:bg-white transition-colors">
+                    {sub.count}
+                  </div>
+                </Link>
+              ))}
             </nav>
           </div>
         </div>
