@@ -25,7 +25,11 @@ import {
 import { createSubsidiary, type SubsidiaryActionState } from "@/app/admin/actions"
 import { toast } from "sonner"
 
-export function NewBranchDialog() {
+export function NewBranchDialog({ 
+  organizations = [] 
+}: { 
+  organizations?: { id: string, name: string }[] 
+}) {
   const [open, setOpen] = React.useState(false)
   const [state, formAction, isPending] = useActionState(createSubsidiary, { error: "", success: false } as SubsidiaryActionState)
 
@@ -55,8 +59,23 @@ export function NewBranchDialog() {
         </DialogHeader>
         <form action={formAction} className="space-y-6 pt-4">
           <div className="space-y-2">
+            <Label htmlFor="organization_id" className="text-xs font-black text-slate-400 uppercase tracking-widest pl-1">
+              Parent Company
+            </Label>
+            <Select name="organization_id" required>
+              <SelectTrigger className="h-12 rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 font-bold text-slate-900 bg-white">
+                <SelectValue placeholder="Select parent company..." />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl border-slate-100 shadow-xl">
+                {organizations.map((org) => (
+                  <SelectItem key={org.id} value={org.id}>{org.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
             <Label htmlFor="name" className="text-xs font-black text-slate-400 uppercase tracking-widest pl-1">
-              Subsidiary Name
+              Branch Name
             </Label>
             <Input
               id="name"
@@ -76,24 +95,6 @@ export function NewBranchDialog() {
               placeholder="e.g. Bulawayo, CBD"
               className="h-12 rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 font-bold text-slate-900"
             />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="schema_type" className="text-xs font-black text-slate-400 uppercase tracking-widest pl-1">
-              Business Type (Registration Form)
-            </Label>
-            <Select name="schema_type" defaultValue="fallback">
-              <SelectTrigger className="h-12 rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 font-bold text-slate-900 bg-white">
-                <SelectValue placeholder="Select company..." />
-              </SelectTrigger>
-              <SelectContent className="rounded-xl border-slate-100 shadow-xl">
-                <SelectItem value="lpg">Flora Gas</SelectItem>
-                <SelectItem value="mining">Continental Treasures</SelectItem>
-                <SelectItem value="bakery">Granite Haven</SelectItem>
-                <SelectItem value="fuel">Global Energies</SelectItem>
-                <SelectItem value="sbali">Ecomatt Foods</SelectItem>
-                <SelectItem value="fallback">Standard / Other</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
           <DialogFooter className="pt-4">
             <Button 

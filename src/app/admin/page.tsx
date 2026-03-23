@@ -42,6 +42,7 @@ export default async function AdminDashboard({
   }
 
   const { data: subsidiaries } = await subsQuery
+  const { data: organizations } = await supabase.from('organizations').select('id, name').order('name')
 
   // Final Data Mapping
   const branchData = (subsidiaries || []).map((sub, index) => {
@@ -75,7 +76,7 @@ export default async function AdminDashboard({
         
         <div className="flex items-center gap-3">
           <AdminSearchBar />
-          <NewBranchDialog />
+          <NewBranchDialog organizations={organizations || []} />
         </div>
       </div>
 

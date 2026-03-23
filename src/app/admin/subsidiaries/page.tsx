@@ -3,14 +3,17 @@ import { Building2, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import { NewBranchDialog } from "@/components/new-branch-dialog"
 import { CopyLinkButton } from "@/components/copy-link-button"
+import { QRCodeDialog } from "@/components/qr-code-dialog"
 
 export default async function SubsidiariesPage() {
   const supabase = await createClient()
   
   const { data: subsidiaries } = await supabase
     .from('subsidiaries')
-    .select('*, customers(count)')
+    .select('*, customers(count), organizations(name)')
     .order('name', { ascending: true })
+
+  const { data: organizations } = await supabase.from('organizations').select('id, name').order('name')
 
   return (
     <div className="space-y-8">
@@ -19,7 +22,7 @@ export default async function SubsidiariesPage() {
           <h1 className="text-3xl font-black text-slate-900 tracking-tight">Branches & Subsidiaries</h1>
           <p className="text-slate-500 font-medium pt-1">Manage and monitor all active business units.</p>
         </div>
-        <NewBranchDialog />
+        <NewBranchDialog organizations={organizations || []} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -32,15 +35,8 @@ export default async function SubsidiariesPage() {
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-lg font-bold text-slate-900 leading-tight">{sub.name}</h3>
-                  <span className="text-[9px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase tracking-tighter">
-                    {
-                      sub.schema_type === 'lpg' ? 'Flora Gas' :
-                      sub.schema_type === 'mining' ? 'Continental Treasures' :
-                      sub.schema_type === 'bakery' ? 'Granite Haven' :
-                      sub.schema_type === 'fuel' ? 'Global Energies' :
-                      sub.schema_type === 'sbali' ? 'Ecomatt Foods' :
-                      'Standard'
-                    }
+                  <span className="text-[9px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase tracking-tighter shadow-sm">
+                    {sub.organizations?.name || 'Independent'}
                   </span>
                 </div>
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{sub.location || 'Central'}</p>
@@ -74,6 +70,7 @@ export default async function SubsidiariesPage() {
               >
                 <ExternalLink className="w-4 h-4" />
               </Link>
+              <QRCodeDialog branchName={sub.name} url={`${process.env.NEXT_PUBLIC_APP_URL || 'https://ensign-crm.vercel.app'}/capture/${sub.id}`} />
               <CopyLinkButton url={`${process.env.NEXT_PUBLIC_APP_URL || 'https://ensign-crm.vercel.app'}/capture/${sub.id}`} />
             </div>
           </div>
@@ -84,7 +81,7 @@ export default async function SubsidiariesPage() {
             <Building2 className="w-12 h-12 text-slate-200 mb-4" />
             <h3 className="text-lg font-bold text-slate-900 mb-2">No branches found</h3>
             <p className="text-slate-500 mb-6 max-w-xs">Register your first subsidiary branch to start capturing customer data.</p>
-            <NewBranchDialog />
+            <NewBranchDialog organizations={organizations || []} />
           </div>
         )}
       </div>

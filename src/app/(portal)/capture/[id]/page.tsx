@@ -24,11 +24,19 @@ export default async function CapturePage({ params }: { params: Promise<{ id: st
   const schemaType = subsidiary?.schema_type || (id === "1" ? "lpg" : "fallback")
   const schema = subsidiarySchemas[schemaType] || subsidiarySchemas.fallback
 
+  // Dynamic Theme Logic matching Images 4 & 5
+  // SBALI/ECOMATT (Image 4) is Dark
+  // FLORA GAS (Image 5) is Light
+  const isDark = schemaType === 'sbali'
+  const bgColor = isDark ? 'bg-[#0F172A]' : 'bg-[#F0F2F5]'
+  const accentColor = schemaType === 'lpg' ? '#EA580C' : '#6366F1'
+  const headerBg = isDark ? 'bg-[#1E293B]' : 'bg-[#1e3a5f]'
+
   return (
-    <div className="min-h-screen bg-[#F0F2F5] flex flex-col font-sans">
+    <div className={`min-h-screen ${bgColor} flex flex-col font-sans transition-colors duration-500`}>
       
-      {/* Premium Dark Blue Top Navbar precisely matching the reference */}
-      <header className="bg-[#1e3a5f] h-16 flex items-center justify-between px-6 shrink-0 shadow-md relative z-10 w-full">
+      {/* Premium Navbar matching the subsidiary context */}
+      <header className={`${headerBg} h-16 flex items-center justify-between px-6 shrink-0 shadow-md relative z-10 w-full`}>
         <div className="flex items-center gap-4">
           <div className="w-10 h-10 rounded-lg bg-[#EA580C] shadow-inner flex items-center justify-center flex-shrink-0">
             <Flame className="w-6 h-6 text-white" />
@@ -52,21 +60,21 @@ export default async function CapturePage({ params }: { params: Promise<{ id: st
         <div className="w-full max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-700">
           
           {/* Main Form Container Card */}
-          <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-slate-100 overflow-hidden">
+          <div className={`${isDark ? 'bg-[#1E293B] border-slate-800' : 'bg-white border-slate-100'} rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border overflow-hidden`}>
             
             {/* Header Area Inside the Card */}
             <div className="px-8 sm:px-12 pt-10 pb-6">
-              <h2 className="text-[#1e3a5f] text-[28px] font-bold tracking-tight mb-2">
-                Customer Registration Form
+              <h2 className={`${isDark ? 'text-indigo-400' : 'text-[#1e3a5f]'} text-[28px] font-bold tracking-tight mb-2`}>
+                {schemaType === 'sbali' ? 'Roller Meal Customer Data Capture' : 'Customer Registration Form'}
               </h2>
-              <p className="text-slate-500 font-medium text-[15px]">
-                Fill in all required fields to register a new {branchName} customer.
+              <p className={`${isDark ? 'text-slate-400' : 'text-slate-500'} font-medium text-[15px]`}>
+                {schemaType === 'sbali' ? 'Enter customer information below' : `Fill in all required fields to register a new ${branchName} customer.`}
               </p>
             </div>
 
             {/* Injected Intelligent Component handling the massive grid layout loop */}
             <div className="px-8 sm:px-12 pb-10">
-              <DynamicCaptureForm subsidiaryId={id} schema={schema} />
+              <DynamicCaptureForm subsidiaryId={id} schema={schema} isDark={isDark} />
             </div>
 
           </div>

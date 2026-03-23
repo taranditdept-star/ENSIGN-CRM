@@ -14,58 +14,90 @@ export type SectionDefinition = {
 }
 
 export const subsidiarySchemas: Record<string, SectionDefinition[]> = {
-  // Flora Gas specific mapping per UX design
+  // Flora Gas specific mapping per UX design (Image 5)
   "lpg": [
     {
       title: "PERSONAL INFORMATION",
       fields: [
-        { id: "firstName", label: "FIRST NAME", type: "text", required: true, placeholder: "e.g. Tendai", colSpan: 6 },
-        { id: "surname", label: "SURNAME", type: "text", required: true, placeholder: "e.g. Moyo", colSpan: 6 },
-        { id: "phone", label: "PHONE NUMBER", type: "text", required: true, placeholder: "e.g. 0771234567", colSpan: 6 },
-        { id: "gender", label: "GENDER", type: "select", required: true, options: [{label: "Male", value: "Male"}, {label: "Female", value: "Female"}, {label: "Other", value: "Other"}], colSpan: 6 },
-        { id: "physicalAddress", label: "PHYSICAL ADDRESS", type: "text", required: true, placeholder: "e.g. 14 Baines Ave, Harare", colSpan: 12 }
+        { id: "firstName", label: "FIRST NAME", type: "text", required: true, placeholder: "e.g. Nyasha", colSpan: 6 },
+        { id: "surname", label: "SURNAME", type: "text", required: true, placeholder: "e.g. Zhou", colSpan: 6 },
+        { id: "phone", label: "PHONE NUMBER", type: "text", required: true, placeholder: "e.g. 0774 555 666", colSpan: 6 },
+        { id: "gender", label: "GENDER", type: "select", required: true, options: [{label: "Male", value: "Male"}, {label: "Female", value: "Female"}], colSpan: 6 },
+        { id: "physicalAddress", label: "PHYSICAL ADDRESS", type: "text", required: true, placeholder: "e.g. 24 Samora Machel Ave, Harare", colSpan: 12 }
       ]
     },
     {
       title: "HOUSEHOLD & USAGE",
       fields: [
-        { id: "familySize", label: "FAMILY SIZE", type: "select", options: [{label: "1-2", value:"1-2"}, {label: "3-5", value:"3-5"}, {label: "6+", value:"6+"}], colSpan: 4 },
-        { id: "cylinderSize", label: "CYLINDER SIZE", type: "select", required: true, options: [{label: "3kg", value: "3kg"}, {label: "5kg", value: "5kg"}, {label: "9kg", value: "9kg"}, {label: "14kg", value: "14kg"}, {label: "19kg", value: "19kg"}, {label: "48kg", value: "48kg"}], colSpan: 4 },
-        { id: "quantity", label: "QUANTITY", type: "number", required: true, placeholder: "e.g. 2", colSpan: 4 },
-        { id: "usageFrequency", label: "HOW OFTEN DO THEY USE GAS AT HOME?", type: "select", options: [{label: "Daily", value: "Daily"}, {label: "Weekly", value: "Weekly"}, {label: "Monthly", value: "Monthly"}], colSpan: 12 }
+        { id: "familySize", label: "FAMILY SIZE", type: "select", required: true, options: [{label: "1-2", value:"1-2"}, {label: "3-5", value:"3-5"}, {label: "6+", value:"6+"}], colSpan: 4 },
+        { id: "cylinderSize", label: "CYLINDER SIZE", type: "select", required: true, options: [{label: "6kg", value: "6kg"}, {label: "9kg", value: "9kg"}, {label: "14kg", value: "14kg"}, {label: "19kg", value: "19kg"}, {label: "48kg", value: "48kg"}], colSpan: 4 },
+        { id: "quantity", label: "QUANTITY", type: "number", required: true, placeholder: "e.g. 1", colSpan: 4 },
+        { id: "usageFrequency", label: "GAS USAGE INTENSITY", type: "select", required: true, options: [
+          {label: "Daily Cooking", value: "Daily"}, 
+          {label: "Backup/Power Cuts", value: "Backup"}, 
+          {label: "Heating/Seasonal", value: "Seasonal"}
+        ], colSpan: 12 }
       ]
     },
     {
       title: "CUSTOMER TYPE & PREFERENCES",
       fields: [
-        { id: "customerType", label: "CUSTOMER TYPE", type: "select", required: true, options: [{label: "Domestic", value: "Domestic"}, {label: "Commercial", value: "Commercial"}], colSpan: 6 },
-        { id: "paymentMethod", label: "PREFERRED PAYMENT METHOD", type: "select", options: [{label: "Cash", value: "Cash"}, {label: "Ecocash", value: "Ecocash"}, {label: "Swipe", value: "Swipe"}], colSpan: 6 },
-        { id: "requiresDelivery", label: "Requires Delivery?", type: "switch", colSpan: 12 }
+        { id: "customerType", label: "CUSTOMER TYPE", type: "select", required: true, options: [{label: "Domestic (Home)", value: "Domestic"}, {label: "Commercial (Business)", value: "Commercial"}], colSpan: 6 },
+        { id: "paymentMethod", label: "PREFERRED PAYMENT METHOD", type: "select", required: true, options: [
+          {label: "USD Cash", value: "USD"}, 
+          {label: "ZIG / Ecocash", value: "ZIG"}, 
+          {label: "Bank Transfer", value: "Bank"}
+        ], colSpan: 6 },
+        { id: "requiresDelivery", label: "Enable Home Delivery Service?", type: "switch", colSpan: 12 }
       ]
     },
     {
       title: "ADDITIONAL NOTES",
       fields: [
-        { id: "additionalNotes", label: "CAPTURE ANY ADDITIONAL CUSTOMER PREFERENCES OR REMARKS", type: "textarea", placeholder: "e.g. Prefers morning deliveries, interested in becoming a reseller in Kuwadzana...", colSpan: 12 }
+        { id: "additionalNotes", label: "INTERNAL REMARKS / SPECIAL INSTRUCTIONS", type: "textarea", placeholder: "e.g. Customer requested call before delivery, interested in 48kg commercial account...", colSpan: 12 }
       ]
     }
   ],
-  // Ecomatt Foods (Sbali/Chitsano) - Roller Meal
+  // Sbali Roller Meal - Agriculture (Image 4)
   "sbali": [
     {
-      title: "PERSONAL INFORMATION",
+      title: "CUSTOMER IDENTIFICATION",
       fields: [
-        { id: "firstName", label: "FIRST NAME", type: "text", required: true, colSpan: 6 },
-        { id: "surname", label: "SURNAME", type: "text", required: true, colSpan: 6 },
-        { id: "phone", label: "PHONE NUMBER", type: "text", required: true, colSpan: 6 },
-        { id: "location", label: "LOCATION", type: "text", required: true, placeholder: "e.g. Mbare, Harare", colSpan: 6 }
+        { id: "firstName", label: "FIRST NAME", type: "text", required: true, placeholder: "e.g. Tendai", colSpan: 6 },
+        { id: "surname", label: "SURNAME", type: "text", required: true, placeholder: "e.g. Chivasa", colSpan: 6 },
+        { id: "phone", label: "PHONE NUMBER", type: "text", required: true, placeholder: "+263 772 123 456", colSpan: 6 },
+        { id: "gender", label: "GENDER", type: "select", required: true, options: [{label: "Male", value: "Male"}, {label: "Female", value: "Female"}], colSpan: 6 }
       ]
     },
     {
-      title: "ORDER DETAILS",
+      title: "LOCATION & CLASSIFICATION",
       fields: [
-        { id: "quantityKg", label: "QUANTITY (KG)", type: "number", required: true, placeholder: "e.g. 50", colSpan: 6 },
-        { id: "customerType", label: "USER TYPE", type: "select", options: [{label: "Retail", value: "Retail"}, {label: "Wholesale", value: "Wholesale"}], colSpan: 6 }
+        { id: "physicalAddress", label: "RESIDENTIAL ADDRESS", type: "text", required: true, placeholder: "e.g. 1564 Section 5, Kambuzuma", colSpan: 12 },
+        { id: "location", label: "REGION / DEPOT", type: "select", required: true, options: [
+          {label: "Harare Central", value: "Harare"},
+          {label: "Bulawayo Depot", value: "Bulawayo"},
+          {label: "Gweru Branch", value: "Gweru"},
+          {label: "Mutare Depot", value: "Mutare"},
+          {label: "Chinhoyi", value: "Chinhoyi"},
+          {label: "Masvingo", value: "Masvingo"}
+        ], colSpan: 6 },
+        { id: "customerType", label: "CUSTOMER CATEGORY", type: "select", required: true, options: [
+          {label: "Retail Consumer", value: "Retail"},
+          {label: "Wholesale / Tuckshop", value: "Wholesale"},
+          {label: "Corporate / NGO", value: "Corporate"}
+        ], colSpan: 6 }
+      ]
+    },
+    {
+      title: "ORDER SPECIFICATIONS",
+      fields: [
+        { id: "productType", label: "PRODUCT TYPE", type: "select", required: true, options: [
+          {label: "Sbali Roller Meal (10kg)", value: "RM10"},
+          {label: "Sbali Roller Meal (20kg)", value: "RM20"},
+          {label: "Sbali Super Refined (5kg)", value: "SR5"},
+          {label: "Sbali Super Refined (10kg)", value: "SR10"}
+        ], colSpan: 12 },
+        { id: "quantity", label: "ESTIMATED MONTHLY CONSUMPTION (UNITS)", type: "number", required: true, placeholder: "e.g. 5", colSpan: 12 }
       ]
     }
   ],

@@ -13,15 +13,34 @@ export async function createSubsidiary(state: SubsidiaryActionState, formData: F
   
   const name = formData.get('name') as string
   const location = formData.get('location') as string
-  const schema_type = formData.get('schema_type') as string
+  let schema_type = formData.get('schema_type') as string
+  const organization_id = formData.get('organization_id') as string
 
   if (!name) {
     return { error: 'Name is required', success: false }
   }
 
+  // If schema_type is not provided, inherit from organization
+  if (!schema_type && organization_id) {
+    const { data: org } = await supabase
+      .from('organizations')
+      .select('module_type')
+      .eq('id', organization_id)
+      .single()
+    
+    if (org?.module_type) {
+      schema_type = org.module_type
+    }
+  }
+
   const { error } = await supabase
     .from('subsidiaries')
-    .insert({ name, location, schema_type: schema_type || 'fallback' })
+    .insert({ 
+      name, 
+      location, 
+      schema_type: schema_type || 'fallback',
+      organization_id: organization_id || null
+    })
 
   if (error) {
     return { error: error.message, success: false }
