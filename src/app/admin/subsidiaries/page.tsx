@@ -33,7 +33,14 @@ export default async function SubsidiariesPage() {
                 <div className="flex items-center gap-2">
                   <h3 className="text-lg font-bold text-slate-900 leading-tight">{sub.name}</h3>
                   <span className="text-[9px] font-black bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase tracking-tighter">
-                    {sub.schema_type || 'fallback'}
+                    {
+                      sub.schema_type === 'lpg' ? 'Flora Gas' :
+                      sub.schema_type === 'mining' ? 'Continental Treasures' :
+                      sub.schema_type === 'bakery' ? 'Granite Haven' :
+                      sub.schema_type === 'fuel' ? 'Global Energies' :
+                      sub.schema_type === 'sbali' ? 'Ecomatt Foods' :
+                      'Standard'
+                    }
                   </span>
                 </div>
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{sub.location || 'Central'}</p>

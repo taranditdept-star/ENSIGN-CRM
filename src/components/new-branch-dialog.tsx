@@ -83,15 +83,15 @@ export function NewBranchDialog() {
             </Label>
             <Select name="schema_type" defaultValue="fallback">
               <SelectTrigger className="h-12 rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 font-bold text-slate-900 bg-white">
-                <SelectValue placeholder="Select business type..." />
+                <SelectValue placeholder="Select company..." />
               </SelectTrigger>
               <SelectContent className="rounded-xl border-slate-100 shadow-xl">
-                <SelectItem value="lpg">LPG Gas (Flora Gas Style)</SelectItem>
-                <SelectItem value="mining">Mining & Operations</SelectItem>
-                <SelectItem value="bakery">Bakery & Retail</SelectItem>
-                <SelectItem value="fuel">Fuel & Logistics</SelectItem>
-                <SelectItem value="sbali">Ecomatt / Roller Meal</SelectItem>
-                <SelectItem value="fallback">Generic / Standard</SelectItem>
+                <SelectItem value="lpg">Flora Gas</SelectItem>
+                <SelectItem value="mining">Continental Treasures</SelectItem>
+                <SelectItem value="bakery">Granite Haven</SelectItem>
+                <SelectItem value="fuel">Global Energies</SelectItem>
+                <SelectItem value="sbali">Ecomatt Foods</SelectItem>
+                <SelectItem value="fallback">Standard / Other</SelectItem>
               </SelectContent>
             </Select>
           </div>

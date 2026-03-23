@@ -114,7 +114,7 @@ export default async function AdminDashboard({
               <tr>
                 <th className="px-8 py-4 w-12 text-center">ID</th>
                 <th className="px-8 py-4">Subsidiary Name</th>
-                <th className="px-8 py-4">Type</th>
+                <th className="px-8 py-4">Company</th>
                 <th className="px-8 py-4">Location</th>
                 <th className="px-8 py-4">Customer Captures</th>
                 <th className="px-8 py-4">Last Activity</th>
@@ -142,8 +142,15 @@ export default async function AdminDashboard({
                     </Link>
                   </td>
                   <td className="px-8 py-5">
-                    <span className="text-[10px] font-black bg-slate-100 text-slate-500 px-2 py-1 rounded uppercase tracking-tighter">
-                      {row.schema_type || 'fallback'}
+                    <span className="text-[10px] font-black bg-slate-100 text-slate-500 px-2.5 py-1.5 rounded-lg uppercase tracking-tight">
+                      {
+                        row.schema_type === 'lpg' ? 'Flora Gas' :
+                        row.schema_type === 'mining' ? 'Continental Treasures' :
+                        row.schema_type === 'bakery' ? 'Granite Haven' :
+                        row.schema_type === 'fuel' ? 'Global Energies' :
+                        row.schema_type === 'sbali' ? 'Ecomatt Foods' :
+                        'Standard'
+                      }
                     </span>
                   </td>
                   <td className="px-8 py-5 text-slate-500 font-semibold">{row.location}</td>
