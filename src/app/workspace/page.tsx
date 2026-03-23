@@ -3,6 +3,8 @@ import { Building2, ChevronRight, LayoutDashboard } from "lucide-react"
 import Link from "next/link"
 import { LogoutButton } from "@/components/logout-button"
 
+export const dynamic = 'force-dynamic'
+
 export default async function GenericWorkspace() {
   const supabase = await createClient()
 
@@ -35,11 +37,17 @@ export default async function GenericWorkspace() {
           </div>
           <h1 className="text-4xl font-black text-slate-900 tracking-tight">Select Workspace</h1>
           <p className="text-slate-500 font-medium">Please select a subsidiary branch to enter your workspace.</p>
+          
+          {user?.email === 'admin@ensign.co.zw' && (
+            <div className="text-[10px] font-mono text-slate-300 mt-1">
+              Debug: ID={user.id.slice(0,8)} | Role={profile?.role || 'NONE'} | Error={profileError ? 'YES' : 'NO'}
+            </div>
+          )}
         </div>
 
         <div className="grid gap-3">
           {subsidiaries && subsidiaries.length > 0 ? (
-            subsidiaries.map((sub) => (
+            subsidiaries.map((sub: any) => (
               <Link 
                 key={sub.id} 
                 href={`/workspace/${sub.id}`}
