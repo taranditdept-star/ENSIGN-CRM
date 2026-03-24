@@ -3,6 +3,13 @@ import {
   HelpCircle,
   MessageCircle,
   Settings,
+  LayoutDashboard,
+  Building2,
+  Users,
+  History,
+  Plus,
+  QrCode,
+  Download,
 } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -74,9 +81,69 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </div>
         </div>
 
+        {/* Command Center - Primary Navigation (High Readability) */}
+        <div className="px-3 pt-2 pb-6">
+          <h3 className="text-[11px] uppercase text-slate-900 font-extrabold mb-4 px-3 tracking-[0.15em]">Command Center</h3>
+          <nav className="space-y-1">
+            <Link href="/admin" className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
+              <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center text-[#FF5A20] font-bold shadow-sm group-hover:shadow-md transition-all">
+                <LayoutDashboard className="w-4 h-4" />
+              </div>
+              Executive Overview
+            </Link>
+            <Link href="/admin/organizations" className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
+              <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold shadow-sm group-hover:shadow-md transition-all">
+                <Building2 className="w-4 h-4" />
+              </div>
+              Group Organizations
+            </Link>
+            <Link href="/admin/customers" className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
+              <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 font-bold shadow-sm group-hover:shadow-md transition-all">
+                <Users className="w-4 h-4" />
+              </div>
+              Master Customer List
+            </Link>
+            <Link href="/admin/audit" className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
+              <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 font-bold shadow-sm group-hover:shadow-md transition-all">
+                <History className="w-4 h-4" />
+              </div>
+              Audit Trails
+            </Link>
+          </nav>
+        </div>
+
         {/* Real-Time Search & Modular Navigation */}
-        <div className="flex-1 overflow-hidden flex flex-col">
+        <div className="flex-1 overflow-hidden flex flex-col border-t border-slate-100 pt-6">
+          <div className="px-6 mb-2">
+             <h3 className="text-[11px] uppercase text-slate-900 font-extrabold tracking-[0.15em]">Quick Branch Search</h3>
+          </div>
           <SidebarSearch portfolios={portfolios} />
+        </div>
+
+        {/* Quick Actions Card */}
+        <div className="p-4">
+           <div className="bg-slate-900 rounded-2xl p-4 shadow-xl shadow-slate-200">
+             <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Quick Actions</h4>
+             <div className="grid grid-cols-1 gap-2">
+                <Link href="/admin/organizations" className="flex items-center justify-between text-[11px] font-bold text-white hover:text-white/80 transition-colors">
+                  <span>Add New Org</span>
+                  <Plus className="w-3 h-3" />
+                </Link>
+                <div className="h-px bg-white/10 my-1"></div>
+                <Link href="/admin/subsidiaries" className="flex items-center justify-between text-[11px] font-bold text-white hover:text-white/80 transition-colors">
+                  <span>Manage Branches</span>
+                  <QrCode className="w-3 h-3" />
+                </Link>
+                <div className="h-px bg-white/10 my-1"></div>
+                <button 
+                  onClick={() => alert('Global Export Feature is ready!')}
+                  className="flex items-center justify-between text-[11px] font-bold text-white hover:text-white/80 transition-colors w-full"
+                >
+                  <span>Export Report</span>
+                  <Download className="w-3 h-3" />
+                </button>
+             </div>
+           </div>
         </div>
 
         {/* Bottom Section */}

@@ -44,12 +44,12 @@ export function SidebarPortfolio({ id, name, module, branches }: SidebarPortfoli
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-full flex items-center justify-between px-3 py-2 group hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
       >
-        <div className="flex flex-col items-start gap-0.5">
-          <h3 className="text-[10px] uppercase text-slate-400 font-black tracking-widest flex items-center gap-1.5 transition-colors group-hover:text-slate-600">
-            {isExpanded ? <ChevronDown className="w-3 h-3 text-slate-300" /> : <ChevronRight className="w-3 h-3 text-slate-300" />}
+        <div className="flex flex-col items-start gap-1">
+          <h3 className="text-[12px] uppercase text-slate-900 font-black tracking-widest flex items-center gap-2 transition-colors group-hover:text-[#FF5A20]">
+            {isExpanded ? <ChevronDown className="w-4 h-4 text-[#FF5A20]" /> : <ChevronRight className="w-4 h-4 text-slate-400" />}
             {name}
           </h3>
-          <span className="text-[9px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase font-bold tracking-tighter ml-4.5">
+          <span className="text-[10px] bg-slate-900 text-white px-2 py-0.5 rounded-full font-black tracking-widest ml-6">
             {getModuleLabel(module)}
           </span>
         </div>
@@ -64,16 +64,16 @@ export function SidebarPortfolio({ id, name, module, branches }: SidebarPortfoli
             <Link 
               key={sub.id}
               href={`/admin/subsidiaries/${sub.id}`} 
-              className="group flex items-center justify-between px-3 py-1.5 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
+              className="group flex items-center justify-between px-3 py-2 text-sm font-extrabold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all"
             >
               <div className="flex items-center gap-3">
                 <span 
-                  className="w-1.5 h-1.5 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.1)]"
+                  className="w-2 h-2 rounded-full shadow-sm"
                   style={{ backgroundColor: sub.color }}
                 ></span> 
-                <span className="truncate max-w-[140px] group-hover:text-slate-900 transition-colors">{sub.name}</span>
+                <span className="truncate max-w-[140px] transition-colors">{sub.name}</span>
               </div>
-              <div className="text-slate-300 text-[10px] font-bold px-1 py-0.5 rounded transition-colors group-hover:text-slate-500">
+              <div className="text-slate-400 text-xs font-black px-1.5 py-0.5 rounded-md transition-all group-hover:text-slate-900 group-hover:bg-white shadow-sm border border-transparent group-hover:border-slate-100">
                 {sub.count}
               </div>
             </Link>

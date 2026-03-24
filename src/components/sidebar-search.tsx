@@ -65,7 +65,7 @@ export function SidebarSearch({ portfolios }: SidebarSearchProps) {
             placeholder="Search branches..." 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full bg-slate-50 hover:bg-slate-100 border border-slate-200/60 rounded-xl pl-9 pr-10 py-2.5 text-xs font-bold focus:outline-none focus:ring-1 focus:ring-orange-200 focus:bg-white transition-all placeholder:text-slate-400 text-slate-900"
+            className="w-full bg-slate-50 hover:bg-slate-100 border border-slate-200/60 rounded-xl pl-9 pr-10 py-2.5 text-sm font-bold focus:outline-none focus:ring-1 focus:ring-orange-200 focus:bg-white transition-all placeholder:text-slate-400 text-slate-900"
           />
           {query ? (
             <button 
@@ -97,8 +97,8 @@ export function SidebarSearch({ portfolios }: SidebarSearchProps) {
             ))}
           </div>
         ) : (
-          <div className="px-4 py-8 text-center bg-slate-50 rounded-2xl mx-1 border border-dashed border-slate-200">
-            <p className="text-xs font-bold text-slate-400 italic">No results for &quot;{query}&quot;</p>
+          <div className="px-4 py-8 text-center bg-slate-50 rounded-2xl mx-1 border border-dashed border-slate-300">
+            <p className="text-sm font-black text-slate-700 italic">No results for &quot;{query}&quot;</p>
           </div>
         )}
       </div>
