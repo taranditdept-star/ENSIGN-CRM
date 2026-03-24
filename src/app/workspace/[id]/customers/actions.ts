@@ -65,3 +65,48 @@ export async function updateCustomer(
   revalidatePath(`/workspace/${subsidiaryId}`)
   return { success: true, message: `Successfully updated ${first_name}'s record!` }
 }
+
+export async function importCustomers(
+  subsidiaryId: string, 
+  data: Record<string, unknown>[]
+): Promise<ActionState> {
+  const supabase = await createClient()
+
+  if (!data || data.length === 0) {
+    return { error: 'No data provided for import.' }
+  }
+
+  // Identify core fields from our schema
+  const coreFieldsList = ['first_name', 'surname', 'phone', 'gender', 'physical_address']
+  
+  const recordsToInsert = data.map(row => {
+    const core: Record<string, unknown> = { subsidiary_id: subsidiaryId }
+    const metadata: Record<string, unknown> = {}
+
+    Object.entries(row).forEach(([key, val]) => {
+      if (coreFieldsList.includes(key)) {
+        core[key] = val
+      } else {
+        metadata[key] = val
+      }
+    })
+
+    return {
+      ...core,
+      customer_metadata: metadata,
+      created_at: new Date().toISOString()
+    }
+  })
+
+  // Bulk Insert
+  const { error } = await supabase
+    .from('customers')
+    .insert(recordsToInsert)
+
+  if (error) {
+    return { error: `Bulk Import Error: ${error.message}` }
+  }
+
+  revalidatePath(`/workspace/${subsidiaryId}/customers`)
+  return { success: true, message: `Successfully imported ${recordsToInsert.length} customers!` }
+}

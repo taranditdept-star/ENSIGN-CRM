@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import { PlusCircle } from "lucide-react"
 import Link from "next/link"
 import { ExportDataButton } from "@/components/export-data-button"
+import { ImportDataButton } from "@/components/import-data-button"
 
 export default async function CustomersPage({ 
   params,
@@ -21,11 +22,12 @@ export default async function CustomersPage({
   // Fetch branch name for the header
   const { data: subData } = await supabase
     .from('subsidiaries')
-    .select('name')
+    .select('name, schema_type')
     .eq('id', id)
     .single()
 
   const branchName = subData?.name || "Flora Gas"
+  const schemaType = subData?.schema_type || "fallback"
 
   // Build Query
   let query = supabase
@@ -56,6 +58,7 @@ export default async function CustomersPage({
           <p className="text-slate-500 mt-1 font-medium">Viewing {count || 0} registered customers for {branchName}.</p>
         </div>
         <div className="flex gap-3">
+          <ImportDataButton subsidiaryId={id} schemaType={schemaType} />
           <ExportDataButton data={customers} filename={`${branchName.toLowerCase().replace(/\s/g, '-')}-customers.csv`} />
           <Link 
             href={`/workspace/${id}/capture`}
