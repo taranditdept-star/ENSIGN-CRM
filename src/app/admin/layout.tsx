@@ -2,7 +2,6 @@ import Link from 'next/link'
 import {
   HelpCircle,
   MessageCircle,
-  Settings,
   LayoutDashboard,
   Building2,
   Users,
@@ -14,8 +13,8 @@ import { createClient } from '@/utils/supabase/server'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { LogoutButton } from '@/components/logout-button'
 import { SidebarSearch } from '@/components/sidebar-search'
-import { SidebarQuickActions } from '@/components/sidebar-quick-actions'
 import { MobileNav } from '@/components/mobile-nav'
+import { AdminHeader } from '@/components/admin-header'
 
 interface OrganizationWithSubs {
   id: string;
@@ -150,28 +149,20 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </div>
         </div>
 
-        {/* Fixed Footers & Quick Actions */}
-        <div className="shrink-0 border-t border-slate-100 bg-slate-50/50 backdrop-blur-md">
-          <SidebarQuickActions />
-          
-          <div className="p-4 space-y-0.5">
-            <div className="grid grid-cols-3 gap-1 mb-2">
-              <Link href="#" className="flex flex-col items-center justify-center p-2 text-slate-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all group">
-                <HelpCircle className="w-4 h-4 mb-1" />
-                <span className="text-[9px] font-black uppercase">Help</span>
-              </Link>
-              <Link href="#" className="flex flex-col items-center justify-center p-2 text-slate-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all group">
-                <MessageCircle className="w-4 h-4 mb-1" />
-                <span className="text-[9px] font-black uppercase">Feedback</span>
-              </Link>
-              <Link href="#" className="flex flex-col items-center justify-center p-2 text-slate-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all group">
-                <Settings className="w-4 h-4 mb-1" />
-                <span className="text-[9px] font-black uppercase">Setup</span>
-              </Link>
-            </div>
-            <div className="pt-2 border-t border-slate-200/50">
-              <LogoutButton />
-            </div>
+        {/* Sidebar Footer - Clean & Minimal */}
+        <div className="shrink-0 border-t border-slate-100 bg-white p-4 space-y-0.5">
+          <div className="grid grid-cols-2 gap-2 mb-2">
+            <Link href="#" className="flex items-center gap-2 px-3 py-1.5 text-slate-400 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all text-[11px] font-black uppercase tracking-wider">
+              <HelpCircle className="w-3.5 h-3.5" />
+              <span>Help</span>
+            </Link>
+            <Link href="#" className="flex items-center gap-2 px-3 py-1.5 text-slate-400 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all text-[11px] font-black uppercase tracking-wider">
+              <MessageCircle className="w-3.5 h-3.5" />
+              <span>Feedback</span>
+            </Link>
+          </div>
+          <div className="pt-2 border-t border-slate-50">
+            <LogoutButton />
           </div>
         </div>
       </aside>
@@ -179,6 +170,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col h-[calc(100vh-32px)] bg-white border border-slate-200 lg:rounded-2xl shadow-sm overflow-hidden relative">
         <MobileNav portfolios={portfolios} commandCenter={commandCenter} strategicTools={strategicTools} />
+        <AdminHeader />
         <div className="flex-1 overflow-y-auto px-4 sm:px-8 py-8">
           {children}
         </div>
