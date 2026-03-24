@@ -48,12 +48,12 @@ export function NewOrganizationDialog() {
       <DialogTrigger render={(props) => (
         <Button {...props} className="bg-[#FF5A20] hover:bg-[#E44E1B] text-white font-bold rounded-xl px-6">
           <Plus className="w-5 h-5 mr-2" />
-          Add Company
+          Add Organization
         </Button>
       )} />
       <DialogContent className="sm:max-w-[425px] rounded-3xl p-8 border-slate-100 shadow-2xl">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-black text-slate-900 tracking-tight">Add Main Company</DialogTitle>
+          <DialogTitle className="text-2xl font-black text-slate-900 tracking-tight">Add Group Organization</DialogTitle>
           <DialogDescription className="text-slate-500 font-medium pt-1">
             Create a top-level organization and assign its business module.
           </DialogDescription>
@@ -61,7 +61,7 @@ export function NewOrganizationDialog() {
         <form onSubmit={handleSubmit} className="space-y-6 pt-4">
           <div className="space-y-2">
             <Label htmlFor="name" className="text-xs font-black text-slate-400 uppercase tracking-widest pl-1">
-              Company Name
+              Organization Name
             </Label>
             <Input
               id="name"

@@ -47,12 +47,12 @@ export function NewBranchDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger render={(props) => (
         <Button {...props} variant="outline" className="h-10 border-slate-200 text-slate-700 font-bold gap-2 rounded-xl shadow-sm">
-          <Plus className="w-4 h-4 text-[#FF5A20]" /> New Branch
+          <Plus className="w-4 h-4 text-[#FF5A20]" /> Add Subsidiary Branch
         </Button>
       )} />
       <DialogContent className="sm:max-w-[425px] rounded-3xl p-8 border-slate-100 shadow-2xl">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-black text-slate-900 tracking-tight">Add New Branch</DialogTitle>
+          <DialogTitle className="text-2xl font-black text-slate-900 tracking-tight">Add Subsidiary Branch</DialogTitle>
           <DialogDescription className="text-slate-500 font-medium pt-1">
             Register a new subsidiary branch to the Ensign Holdings network.
           </DialogDescription>
@@ -60,7 +60,7 @@ export function NewBranchDialog({
         <form action={formAction} className="space-y-6 pt-4">
           <div className="space-y-2">
             <Label htmlFor="organization_id" className="text-xs font-black text-slate-400 uppercase tracking-widest pl-1">
-              Parent Company
+              Parent Organization
             </Label>
             <Select name="organization_id" required>
               <SelectTrigger className="h-12 rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 font-bold text-slate-900 bg-white">
