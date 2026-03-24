@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { ChevronRight, ChevronDown } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 
 interface Branch {
   id: string;
@@ -39,45 +39,45 @@ export function SidebarPortfolio({ name, module, branches }: SidebarPortfolioPro
   }
 
   return (
-    <div className="space-y-1.5 animate-in fade-in slide-in-from-left-2 duration-500">
+    <div className="space-y-0.5">
       <button 
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between px-3 py-3 group hover:bg-slate-900/[0.02] rounded-2xl transition-all cursor-pointer border border-transparent hover:border-slate-100/50"
+        className="w-full flex items-center justify-between px-3 py-2 group hover:bg-slate-50 rounded-lg transition-all cursor-pointer border border-transparent"
       >
-        <div className="flex items-center gap-3 w-full">
-           <div className={`p-1.5 rounded-lg bg-white shadow-sm border border-slate-100 group-hover:scale-110 transition-transform ${isExpanded ? 'text-[#FF5A20]' : 'text-slate-400'}`}>
-             {isExpanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
+        <div className="flex items-center gap-2 w-full overflow-hidden">
+           <div className={`transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}>
+             <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-900" />
            </div>
-           <div className="flex items-center justify-between flex-1 pr-1">
-             <h3 className="text-[14px] text-slate-900 font-bold tracking-tight">
-               {name}
-             </h3>
-             <span className="text-[8px] bg-slate-900/5 text-slate-500 border border-slate-100 px-2 py-0.5 rounded-lg font-black tracking-widest uppercase">
-               {getModuleLabel(module)}
-             </span>
-           </div>
+           <h3 className="text-[13px] text-slate-600 font-semibold truncate tracking-tight group-hover:text-slate-900">
+             {name}
+           </h3>
         </div>
+        {!isExpanded && (
+          <span className="text-[9px] text-slate-400 font-extrabold uppercase tracking-tighter opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap ml-2">
+            {getModuleLabel(module)}
+          </span>
+        )}
       </button>
 
       {isExpanded && (
-        <nav className="space-y-1 ml-6 border-l-2 border-slate-50 pl-3 py-1">
+        <nav className="space-y-0.5 ml-[19px] border-l border-slate-100 pl-3 py-1">
           {branches.length === 0 && (
-            <p className="px-3 py-2 text-[11px] text-slate-400 font-bold italic">No active branches</p>
+            <p className="px-3 py-2 text-[11px] text-slate-400 italic">Empty</p>
           )}
           {branches.map((sub) => (
             <Link 
               key={sub.id}
               href={`/admin/subsidiaries/${sub.id}`} 
-              className="group flex items-center justify-between px-3 py-2 text-sm font-bold text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 rounded-xl transition-all border border-transparent hover:border-slate-100"
+              className="group flex items-center justify-between px-2 py-1.5 text-[12.5px] font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-md transition-all border border-transparent"
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5">
                 <div 
-                  className="w-2 h-2 rounded-full shadow-inner ring-4 ring-slate-50/50"
+                  className="w-1.5 h-1.5 rounded-full shrink-0"
                   style={{ backgroundColor: sub.color }}
                 /> 
-                <span className="truncate max-w-[130px] text-[13px] tracking-tight">{sub.name}</span>
+                <span className="truncate max-w-[130px]">{sub.name}</span>
               </div>
-              <div className="text-[9px] text-slate-400 font-black px-1.5 py-0.5 rounded-lg bg-slate-50 border border-slate-100 group-hover:bg-[#FF5A20] group-hover:text-white group-hover:border-[#FF5A20] transition-all">
+              <div className="text-[10px] text-slate-400 font-bold px-1.5 py-0.5 rounded-full bg-slate-50 group-hover:bg-[#FF5A20]/10 group-hover:text-[#FF5A20] transition-colors">
                 {sub.count}
               </div>
             </Link>

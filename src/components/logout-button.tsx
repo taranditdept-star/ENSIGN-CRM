@@ -9,12 +9,10 @@ export function LogoutButton() {
     <Button 
       variant="ghost" 
       onClick={() => logout()}
-      className="w-full flex items-center justify-start gap-4 px-4 py-3 h-auto text-[13px] font-bold text-slate-400 hover:text-rose-600 hover:bg-rose-50/50 rounded-2xl transition-all group"
+      className="w-full flex items-center justify-start gap-3 px-3 py-2 h-auto text-[12px] font-semibold text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all group"
     >
-      <div className="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center group-hover:bg-rose-100 transition-colors">
-        <LogOut className="w-4 h-4" />
-      </div>
-      Logout Account
+      <LogOut className="w-3.5 h-3.5 text-slate-400 group-hover:text-rose-600 transition-colors" />
+      <span>Logout Account</span>
     </Button>
   )
 }
