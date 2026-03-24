@@ -7,7 +7,6 @@ import {
   Building2,
   Users,
   History,
-  History,
   QrCode,
   Globe,
 } from 'lucide-react'
