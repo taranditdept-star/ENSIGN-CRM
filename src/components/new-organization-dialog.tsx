@@ -79,19 +79,27 @@ export function NewOrganizationDialog() {
               <SelectTrigger className="h-12 rounded-xl border-slate-200 font-bold text-slate-900 bg-white">
                 <SelectValue placeholder="Select module..." />
               </SelectTrigger>
-              <SelectContent className="rounded-xl border-slate-100 shadow-xl">
-                <SelectItem value="lpg">Flora Gas (LPG)</SelectItem>
-                <SelectItem value="sbali">Sbali Roller Meal (Agriculture)</SelectItem>
-                <SelectItem value="mining">Continental Treasures (Gold Mining)</SelectItem>
-                <SelectItem value="explosives">Mining Explosives (Continental)</SelectItem>
-                <SelectItem value="fuel">Global Energies (Fuel Logistics)</SelectItem>
-                <SelectItem value="solar">Flora Solar & Tech (Solar)</SelectItem>
-                <SelectItem value="branding">MountPlus / New Impetus (Branding)</SelectItem>
-                <SelectItem value="farming">Ecomatt Farm (Livestock/Crops)</SelectItem>
-                <SelectItem value="meat">Ecomatt Butcheries (Meat)</SelectItem>
-                <SelectItem value="bakery">Granite Haven Bakery (Pies)</SelectItem>
-                <SelectItem value="retail">Granite Haven Groceries (Retail)</SelectItem>
-                <SelectItem value="fallback">Standard CRM Module</SelectItem>
+              <SelectContent className="rounded-2xl border-slate-100 shadow-2xl p-2 min-w-[280px]">
+                <div className="px-3 py-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pointer-events-none">Agriculture & Energy</div>
+                <SelectItem value="lpg" className="py-2.5 rounded-lg focus:bg-orange-50 focus:text-orange-600 transition-colors">Flora Gas (LPG)</SelectItem>
+                <SelectItem value="sbali" className="py-2.5 rounded-lg focus:bg-orange-50 focus:text-orange-600 transition-colors">Sbali Roller Meal (Agric)</SelectItem>
+                <SelectItem value="fuel" className="py-2.5 rounded-lg focus:bg-orange-50 focus:text-orange-600 transition-colors">Global Energies (Fuel)</SelectItem>
+                <SelectItem value="solar" className="py-2.5 rounded-lg focus:bg-orange-50 focus:text-orange-600 transition-colors">Flora Solar & Tech (Solar)</SelectItem>
+                
+                <div className="px-3 py-2 mt-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pointer-events-none border-t border-slate-50 pt-3">Mining & Industry</div>
+                <SelectItem value="mining" className="py-2.5 rounded-lg focus:bg-indigo-50 focus:text-indigo-600 transition-colors">Continental Treasures (Gold)</SelectItem>
+                <SelectItem value="explosives" className="py-2.5 rounded-lg focus:bg-indigo-50 focus:text-indigo-600 transition-colors">Mining Explosives (Explo)</SelectItem>
+                <SelectItem value="branding" className="py-2.5 rounded-lg focus:bg-indigo-50 focus:text-indigo-600 transition-colors">MountPlus (Branding/Prnt)</SelectItem>
+                
+                <div className="px-3 py-2 mt-2 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pointer-events-none border-t border-slate-50 pt-3">Food & Retail</div>
+                <SelectItem value="farming" className="py-2.5 rounded-lg focus:bg-pink-50 focus:text-pink-600 transition-colors">Ecomatt Farm (Livestock)</SelectItem>
+                <SelectItem value="meat" className="py-2.5 rounded-lg focus:bg-pink-50 focus:text-pink-600 transition-colors">Ecomatt Butcheries (Meat)</SelectItem>
+                <SelectItem value="bakery" className="py-2.5 rounded-lg focus:bg-pink-50 focus:text-pink-600 transition-colors">Granite Haven Bakery (Pies)</SelectItem>
+                <SelectItem value="retail" className="py-2.5 rounded-lg focus:bg-pink-50 focus:text-pink-600 transition-colors">Granite Haven Groceries</SelectItem>
+                
+                <div className="mt-2 border-t border-slate-50 pt-2">
+                  <SelectItem value="fallback" className="py-2.5 rounded-lg font-black text-slate-900">Standard CRM Module</SelectItem>
+                </div>
               </SelectContent>
             </Select>
           </div>
