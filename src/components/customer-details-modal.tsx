@@ -78,7 +78,7 @@ export function CustomerDetailsModal({ customer }: { customer: Customer }) {
       <DialogTrigger render={<Button variant="ghost" size="sm" className="font-bold text-slate-400 hover:text-[#FF5A20]" />}>
         View Details
       </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col p-0 rounded-3xl border-0 shadow-2xl">
+      <DialogContent className="sm:max-w-[850px] w-[95vw] max-h-[90vh] overflow-hidden flex flex-col p-0 rounded-3xl border-0 shadow-2xl">
         <DialogHeader className="p-8 bg-slate-900 text-white shrink-0">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-4">
@@ -101,10 +101,10 @@ export function CustomerDetailsModal({ customer }: { customer: Customer }) {
         </DialogHeader>
 
         <div className="flex-1 overflow-y-auto bg-[#F8FAFC]">
-          <div className="grid grid-cols-12 gap-0">
+          <div className="flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-slate-100">
             
             {/* Left Col: Info */}
-            <div className="col-span-12 lg:col-span-4 p-8 space-y-8 border-r border-slate-100 bg-white">
+            <div className="w-full md:w-[320px] p-8 space-y-8 bg-white shrink-0">
               <section className="space-y-4">
                 <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Contact Details</h3>
                 <div className="space-y-3">
@@ -121,28 +121,28 @@ export function CustomerDetailsModal({ customer }: { customer: Customer }) {
 
               <section className="space-y-4">
                 <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Profile Stats</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100/50">
-                    <p className="text-[10px] font-black text-indigo-400 uppercase mb-1">Registered</p>
-                    <p className="text-xs font-bold text-slate-700">{new Date(customer.created_at).toLocaleDateString()}</p>
+                <div className="grid grid-cols-1 gap-3">
+                  <div className="p-4 bg-indigo-50/50 rounded-xl border border-indigo-100/50 flex flex-col justify-center">
+                    <p className="text-[10px] font-black text-indigo-400 uppercase mb-1">Registered On</p>
+                    <p className="text-sm font-bold text-slate-700">{new Date(customer.created_at).toLocaleDateString()}</p>
                   </div>
-                  <div className="p-3 bg-pink-50/50 rounded-xl border border-pink-100/50">
-                    <p className="text-[10px] font-black text-pink-400 uppercase mb-1">Tot. Notes</p>
-                    <p className="text-xs font-bold text-slate-700">{notes.length}</p>
+                  <div className="p-4 bg-pink-50/50 rounded-xl border border-pink-100/50 flex flex-col justify-center">
+                    <p className="text-[10px] font-black text-pink-400 uppercase mb-1">Total Notes</p>
+                    <p className="text-sm font-bold text-slate-700">{notes.length} Interactions</p>
                   </div>
                 </div>
               </section>
 
               {/* Dynamic Metadata Section */}
               {customer.customer_metadata && Object.keys(customer.customer_metadata).filter(k => k !== 'notes').length > 0 && (
-                <section className="space-y-4">
+                <section className="space-y-4 pt-4 border-t border-slate-50">
                   <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Subsidiary Data</h3>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {Object.entries(customer.customer_metadata).map(([key, val]) => (
                       key !== 'notes' && (
-                        <div key={key} className="flex justify-between items-center py-2 border-b border-slate-50 last:border-0">
-                          <span className="text-[11px] font-bold text-slate-400 uppercase">{key.replace(/([A-Z])/g, ' $1')}</span>
-                          <span className="text-xs font-bold text-slate-700">{String(val)}</span>
+                        <div key={key} className="flex flex-col gap-1 py-1">
+                          <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">{key.replace(/([A-Z])/g, ' $1')}</span>
+                          <span className="text-sm font-bold text-slate-700">{String(val)}</span>
                         </div>
                       )
                     ))}
@@ -152,7 +152,7 @@ export function CustomerDetailsModal({ customer }: { customer: Customer }) {
             </div>
 
             {/* Right Col: Interaction Feed */}
-            <div className="col-span-12 lg:col-span-8 p-8 flex flex-col gap-8">
+            <div className="flex-1 p-8 flex flex-col gap-8 min-w-0">
               
               {/* Add Note Section */}
               <section className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
