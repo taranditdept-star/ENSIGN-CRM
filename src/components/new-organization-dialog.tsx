@@ -82,8 +82,15 @@ export function NewOrganizationDialog() {
               <SelectContent className="rounded-xl border-slate-100 shadow-xl">
                 <SelectItem value="lpg">Flora Gas (LPG)</SelectItem>
                 <SelectItem value="sbali">Sbali Roller Meal (Agriculture)</SelectItem>
-                <SelectItem value="mining">Continental Treasures (Mining)</SelectItem>
-                <SelectItem value="fuel">Global Energies (Fuel)</SelectItem>
+                <SelectItem value="mining">Continental Treasures (Gold Mining)</SelectItem>
+                <SelectItem value="explosives">Mining Explosives (Continental)</SelectItem>
+                <SelectItem value="fuel">Global Energies (Fuel Logistics)</SelectItem>
+                <SelectItem value="solar">Flora Solar & Tech (Solar)</SelectItem>
+                <SelectItem value="branding">MountPlus / New Impetus (Branding)</SelectItem>
+                <SelectItem value="farming">Ecomatt Farm (Livestock/Crops)</SelectItem>
+                <SelectItem value="meat">Ecomatt Butcheries (Meat)</SelectItem>
+                <SelectItem value="bakery">Granite Haven Bakery (Pies)</SelectItem>
+                <SelectItem value="retail">Granite Haven Groceries (Retail)</SelectItem>
                 <SelectItem value="fallback">Standard CRM Module</SelectItem>
               </SelectContent>
             </Select>

@@ -153,8 +153,101 @@ export const subsidiarySchemas: Record<string, SectionDefinition[]> = {
       ]
     }
   ],
-  // Ecomatt Foods / Butcheries
-  "food": [
+  // MountPlus / New Impetus - Branding & Design
+  "branding": [
+    {
+      title: "CLIENT & PROJECT SCOPE",
+      fields: [
+        { id: "firstName", label: "CONTACT PERSON", type: "text", required: true, colSpan: 6 },
+        { id: "phone", label: "CONTACT PHONE", type: "text", required: true, colSpan: 6 },
+        { id: "serviceType", label: "SERVICE REQUIRED", type: "select", required: true, options: [
+          {label: "Graphic Design", value: "Design"}, 
+          {label: "Large Format Printing", value: "Printing"}, 
+          {label: "Corporate Branding / Signs", value: "Branding"},
+          {label: "Embroidery / Apparels", value: "Embroidery"}
+        ], colSpan: 12 }
+      ]
+    },
+    {
+      title: "PRODUCTION DETAILS",
+      fields: [
+        { id: "deadlineDate", label: "REQUIRED DEADLINE", type: "text", placeholder: "DD/MM/YYYY", colSpan: 6 },
+        { id: "quantity", label: "QUANTITY / UNITS", type: "number", placeholder: "e.g. 100", colSpan: 6 },
+        { id: "designSpecs", label: "DESIGN SPECIFICATIONS", type: "textarea", placeholder: "e.g. Resolution, Material type, Color codes...", colSpan: 12 }
+      ]
+    }
+  ],
+  // Flora Solar & Tech - Installations
+  "solar": [
+    {
+      title: "SITE COMPLIANCE",
+      fields: [
+        { id: "firstName", label: "CLIENT NAME", type: "text", required: true, colSpan: 6 },
+        { id: "phone", label: "CLIENT PHONE", type: "text", required: true, colSpan: 6 },
+        { id: "siteAddress", label: "INSTALLATION ADDRESS", type: "text", required: true, colSpan: 12 }
+      ]
+    },
+    {
+      title: "SYSTEM CONFIGURATION",
+      fields: [
+        { id: "systemSize", label: "REQUIRED SYSTEM SIZE", type: "select", options: [
+          {label: "3kVA (Small Home)", value: "3KVA"}, 
+          {label: "5kVA (Standard)", value: "5KVA"}, 
+          {label: "10kVA+ (Commercial)", value: "10KVA"}
+        ], colSpan: 6 },
+        { id: "batteryType", label: "BATTERY PREFERENCE", type: "select", options: [{label: "Lithium-Ion", value: "Lithium"}, {label: "Gel / Lead Acid", value: "Gel"}], colSpan: 6 },
+        { id: "requiresInstallation", label: "Full Professional Installation Required?", type: "switch", colSpan: 12 }
+      ]
+    }
+  ],
+  // Continental Treasures Explosives
+  "explosives": [
+    {
+      title: "REGULATORY COMPLIANCE",
+      fields: [
+        { id: "firstName", label: "PURCHASER NAME", type: "text", required: true, colSpan: 6 },
+        { id: "permitNumber", label: "BLASTING PERMIT #", type: "text", required: true, placeholder: "e.g. ZW-BL-992", colSpan: 6 },
+        { id: "phone", label: "CONTACT PHONE", type: "text", required: true, colSpan: 12 }
+      ]
+    },
+    {
+      title: "PRODUCT ALLOCATION",
+      fields: [
+        { id: "explosiveType", label: "EXPLOSIVE GRADE", type: "select", options: [
+          {label: "Dynamite (Gelignite)", value: "Dynamite"}, 
+          {label: "ANFO", value: "ANFO"}, 
+          {label: "Detonators / Fuses", value: "Detonators"}
+        ], colSpan: 12 },
+        { id: "quantity", label: "QUANTITY (CASES/UNITS)", type: "number", required: true, colSpan: 6 },
+        { id: "storageLocation", label: "CERTIFIED MAGAZINE LOCATION", type: "text", placeholder: "e.g. Shaft 4 Magazine", colSpan: 6 }
+      ]
+    }
+  ],
+  // Ecomatt Farm - Piggery & Crops
+  "farming": [
+    {
+      title: "PRODUCE & LIVESTOCK",
+      fields: [
+        { id: "firstName", label: "BUYER / PARTNER NAME", type: "text", required: true, colSpan: 6 },
+        { id: "phone", label: "CONTACT PHONE", type: "text", required: true, colSpan: 6 },
+        { id: "produceCategory", label: "PRODUCE CATEGORY", type: "select", required: true, options: [
+          {label: "Livestock (Pigs/Poultry)", value: "Livestock"}, 
+          {label: "Crops (Maize/Grain)", value: "Crops"}, 
+          {label: "Vegetables (Horticulture)", value: "Veg"}
+        ], colSpan: 12 }
+      ]
+    },
+    {
+      title: "BATCH DETAILS",
+      fields: [
+        { id: "unitWeight", label: "EST. WEIGHT (KG)", type: "number", colSpan: 6 },
+        { id: "batchNumber", label: "BATCH / LOT ID", type: "text", colSpan: 6 },
+        { id: "grading", label: "QUALITY GRADING", type: "select", options: [{label: "Grade A (Export)", value: "A"}, {label: "Grade B (Local)", value: "B"}], colSpan: 12 }
+      ]
+    }
+  ],
+  // Ecomatt Butcheries
+  "meat": [
     {
       title: "CUSTOMER IDENTIFICATION",
       fields: [
@@ -172,6 +265,24 @@ export const subsidiarySchemas: Record<string, SectionDefinition[]> = {
         ], colSpan: 12 },
         { id: "weightKg", label: "WEIGHT (KG)", type: "number", required: true, placeholder: "e.g. 5.5", colSpan: 6 },
         { id: "cutPreference", label: "CUT PREFERENCE", type: "select", options: [{label: "Steak", value: "Steak"}, {label: "Mince", value: "Mince"}, {label: "Stewing", value: "Stewing"}], colSpan: 6 }
+      ]
+    }
+  ],
+  // Granite Haven Groceries
+  "retail": [
+    {
+      title: "SHOPPER INFO",
+      fields: [
+        { id: "firstName", label: "CUSTOMER NAME", type: "text", required: true, colSpan: 6 },
+        { id: "phone", label: "PHONE NUMBER", type: "text", colSpan: 6 }
+      ]
+    },
+    {
+      title: "BASKET INSIGHTS",
+      fields: [
+        { id: "visitPurpose", label: "VISIT PURPOSE", type: "select", options: [{label: "Bulk Monthly Shop", value: "Bulk"}, {label: "Daily / Minor Items", value: "Daily"}], colSpan: 6 },
+        { id: "paymentType", label: "PAYMENT USED", type: "select", options: [{label: "USD Cash", value: "USD"}, {label: "Debit Card", value: "Card"}, {label: "Mobile Money", value: "Mobile"}], colSpan: 6 },
+        { id: "interestedInReward", label: "Interested in Loyalty Program?", type: "switch", colSpan: 12 }
       ]
     }
   ],
