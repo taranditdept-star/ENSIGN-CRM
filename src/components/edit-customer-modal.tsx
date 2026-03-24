@@ -1,13 +1,12 @@
 'use client'
 
-import { useState, useActionState, useEffect } from 'react'
+import { useState } from "react"
 import { 
   Dialog, 
   DialogContent, 
   DialogHeader, 
-  DialogTitle, 
-  DialogDescription,
-  DialogFooter
+  DialogTitle,
+  DialogTrigger 
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -21,125 +20,113 @@ import {
   SelectValue 
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import { subsidiarySchemas } from "@/lib/schemas"
-import { updateCustomer, ActionState } from "@/app/workspace/[id]/customers/actions"
+import { Edit3, Loader2, Save } from "lucide-react"
+import { updateCustomerAdmin } from "@/app/admin/actions"
 import { toast } from "sonner"
-import { Loader2 } from "lucide-react"
+import { subsidiarySchemas } from "@/lib/schemas"
 
-type Customer = {
-  id: string
-  first_name: string
-  surname: string
-  phone: string
-  gender: string | null
-  physical_address: string | null
-  customer_metadata?: Record<string, any>
+interface Customer {
+  id: string;
+  first_name: string;
+  surname: string;
+  phone: string;
+  email: string;
+  subsidiary_id: string;
+  schema_type?: string;
+  customer_metadata?: Record<string, any>;
 }
 
-interface EditCustomerModalProps {
-  customer: Customer | null
-  subsidiaryId: string
-  open: boolean
-  onOpenChange: (open: boolean) => void
-}
-
-export function EditCustomerModal({ customer, subsidiaryId, open, onOpenChange }: EditCustomerModalProps) {
-  const schema = subsidiarySchemas[subsidiaryId] || subsidiarySchemas["fallback"]
-  const initialState: ActionState = {}
+export function EditCustomerModal({ customer, schemaType = 'fallback' }: { customer: Customer, schemaType?: string }) {
+  const [isPending, setIsPending] = useState(false)
+  const [open, setOpen] = useState(false)
   
-  // Wrap updateCustomer in a function that passes necessary IDs
-  const updateWithIds = async (prevState: ActionState, formData: FormData) => {
-    if (!customer) return { error: "No customer selected" }
-    return await updateCustomer(customer.id, subsidiaryId, prevState, formData)
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsPending(true)
+    
+    const formData = new FormData(e.currentTarget)
+    formData.append('subsidiaryId', customer.subsidiary_id)
+    
+    try {
+      await updateCustomerAdmin(customer.id, formData)
+      toast.success("Customer updated successfully!")
+      setOpen(false)
+    } catch (error: any) {
+      toast.error(error.message || "Failed to update customer")
+    } finally {
+      setIsPending(false)
+    }
   }
 
-  const [state, action, isPending] = useActionState(updateWithIds, initialState)
-
-  useEffect(() => {
-    if (state.success) {
-      toast.success(state.message || "Customer updated successfully")
-      onOpenChange(false)
-    } else if (state.error) {
-      toast.error(state.error)
-    }
-  }, [state, onOpenChange])
-
-  if (!customer) return null
+  const sections = subsidiarySchemas[schemaType] || subsidiarySchemas['fallback']
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto rounded-3xl border-slate-100 shadow-2xl">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-black text-slate-900 tracking-tight">Edit Customer Record</DialogTitle>
-          <DialogDescription className="text-slate-500 font-medium pt-1">
-            Update the profile for {customer.first_name} {customer.surname}.
-          </DialogDescription>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger render={
+        <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
+          <Edit3 className="w-4 h-4" />
+        </Button>
+      } />
+      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto rounded-3xl border-0 shadow-2xl p-0">
+        <DialogHeader className="p-8 bg-slate-900 text-white sticky top-0 z-10">
+          <DialogTitle className="text-2xl font-black tracking-tight flex items-center gap-3">
+            <div className="p-2 bg-white/10 rounded-lg">
+              <Edit3 className="w-5 h-5 text-white" />
+            </div>
+            Edit Customer Profile
+          </DialogTitle>
+          <p className="text-slate-400 text-sm font-medium mt-1">Update core details and subsidiary-specific information.</p>
         </DialogHeader>
 
-        <form action={action} className="space-y-8 py-4">
-          {schema.map((section, sIdx) => (
+        <form onSubmit={handleSubmit} className="p-8 space-y-8 bg-white">
+          {sections.map((section, sIdx) => (
             <div key={sIdx} className="space-y-4">
-              <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-50 pb-2">
+              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-50 pb-2">
                 {section.title}
               </h3>
-              <div className="grid grid-cols-12 gap-x-6 gap-y-4">
+              <div className="grid grid-cols-12 gap-4">
                 {section.fields.map((field) => {
-                  // Determine initial value from customer core fields or metadata
-                  const coreMap: Record<string, any> = {
-                    firstName: customer.first_name,
-                    surname: customer.surname,
-                    phone: customer.phone,
-                    physicalAddress: customer.physical_address,
-                    gender: customer.gender
-                  }
+                  const defaultValue = (customer as any)[field.id] || (customer.customer_metadata as any)?.[field.id] || ""
                   
-                  const value = coreMap[field.id] ?? customer.customer_metadata?.[field.id] ?? ""
-
                   return (
-                    <div key={field.id} className={`${field.colSpan === 12 ? 'col-span-12' : field.colSpan === 6 ? 'col-span-12 sm:col-span-6' : 'col-span-12 sm:col-span-4'} space-y-2`}>
-                      <Label htmlFor={field.id} className="text-[13px] font-bold text-slate-700 ml-1">
-                        {field.label} {field.required && <span className="text-red-500">*</span>}
+                    <div key={field.id} className={`col-span-${field.colSpan || 12} space-y-1.5`}>
+                      <Label className="text-[11px] font-bold text-slate-500 uppercase tracking-tight">
+                        {field.label} {field.required && <span className="text-rose-500">*</span>}
                       </Label>
-
-                      {field.type === 'switch' ? (
-                        <div className="flex items-center space-x-2 pt-1 uppercase">
-                           <Switch 
-                            id={field.id} 
-                            name={field.id} 
-                            defaultChecked={Boolean(value)}
-                          />
-                          <span className="text-xs font-black text-slate-400">Enable Toggle</span>
-                        </div>
-                      ) : field.type === 'select' ? (
-                        <Select name={field.id} defaultValue={String(value)}>
-                          <SelectTrigger className="h-11 rounded-xl border-slate-200 bg-slate-50/50 font-semibold focus:ring-indigo-500/20">
-                            <SelectValue placeholder={field.placeholder || "Select option"} />
+                      
+                      {field.type === 'select' ? (
+                        <Select name={field.id} defaultValue={String(defaultValue)}>
+                          <SelectTrigger className="h-11 rounded-xl border-slate-100 bg-slate-50 font-bold focus:ring-[#FF5A20]">
+                            <SelectValue placeholder={field.placeholder} />
                           </SelectTrigger>
-                          <SelectContent className="rounded-xl border-slate-100 shadow-lg">
+                          <SelectContent className="rounded-xl border-slate-100 shadow-xl">
                             {field.options?.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value} className="font-medium focus:bg-indigo-50 rounded-lg m-1">
+                              <SelectItem key={opt.value} value={opt.value} className="font-bold text-slate-600 focus:bg-slate-50">
                                 {opt.label}
                               </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
+                      ) : field.type === 'switch' ? (
+                        <div className="flex items-center gap-2 h-11 px-3 bg-slate-50 rounded-xl border border-slate-50">
+                          <Switch name={field.id} defaultChecked={!!defaultValue} />
+                          <span className="text-xs font-bold text-slate-400 italic">Toggle to enable/disable</span>
+                        </div>
                       ) : field.type === 'textarea' ? (
                         <Textarea 
-                          id={field.id}
                           name={field.id}
-                          defaultValue={String(value)}
+                          defaultValue={String(defaultValue)}
                           placeholder={field.placeholder}
-                          className="min-h-[100px] rounded-xl border-slate-200 bg-slate-50/50 focus:ring-indigo-500/20 font-medium resize-none"
+                          className="min-h-[100px] rounded-xl border-slate-100 bg-slate-50 font-bold focus:ring-[#FF5A20] resize-none"
                         />
                       ) : (
                         <Input 
-                          id={field.id}
                           name={field.id}
                           type={field.type}
-                          defaultValue={String(value)}
+                          defaultValue={String(defaultValue)}
                           placeholder={field.placeholder}
                           required={field.required}
-                          className="h-11 rounded-xl border-slate-200 bg-slate-50/50 focus:ring-indigo-500/20 font-semibold tabular-nums"
+                          className="h-11 rounded-xl border-slate-100 bg-slate-50 font-bold focus:ring-[#FF5A20]"
                         />
                       )}
                     </div>
@@ -149,30 +136,25 @@ export function EditCustomerModal({ customer, subsidiaryId, open, onOpenChange }
             </div>
           ))}
 
-          <DialogFooter className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-slate-50">
+          {/* Hidden metadata handling or extra fields */}
+          <div className="pt-6 flex justify-end gap-3 sticky bottom-0 bg-white border-t border-slate-50">
             <Button 
               type="button" 
-              variant="outline" 
-              onClick={() => onOpenChange(false)}
-              className="h-12 rounded-2xl border-slate-200 font-bold px-8 hover:bg-slate-50"
+              variant="ghost" 
+              onClick={() => setOpen(false)}
+              className="h-12 px-6 rounded-xl font-bold text-slate-400 hover:text-slate-600 hover:bg-slate-50"
             >
-              Discard Changes
+              Cancel
             </Button>
             <Button 
               type="submit" 
               disabled={isPending}
-              className="h-12 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold px-10 shadow-xl shadow-slate-200 disabled:opacity-70"
+              className="h-12 px-8 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black shadow-lg shadow-slate-200 transition-all active:scale-95"
             >
-              {isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Updating...
-                </>
-              ) : (
-                "Save Customer Record"
-              )}
+              {isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
+              Save Changes
             </Button>
-          </DialogFooter>
+          </div>
         </form>
       </DialogContent>
     </Dialog>

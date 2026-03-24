@@ -88,3 +88,54 @@ export async function addInteractionNote(customerId: string, content: string, fo
   revalidatePath('/admin/customers')
   return { success: true }
 }
+
+export async function deleteCustomer(customerId: string) {
+  const supabase = await createClient()
+  
+  const { error } = await supabase
+    .from('customers')
+    .delete()
+    .eq('id', customerId)
+
+  if (error) throw new Error(error.message)
+  
+  revalidatePath('/admin/customers')
+  revalidatePath('/admin/subsidiaries', 'layout')
+  return { success: true }
+}
+
+export async function updateCustomerAdmin(customerId: string, formData: FormData) {
+  const supabase = await createClient()
+
+  const first_name = formData.get('firstName') as string
+  const surname = formData.get('surname') as string
+  const phone = formData.get('phone') as string
+  const email = formData.get('email') as string
+  const subsidiary_id = formData.get('subsidiaryId') as string
+
+  // Extract metadata
+  const metadata: Record<string, any> = {}
+  formData.forEach((value, key) => {
+    if (!['firstName', 'surname', 'phone', 'email', 'subsidiaryId', 'customerId'].includes(key) && !key.startsWith('$ACTION')) {
+      metadata[key] = value
+    }
+  })
+
+  const { error } = await supabase
+    .from('customers')
+    .update({
+      first_name,
+      surname,
+      phone,
+      email,
+      customer_metadata: metadata,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', customerId)
+
+  if (error) throw new Error(error.message)
+
+  revalidatePath('/admin/customers')
+  revalidatePath(`/admin/subsidiaries/${subsidiary_id}`)
+  return { success: true }
+}

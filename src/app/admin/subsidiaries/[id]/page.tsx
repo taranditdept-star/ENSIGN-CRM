@@ -1,12 +1,15 @@
 import { createClient } from "@/utils/supabase/server"
 import { notFound } from "next/navigation"
-import { Building2, Users, MapPin, ChevronLeft, Edit3, Trash2 } from "lucide-react"
+import { Building2, Users, MapPin, ChevronLeft } from "lucide-react"
 import Link from "next/link"
 import { QRCodeTrigger } from "@/components/qr-trigger"
 import { CustomerDetailsModal } from "@/components/customer-details-modal"
+import { EditCustomerModal } from "@/components/edit-customer-modal"
+import { DeleteCustomerDialog } from "@/components/delete-customer-dialog"
 
 // Define interfaces for better type safety
 interface CustomerMetadata {
+  [key: string]: any;
   quantityKg?: number;
   refillQuantityKg?: number;
   quantity?: number;
@@ -25,8 +28,10 @@ interface Customer {
   first_name: string;
   surname: string;
   phone: string;
+  email: string;
+  subsidiary_id: string;
   created_at: string;
-  customer_metadata: CustomerMetadata | null;
+  customer_metadata: CustomerMetadata;
 }
 
 interface Subsidiary {
@@ -34,6 +39,7 @@ interface Subsidiary {
   name: string;
   location: string | null;
   customers: Customer[];
+  schema_type?: string; // Added schema_type as per instruction
 }
 
 export default async function SubsidiaryDetailPage({ 
@@ -196,14 +202,10 @@ export default async function SubsidiaryDetailPage({
                        </span>
                     </td>
                     <td className="px-8 py-5">
-                      <div className="flex items-center justify-end gap-2 transition-opacity">
+                      <div className="flex items-center gap-1">
                         <CustomerDetailsModal customer={customer as any} />
-                        <button className="p-2 hover:bg-white hover:shadow-md rounded-lg text-slate-400 hover:text-amber-600 transition-all">
-                          <Edit3 className="w-4 h-4" />
-                        </button>
-                        <button className="p-2 hover:bg-white hover:shadow-md rounded-lg text-slate-400 hover:text-rose-600 transition-all">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        <EditCustomerModal customer={customer as any} schemaType={subsidiary.schema_type} />
+                        <DeleteCustomerDialog customerId={customer.id} customerName={`${customer.first_name} ${customer.surname}`} />
                       </div>
                     </td>
                   </tr>

@@ -1,8 +1,10 @@
 import { createClient } from "@/utils/supabase/server"
-import { Search, Filter, Download, Building2, Zap, Edit3, Trash2 } from "lucide-react"
+import { Search, Filter, Download, Building2, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { CustomerDetailsModal } from "@/components/customer-details-modal"
 import { AdminSearchBar } from "@/components/admin-search-bar"
+import { EditCustomerModal } from "@/components/edit-customer-modal"
+import { DeleteCustomerDialog } from "@/components/delete-customer-dialog"
 
 interface SearchParams {
   q?: string;
@@ -13,8 +15,10 @@ interface Organization {
 }
 
 interface Subsidiary {
+  id: string;
   name: string;
-  organizations: Organization;
+  schema_type?: string;
+  organizations?: Organization; // Make organizations optional as it might not always be fetched
 }
 
 interface Customer {
@@ -35,7 +39,7 @@ export default async function MasterCustomerList({ searchParams }: { searchParam
   // 1. Fetch Customers with filtering - joined with subsidiary and organization
   let supabaseQuery = supabase
     .from('customers')
-    .select('*, subsidiaries(name, organizations(name))')
+    .select('*, subsidiaries(id, name, organizations(name), schema_type)') // Modified select to fetch id and schema_type from subsidiaries
     .order('created_at', { ascending: false })
 
   if (query) {
@@ -195,14 +199,10 @@ export default async function MasterCustomerList({ searchParams }: { searchParam
                       </span>
                     </td>
                     <td className="px-8 py-6 text-right pr-12">
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex items-center gap-1">
                         <CustomerDetailsModal customer={customer as any} />
-                        <button className="p-2 hover:bg-white hover:shadow-md rounded-lg text-slate-400 hover:text-amber-600 transition-all">
-                          <Edit3 className="w-4 h-4" />
-                        </button>
-                        <button className="p-2 hover:bg-white hover:shadow-md rounded-lg text-slate-400 hover:text-rose-600 transition-all">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        <EditCustomerModal customer={customer as any} schemaType={customer.subsidiaries?.schema_type} />
+                        <DeleteCustomerDialog customerId={customer.id} customerName={`${customer.first_name || ''} ${customer.surname || ''}`} />
                       </div>
                     </td>
                   </tr>
