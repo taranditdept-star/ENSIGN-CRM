@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { LogoutButton } from '@/components/logout-button'
 
 interface OrganizationWithSubs {
   id: string;
@@ -185,6 +186,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-500 hover:bg-slate-50 rounded-lg transition-colors">
             <Settings className="w-4 h-4" /> Settings
           </Link>
+          <div className="pt-2 mt-2 border-t border-slate-100 flex items-center px-1">
+            <LogoutButton />
+          </div>
         </div>
       </aside>
 
