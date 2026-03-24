@@ -14,6 +14,7 @@ import {
   Command,
 } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 interface OrganizationWithSubs {
   id: string;
@@ -89,7 +90,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </div>
             <div>
               <h2 className="text-sm font-bold text-slate-900 leading-none mb-1">Ensign Holdings</h2>
-              <p className="text-[10px] text-slate-400 font-semibold bg-slate-100 w-max px-1.5 py-0.5 rounded-sm">Centralized CRM</p>
+              <div className="flex items-center gap-2">
+                <p className="text-[10px] text-slate-400 font-semibold bg-slate-100 dark:bg-slate-800 w-max px-1.5 py-0.5 rounded-sm tracking-tight">Centralized CRM</p>
+                <div className="scale-75 origin-left">
+                  <ThemeToggle />
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { LayoutDashboard, Database, Users, Bell, Search, Settings, LogOut, PlusCircle } from "lucide-react"
+import { LayoutDashboard, Database, Users, Bell, Search, LogOut, PlusCircle } from "lucide-react"
 import { logout } from "@/app/login/actions"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default async function WorkspaceLayout({
   children,
@@ -90,7 +91,8 @@ export default async function WorkspaceLayout({
             </div>
           </div>
           
-          <div className="flex items-center gap-4 ml-4">
+          <div className="flex items-center gap-3 ml-4">
+            <ThemeToggle />
             <button className="text-slate-400 hover:text-indigo-600 relative p-2 transition-colors rounded-lg hover:bg-indigo-50">
               <Bell className="w-5 h-5" />
             </button>

@@ -42,13 +42,6 @@ export default async function CapturePage({ params }: { params: Promise<{ id: st
   const isDark = schemaType === 'sbali' || schemaType === 'mining' || schemaType === 'fuel'
   const bgColor = isDark ? 'bg-[#0F172A]' : 'bg-[#F0F2F5]'
   
-  // Custom Accents
-  const accentColor = 
-    schemaType === 'lpg' ? '#EA580C' : 
-    schemaType === 'sbali' ? '#6366F1' :
-    schemaType === 'mining' ? '#D97706' : 
-    schemaType === 'fuel' ? '#0EA5E9' : '#EA580C'
-
   const headerBg = isDark ? 'bg-[#1E293B]' : (schemaType === 'lpg' ? 'bg-[#1e3a5f]' : 'bg-slate-900')
 
   return (
@@ -75,24 +68,24 @@ export default async function CapturePage({ params }: { params: Promise<{ id: st
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 w-full flex justify-center py-10 px-4 sm:px-6">
+      <main className="flex-1 w-full flex justify-center py-6 sm:py-10 px-4 sm:px-6">
         <div className="w-full max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-700">
           
           {/* Main Form Container Card */}
           <div className={`${isDark ? 'bg-[#1E293B] border-slate-800' : 'bg-white border-slate-100'} rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border overflow-hidden`}>
             
             {/* Header Area Inside the Card */}
-            <div className="px-8 sm:px-12 pt-10 pb-6">
-              <h2 className={`${isDark ? 'text-indigo-400' : 'text-[#1e3a5f]'} text-[28px] font-bold tracking-tight mb-2`}>
+            <div className="px-6 sm:px-12 pt-6 sm:pt-10 pb-6">
+              <h2 className={`${isDark ? 'text-indigo-400' : 'text-[#1e3a5f]'} text-2xl sm:text-[28px] font-bold tracking-tight mb-2`}>
                 {schemaType === 'sbali' ? 'Roller Meal Customer Data Capture' : 'Customer Registration Form'}
               </h2>
-              <p className={`${isDark ? 'text-slate-400' : 'text-slate-500'} font-medium text-[15px]`}>
+              <p className={`${isDark ? 'text-slate-400' : 'text-slate-500'} font-medium text-sm sm:text-[15px]`}>
                 {schemaType === 'sbali' ? 'Enter customer information below' : `Fill in all required fields to register a new ${branchName} customer.`}
               </p>
             </div>
 
             {/* Injected Intelligent Component handling the massive grid layout loop */}
-            <div className="px-8 sm:px-12 pb-10">
+            <div className="px-6 sm:px-12 pb-10">
               <DynamicCaptureForm subsidiaryId={id} schema={schema} isDark={isDark} />
             </div>
 

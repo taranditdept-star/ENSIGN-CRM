@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { QrCode, Download, Printer } from "lucide-react"
-import { QRCodeSVG } from "qrcode.react"
+import { QRCodeCanvas } from "qrcode.react"
 import {
   Dialog,
   DialogContent,
@@ -21,12 +21,27 @@ export function QRCodeDialog({
   branchName: string;
   url: string;
 }) {
-  const qrRef = React.useRef<HTMLDivElement>(null)
+  const handleDownload = () => {
+    const canvas = document.getElementById(`qr-canvas-${branchName}`) as HTMLCanvasElement
+    if (canvas) {
+      const pngUrl = canvas
+        .toDataURL("image/png")
+        .replace("image/png", "image/octet-stream")
+      const downloadLink = document.createElement("a")
+      downloadLink.href = pngUrl
+      downloadLink.download = `QR-${branchName.replace(/\s+/g, "-")}.png`
+      document.body.appendChild(downloadLink)
+      downloadLink.click()
+      document.body.removeChild(downloadLink)
+      toast.success("QR Code downloaded!")
+    }
+  }
 
   const handlePrint = () => {
-    const printContent = qrRef.current
+    const canvas = document.getElementById(`qr-canvas-${branchName}`) as HTMLCanvasElement
     const windowUrl = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0')
-    if (windowUrl && printContent) {
+    if (windowUrl && canvas) {
+      const imgUrl = canvas.toDataURL("image/png")
       windowUrl.document.write(`
         <html>
           <head>
@@ -34,14 +49,15 @@ export function QRCodeDialog({
             <style>
               body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
               .container { text-align: center; border: 2px solid #eee; padding: 40px; border-radius: 20px; }
-              h1 { margin-bottom: 30px; font-size: 24px; color: #1e293b; }
-              p { margin-top: 20px; color: #64748b; font-size: 14px; }
+              img { width: 300px; height: 300px; margin: 20px 0; }
+              h1 { margin-bottom: 10px; font-size: 28px; color: #1e293b; }
+              p { margin-top: 10px; color: #64748b; font-size: 16px; font-weight: bold; }
             </style>
           </head>
           <body>
             <div class="container">
               <h1>${branchName}</h1>
-              ${printContent.innerHTML}
+              <img src="${imgUrl}" />
               <p>Scan to Register Customer</p>
             </div>
             <script>
@@ -75,11 +91,14 @@ export function QRCodeDialog({
         </DialogHeader>
         
         <div className="flex flex-col items-center justify-center py-10">
-          <div 
-            ref={qrRef}
-            className="p-6 bg-white rounded-3xl border-2 border-slate-50 shadow-xl"
-          >
-            <QRCodeSVG value={url} size={200} level="H" includeMargin={false} />
+          <div className="p-6 bg-white rounded-3xl border-2 border-slate-50 shadow-xl">
+            <QRCodeCanvas 
+              id={`qr-canvas-${branchName}`}
+              value={url} 
+              size={200} 
+              level="H" 
+              includeMargin={false} 
+            />
           </div>
           <p className="mt-8 text-[11px] font-black text-slate-300 uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
             {url}
@@ -96,10 +115,7 @@ export function QRCodeDialog({
           <Button 
             variant="outline" 
             className="h-12 border-slate-200 text-slate-700 font-bold rounded-xl flex items-center justify-center gap-2"
-            onClick={() => {
-              // Simple "download" logic can be added here if needed
-              toast.info("Right click the QR code to save as image.")
-            }}
+            onClick={handleDownload}
           >
             <Download className="w-4 h-4" /> Download
           </Button>
