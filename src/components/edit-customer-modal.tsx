@@ -108,18 +108,44 @@ export function EditCustomerModal({
           </Button>
         } />
       )}
-      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto rounded-3xl border-0 shadow-2xl p-0">
-        <DialogHeader className="p-8 bg-slate-900 text-white sticky top-0 z-10">
-          <DialogTitle className="text-2xl font-black tracking-tight flex items-center gap-3">
-            <div className="p-2 bg-white/10 rounded-lg">
-              <Edit3 className="w-5 h-5 text-white" />
+      <DialogContent className="sm:max-w-[720px] max-h-[85vh] overflow-hidden rounded-[40px] border-0 shadow-[0_32px_128px_-16px_rgba(0,0,0,0.3)] p-0 flex flex-col transition-all duration-500 ease-out animate-in fade-in zoom-in-95">
+        <DialogHeader className="p-12 bg-[#0F172A] text-white shrink-0 relative overflow-hidden">
+          {/* Decorative Elements */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[#FF5A20]/20 blur-[100px] -mr-40 -mt-40 rounded-full animate-pulse" />
+          <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-500/10 blur-[60px] -ml-20 -mb-20 rounded-full" />
+          
+          <div className="relative z-10 flex items-center justify-between">
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-white/10 rounded-[22px] flex items-center justify-center backdrop-blur-2xl border border-white/20 shadow-2xl ring-4 ring-white/5">
+                  <Edit3 className="w-7 h-7 text-[#FF5A20]" />
+                </div>
+                <div>
+                  <DialogTitle className="text-3xl font-black tracking-tight text-white">Edit Profile</DialogTitle>
+                  <p className="text-slate-400 text-sm font-bold mt-0.5">Management Portal</p>
+                </div>
+              </div>
+              <p className="text-slate-400 text-[13px] font-medium leading-relaxed max-w-[420px]">
+                Modifying administrative records for <span className="text-white font-bold bg-white/10 px-2 py-0.5 rounded-lg border border-white/10">{customer.first_name} {customer.surname}</span>.
+              </p>
             </div>
-            Edit Customer Profile
-          </DialogTitle>
-          <p className="text-slate-400 text-sm font-medium mt-1">Update core details and subsidiary-specific information.</p>
+            <div className="text-right hidden sm:block">
+              <div className="px-4 py-3 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-md">
+                <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] block mb-1">Entry ID</span>
+                <span className="font-mono text-sm text-[#FF5A20] font-bold">#{customer.id.split('-')[0].toUpperCase()}</span>
+              </div>
+            </div>
+          </div>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="p-8 space-y-8 bg-white">
+        <div className="flex-1 overflow-y-auto px-12 py-10 bg-[#F8FAFC]">
+          <style dangerouslySetInnerHTML={{ __html: `
+            .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+            .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+            .custom-scrollbar::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
+          `}} />
+          <form id="edit-customer-form" onSubmit={handleSubmit} className="space-y-14 custom-scrollbar">
           {sections.map((section, sIdx) => (
             <div key={sIdx} className="space-y-4">
               <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-50 pb-2">
@@ -129,36 +155,41 @@ export function EditCustomerModal({
                 {section.fields.map((field) => {
                   const defaultValue = (customer as any)[field.id] || (customer.customer_metadata as any)?.[field.id] || ""
                   
+                  const colSpanClass = 
+                    field.colSpan === 6 ? "col-span-6" : 
+                    field.colSpan === 4 ? "col-span-4" : 
+                    "col-span-12"
+
                   return (
-                    <div key={field.id} className={`col-span-${field.colSpan || 12} space-y-1.5`}>
-                      <Label className="text-[11px] font-bold text-slate-500 uppercase tracking-tight">
+                    <div key={field.id} className={`${colSpanClass} space-y-2`}>
+                      <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
                         {field.label} {field.required && <span className="text-rose-500">*</span>}
                       </Label>
                       
                       {field.type === 'select' ? (
                         <Select name={field.id} defaultValue={String(defaultValue)}>
-                          <SelectTrigger className="h-11 rounded-xl border-slate-100 bg-slate-50 font-bold focus:ring-[#FF5A20]">
+                          <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50/50 font-bold focus:ring-2 focus:ring-[#FF5A20]/20 hover:border-slate-200 transition-all">
                             <SelectValue placeholder={field.placeholder} />
                           </SelectTrigger>
-                          <SelectContent className="rounded-xl border-slate-100 shadow-xl">
+                          <SelectContent className="rounded-2xl border-slate-100 shadow-2xl overflow-hidden">
                             {field.options?.map(opt => (
-                              <SelectItem key={opt.value} value={opt.value} className="font-bold text-slate-600 focus:bg-slate-50">
+                              <SelectItem key={opt.value} value={opt.value} className="font-bold text-slate-600 py-3 focus:bg-slate-50">
                                 {opt.label}
                               </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
                       ) : field.type === 'switch' ? (
-                        <div className="flex items-center gap-2 h-11 px-3 bg-slate-50 rounded-xl border border-slate-50">
+                        <div className="flex items-center justify-between h-12 px-4 bg-slate-50/50 rounded-2xl border border-slate-100 hover:border-slate-200 transition-all">
+                          <span className="text-[11px] font-bold text-slate-400 italic">Enable Option</span>
                           <Switch name={field.id} defaultChecked={!!defaultValue} />
-                          <span className="text-xs font-bold text-slate-400 italic">Toggle to enable/disable</span>
                         </div>
                       ) : field.type === 'textarea' ? (
                         <Textarea 
                           name={field.id}
                           defaultValue={String(defaultValue)}
                           placeholder={field.placeholder}
-                          className="min-h-[100px] rounded-xl border-slate-100 bg-slate-50 font-bold focus:ring-[#FF5A20] resize-none"
+                          className="min-h-[120px] rounded-2xl border-slate-100 bg-slate-50/50 font-bold focus:ring-2 focus:ring-[#FF5A20]/20 resize-none hover:border-slate-200 transition-all p-4"
                         />
                       ) : (
                         <Input 
@@ -167,7 +198,7 @@ export function EditCustomerModal({
                           defaultValue={String(defaultValue)}
                           placeholder={field.placeholder}
                           required={field.required}
-                          className="h-11 rounded-xl border-slate-100 bg-slate-50 font-bold focus:ring-[#FF5A20]"
+                          className="h-12 rounded-2xl border-slate-100 bg-slate-50/50 font-bold focus:ring-2 focus:ring-[#FF5A20]/20 hover:border-slate-200 transition-all px-4"
                         />
                       )}
                     </div>
@@ -176,27 +207,34 @@ export function EditCustomerModal({
               </div>
             </div>
           ))}
+          </form>
+        </div>
 
-          {/* Hidden metadata handling or extra fields */}
-          <div className="pt-6 flex justify-end gap-3 sticky bottom-0 bg-white border-t border-slate-50">
-            <Button 
-              type="button" 
-              variant="ghost" 
-              onClick={() => setOpen(false)}
-              className="h-12 px-6 rounded-xl font-bold text-slate-400 hover:text-slate-600 hover:bg-slate-50"
-            >
-              Cancel
-            </Button>
-            <Button 
-              type="submit" 
-              disabled={isPending}
-              className="h-12 px-8 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black shadow-lg shadow-slate-200 transition-all active:scale-95"
-            >
-              {isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
-              Save Changes
-            </Button>
-          </div>
-        </form>
+        <div className="p-8 bg-white border-t border-slate-100 flex justify-end gap-4 shrink-0 px-10">
+          <Button 
+            type="button" 
+            variant="ghost" 
+            onClick={() => setOpen(false)}
+            className="h-14 px-8 rounded-2xl font-black text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-all active:scale-95"
+          >
+            Cancel
+          </Button>
+          <Button 
+            form="edit-customer-form"
+            type="submit" 
+            disabled={isPending}
+            className="h-14 px-10 rounded-2xl bg-[#0F172A] hover:bg-[#1E293B] text-white font-black shadow-xl shadow-slate-200 transition-all active:scale-95 flex items-center gap-3"
+          >
+            {isPending ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <>
+                <Save className="w-5 h-5" />
+                <span>Save Changes</span>
+              </>
+            )}
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   )
