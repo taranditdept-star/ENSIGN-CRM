@@ -12,7 +12,7 @@ import { KpiCard } from "@/components/dashboard/kpi-card"
 import { SalesRegisterTable } from "@/components/dashboard/sales-register-table"
 import { BranchPerformancePanel } from "@/components/dashboard/branch-performance-panel"
 import { ActivityHeatmap } from "@/components/dashboard/activity-heatmap"
-import { getDailySalesStats, getBranchPerformance, getActivityHeatmapData } from "@/lib/sales-service"
+import { getDailySalesStats, getBranchPerformance, getActivityVolume } from "@/lib/sales-service"
 import Link from "next/link"
 
 import { DateFilter } from "@/components/dashboard/date-filter"
@@ -27,12 +27,12 @@ export default async function AdminDashboard({
   const { date } = await searchParams
 
   // Fetch Live Sales Stats, Branch Performance & Heatmap
-  const [stats, branchPerformance, heatmapData, { data: orgs }] = await Promise.all([
-    getDailySalesStats(date),
-    getBranchPerformance(date),
-    getActivityHeatmapData(),
-    supabase.from('organizations').select('id, name').order('name')
-  ])
+const [stats, branchPerformance, activityData, { data: orgs }] = await Promise.all([
+  getDailySalesStats(date),
+  getBranchPerformance(date),
+  getActivityVolume(),
+  supabase.from('organizations').select('id, name').order('name')
+])
 
   const organizations = orgs || []
 
@@ -94,14 +94,15 @@ export default async function AdminDashboard({
         />
       </div>
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      {/* Visual Analytics Section */}
+      <div className="mt-12">
+        <ActivityHeatmap data={activityData} />
+      </div>
+
+      {/* Main Sections */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-12">
         {/* Left Col: Heatmap & Table */}
         <div className="lg:col-span-12 space-y-12">
-          {/* Heatmap Section */}
-          <div className="animate-in fade-in slide-in-from-bottom-5 duration-700">
-             <ActivityHeatmap data={heatmapData} />
-          </div>
 
           {/* Daily Sales Register */}
           <div className="animate-in fade-in slide-in-from-bottom-6 duration-1000">

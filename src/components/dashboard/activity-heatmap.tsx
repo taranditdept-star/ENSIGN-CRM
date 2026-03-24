@@ -1,84 +1,78 @@
-'use client'
+"use client"
 
-import { Card } from "@/components/ui/card"
-import { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipProvider, 
-  TooltipTrigger 
-} from "@/components/ui/tooltip"
+import React from 'react'
+import { motion } from 'framer-motion'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
-interface HeatmapData {
+interface ActivityData {
   date: string
   count: number
 }
 
 interface ActivityHeatmapProps {
-  data: HeatmapData[]
+  data: ActivityData[]
 }
 
 export function ActivityHeatmap({ data }: ActivityHeatmapProps) {
-  // Pad data to last 30 days if needed
-  const days = Array.from({ length: 30 }, (_, i) => {
+  // Generate last 90 days of dates
+  const dates = Array.from({ length: 91 }, (_, i) => {
     const d = new Date()
-    d.setDate(d.getDate() - (29 - i))
-    const dateStr = d.toISOString().split('T')[0]
-    const match = data.find(item => item.date === dateStr)
-    return {
-      date: dateStr,
-      count: match ? match.count : 0
-    }
+    d.setDate(d.getDate() - (90 - i))
+    return d.toISOString().split('T')[0]
   })
 
-  const getIntensity = (count: number) => {
-    if (count === 0) return "bg-slate-100"
-    if (count < 5) return "bg-emerald-200"
-    if (count < 15) return "bg-emerald-400"
-    return "bg-emerald-600 shadow-[0_0_10px_rgba(16,185,129,0.3)]"
+  const dataMap = new Map(data.map(item => [item.date, item.count]))
+
+  const getColor = (count: number) => {
+    if (count === 0) return 'bg-slate-100/50'
+    if (count < 5) return 'bg-orange-200'
+    if (count < 15) return 'bg-orange-400'
+    return 'bg-[#FF5A20]'
   }
 
   return (
-    <Card className="bg-white/80 backdrop-blur-xl rounded-[40px] border-0 shadow-2xl p-8">
-      <div className="space-y-6">
-        <div className="space-y-1">
-          <h3 className="text-lg font-black text-slate-900 tracking-tight">Activity Heatmap</h3>
-          <p className="text-slate-400 text-[11px] font-bold uppercase tracking-widest">Transaction volume (Last 30 Days)</p>
+    <div className="bg-white/80 backdrop-blur-xl border border-white p-8 rounded-[32px] shadow-sm">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h2 className="text-xl font-black text-slate-900 tracking-tight">Operational Intensity</h2>
+          <p className="text-[13px] font-semibold text-slate-400 mt-1">Transaction volume across the last 90 days</p>
         </div>
-
-        <TooltipProvider>
-          <div className="flex flex-wrap gap-2">
-            {days.map((day) => (
-              <Tooltip key={day.date}>
-                <TooltipTrigger>
-                  <div 
-                    className={`w-10 h-10 rounded-xl transition-all duration-500 hover:scale-110 cursor-pointer ${getIntensity(day.count)} shadow-inner`}
-                  />
-                </TooltipTrigger>
-                <TooltipContent className="bg-slate-900 text-white border-0 font-bold rounded-xl px-4 py-2">
-                  <p>{new Date(day.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</p>
-                  <p className="text-[11px] text-[#FF5A20] font-black uppercase tracking-widest leading-none mt-1">
-                    {day.count} Transactions
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            ))}
+        <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+          <span>Less</span>
+          <div className="flex gap-1">
+            <div className="w-3 h-3 rounded-sm bg-slate-100" />
+            <div className="w-3 h-3 rounded-sm bg-orange-200" />
+            <div className="w-3 h-3 rounded-sm bg-orange-400" />
+            <div className="w-3 h-3 rounded-sm bg-[#FF5A20]" />
           </div>
-        </TooltipProvider>
-
-        <div className="flex items-center justify-between pt-4 border-t border-slate-50 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-          <div className="flex items-center gap-2">
-            <span>Less</span>
-            <div className="flex gap-1">
-              <div className="w-3 h-3 rounded-sm bg-slate-100" />
-              <div className="w-3 h-3 rounded-sm bg-emerald-200" />
-              <div className="w-3 h-3 rounded-sm bg-emerald-400" />
-              <div className="w-3 h-3 rounded-sm bg-emerald-600" />
-            </div>
-            <span>More</span>
-          </div>
-          <span>Updated Real-time</span>
+          <span>More</span>
         </div>
       </div>
-    </Card>
+
+      <TooltipProvider delay={0}>
+        <div className="flex flex-wrap gap-1.5 lg:grid lg:grid-flow-col lg:grid-rows-7 lg:gap-2">
+          {dates.map((date) => {
+            const count = dataMap.get(date) || 0
+            return (
+              <Tooltip key={date}>
+                <TooltipTrigger>
+                  <motion.div 
+                    whileHover={{ scale: 1.2, zIndex: 10 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-[4px] cursor-pointer transition-colors ${getColor(count)}`}
+                  />
+                </TooltipTrigger>
+                <TooltipContent side="top" className="bg-slate-900 text-white border-none py-2 px-3 rounded-xl shadow-2xl">
+                  <div className="text-[11px] font-bold">
+                    <span className="text-white/60">{new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                    <div className="text-sm mt-0.5">{count} {count === 1 ? 'transaction' : 'transactions'}</div>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            )
+          })}
+        </div>
+      </TooltipProvider>
+    </div>
   )
 }

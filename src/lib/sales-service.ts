@@ -156,3 +156,31 @@ export async function getOrgPerformance() {
     branches: o.branches.size
   }))
 }
+
+export async function getActivityVolume() {
+  const supabase = await createClient()
+  
+  const ninetyDaysAgo = new Date()
+  ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90)
+  
+  const { data, error } = await supabase
+    .from('customers')
+    .select('created_at')
+    .gte('created_at', ninetyDaysAgo.toISOString())
+
+  if (error) {
+    console.error('Error fetching activity volume:', error)
+    return []
+  }
+
+  const volumeMap = (data || []).reduce((acc: Record<string, number>, curr) => {
+    const date = new Date(curr.created_at).toISOString().split('T')[0]
+    acc[date] = (acc[date] || 0) + 1
+    return acc
+  }, {})
+
+  return Object.entries(volumeMap).map(([date, count]) => ({
+    date,
+    count
+  }))
+}
