@@ -87,7 +87,7 @@ export async function getBranchPerformance(): Promise<BranchPerformance[]> {
       total_quantity: s?.total_quantity || 0,
       total_revenue: s?.total_revenue || 0,
       last_activity: h.last_activity,
-      status: h.status as any
+      status: h.status as 'active' | 'warning' | 'inactive'
     }
   })
 }

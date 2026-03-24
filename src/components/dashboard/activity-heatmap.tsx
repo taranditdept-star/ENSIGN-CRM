@@ -49,7 +49,7 @@ export function ActivityHeatmap({ data }: ActivityHeatmapProps) {
           <div className="flex flex-wrap gap-2">
             {days.map((day) => (
               <Tooltip key={day.date}>
-                <TooltipTrigger asChild>
+                <TooltipTrigger>
                   <div 
                     className={`w-10 h-10 rounded-xl transition-all duration-500 hover:scale-110 cursor-pointer ${getIntensity(day.count)} shadow-inner`}
                   />
