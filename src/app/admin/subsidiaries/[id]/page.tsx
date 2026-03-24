@@ -1,7 +1,8 @@
 import { createClient } from "@/utils/supabase/server"
 import { notFound } from "next/navigation"
-import { Building2, Users, MapPin, ChevronLeft } from "lucide-react"
+import { Building2, Users, MapPin, ChevronLeft, QrCode } from "lucide-react"
 import Link from "next/link"
+import { QRCodeTrigger } from "@/components/qr-trigger"
 
 export default async function SubsidiaryDetailPage({ 
   params 
@@ -52,13 +53,16 @@ export default async function SubsidiaryDetailPage({
               </div>
             </div>
           </div>
-          <Link 
-            href={`/capture/${subsidiary.id}`}
-            target="_blank"
-            className="h-12 px-6 bg-[#FF5A20] hover:bg-[#E04F1C] text-white font-black rounded-xl shadow-lg shadow-orange-100 transition-all flex items-center gap-2"
-          >
-            Launch Capture Portal
-          </Link>
+          <div className="flex items-center gap-3">
+            <QRCodeTrigger subsidiaryId={subsidiary.id} subsidiaryName={subsidiary.name} />
+            <Link 
+              href={`/capture/${subsidiary.id}`}
+              target="_blank"
+              className="h-12 px-6 bg-slate-900 hover:bg-slate-800 text-white font-black rounded-xl shadow-lg shadow-slate-200 transition-all flex items-center gap-2"
+            >
+              Launch Capture Portal
+            </Link>
+          </div>
         </div>
       </div>
 
