@@ -126,4 +126,15 @@
   html {
     @apply font-sans;
   }
+  
+  /* Custom System Cursor for all clickable elements */
+  a, 
+  button, 
+  [role="button"],
+  input[type="button"],
+  input[type="submit"],
+  select,
+  .cursor-pointer {
+    cursor: url('/custom-cursor.png') 16 0, pointer !important;
+  }
 }
