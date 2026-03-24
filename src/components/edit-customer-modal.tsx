@@ -30,22 +30,43 @@ interface Customer {
   first_name: string;
   surname: string;
   phone: string;
-  email: string;
-  subsidiary_id: string;
+  email?: string;
+  subsidiary_id?: string;
   schema_type?: string;
   customer_metadata?: Record<string, any>;
 }
 
-export function EditCustomerModal({ customer, schemaType = 'fallback' }: { customer: Customer, schemaType?: string }) {
+interface EditCustomerModalProps {
+  customer: Customer | null;
+  schemaType?: string;
+  subsidiaryId?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+export function EditCustomerModal({ 
+  customer, 
+  schemaType = 'fallback',
+  subsidiaryId,
+  open: externalOpen,
+  onOpenChange: setExternalOpen 
+}: EditCustomerModalProps) {
   const [isPending, setIsPending] = useState(false)
-  const [open, setOpen] = useState(false)
+  const [internalOpen, setInternalOpen] = useState(false)
   
+  const open = externalOpen !== undefined ? externalOpen : internalOpen
+  const setOpen = setExternalOpen || setInternalOpen
+
+  if (!customer && open) return null // Should not happen but for safety
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (!customer) return
+    
     setIsPending(true)
     
     const formData = new FormData(e.currentTarget)
-    formData.append('subsidiaryId', customer.subsidiary_id)
+    formData.append('subsidiaryId', subsidiaryId || customer.subsidiary_id || '')
     
     try {
       await updateCustomerAdmin(customer.id, formData)
@@ -58,15 +79,35 @@ export function EditCustomerModal({ customer, schemaType = 'fallback' }: { custo
     }
   }
 
-  const sections = subsidiarySchemas[schemaType] || subsidiarySchemas['fallback']
+  // Determine schema type
+  const actualSchemaType = schemaType || customer?.schema_type || 'fallback'
+  const sections = subsidiarySchemas[actualSchemaType] || subsidiarySchemas['fallback']
+
+  // If no customer and not open, still need to render the trigger part if not in controlled mode
+  if (!customer && !externalOpen) {
+    return (
+      <Dialog open={internalOpen} onOpenChange={setInternalOpen}>
+        <DialogTrigger render={
+          <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
+            <Edit3 className="w-4 h-4" />
+          </Button>
+        } />
+      </Dialog>
+    )
+  }
+
+  if (!customer) return null
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={
-        <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
-          <Edit3 className="w-4 h-4" />
-        </Button>
-      } />
+      {/* Only show trigger if not in controlled mode */}
+      {externalOpen === undefined && (
+        <DialogTrigger render={
+          <Button variant="ghost" size="icon" className="h-9 w-9 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
+            <Edit3 className="w-4 h-4" />
+          </Button>
+        } />
+      )}
       <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto rounded-3xl border-0 shadow-2xl p-0">
         <DialogHeader className="p-8 bg-slate-900 text-white sticky top-0 z-10">
           <DialogTitle className="text-2xl font-black tracking-tight flex items-center gap-3">

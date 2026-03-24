@@ -101,6 +101,7 @@ export async function deleteCustomer(customerId: string) {
   
   revalidatePath('/admin/customers')
   revalidatePath('/admin/subsidiaries', 'layout')
+  revalidatePath('/workspace', 'layout')
   return { success: true }
 }
 
@@ -137,5 +138,7 @@ export async function updateCustomerAdmin(customerId: string, formData: FormData
 
   revalidatePath('/admin/customers')
   revalidatePath(`/admin/subsidiaries/${subsidiary_id}`)
+  revalidatePath(`/workspace/${subsidiary_id}/customers`)
+  revalidatePath('/workspace', 'layout')
   return { success: true }
 }
