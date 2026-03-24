@@ -58,69 +58,7 @@ export default async function AdminDashboard() {
     }))
   }))
 
-  // JUSTICE FALLBACK: Ensure Flora Gas and Sbali show up for the demo if not in DB
-  const hasFlora = dashboardPortfolios.some(p => p.name.toLocaleLowerCase().includes('flora'))
-  const hasSbali = dashboardPortfolios.some(p => p.name.toLocaleLowerCase().includes('sbali'))
-
-  if (!hasFlora) {
-    dashboardPortfolios.push({
-      id: 'fallback-flora',
-      name: 'Flora Gas',
-      module: 'lpg',
-      branches: [
-        { id: 'f1', name: 'Flora Harare Central', captures: 124, status: 'Active', color: '#4F46E5' },
-        { id: 'f2', name: 'Flora Bulawayo West', captures: 86, status: 'Active', color: '#4F46E5' }
-      ]
-    })
-  }
-
-  if (!hasSbali) {
-    dashboardPortfolios.push({
-      id: 'fallback-sbali',
-      name: 'Sbali Roller Meal',
-      module: 'sbali',
-      branches: [
-        { id: 's1', name: 'Sbali Msasa Factory', captures: 215, status: 'Active', color: '#EC4899' },
-        { id: 's2', name: 'Sbali Mbare Outlet', captures: 42, status: 'New', color: '#EC4899' }
-      ]
-    })
-  }
-
-  // New Industry Portfolios
-  if (!dashboardPortfolios.some(p => p.name.includes('Mining'))) {
-    dashboardPortfolios.push({
-      id: 'fallback-mining',
-      name: 'Continental Mining',
-      module: 'mining',
-      branches: [
-        { id: 'm1', name: 'Kadoma Site A', captures: 12, status: 'Active', color: '#D97706' }
-      ]
-    })
-  }
-
-  if (!dashboardPortfolios.some(p => p.name.includes('Energy'))) {
-    dashboardPortfolios.push({
-      id: 'fallback-fuel',
-      name: 'Global Energies',
-      module: 'fuel',
-      branches: [
-        { id: 'e1', name: 'Harare Filling Station', captures: 342, status: 'Active', color: '#0EA5E9' }
-      ]
-    })
-  }
-
-  if (!dashboardPortfolios.some(p => p.name.includes('Bakery'))) {
-    dashboardPortfolios.push({
-      id: 'fallback-bakery',
-      name: 'Granite Haven Bakery',
-      module: 'bakery',
-      branches: [
-        { id: 'b1', name: 'Main Street Bakery', captures: 56, status: 'Active', color: '#F59E0B' }
-      ]
-    })
-  }
-
-  const totalOrgs = orgs?.length || dashboardPortfolios.length
+  const totalOrgs = orgs?.length || 0
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 h-full">

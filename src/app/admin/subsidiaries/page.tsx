@@ -19,7 +19,7 @@ export default async function SubsidiariesPage() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Branches & Subsidiaries</h1>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Subsidiary Branches</h1>
           <p className="text-slate-500 font-medium pt-1">Manage and monitor all active business units.</p>
         </div>
         <NewBranchDialog organizations={organizations || []} />

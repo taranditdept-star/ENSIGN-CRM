@@ -15,7 +15,7 @@ export default async function OrganizationsPage() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Main Companies</h1>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Group Organizations</h1>
           <p className="text-slate-500 font-medium">Manage top-level organizations in the Ensign network.</p>
         </div>
         <NewOrganizationDialog />

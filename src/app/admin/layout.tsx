@@ -52,31 +52,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     }))
   }))
 
-  // JUSTICE FALLBACK: If DB only has Mock HQ, add the real Ensign Group portfolios for the demo
-  if (portfolios.length <= 1) {
-    portfolios.push(
-      {
-        id: 'f-flora', name: 'Flora Gas', module: 'lpg',
-        branches: [{ id: 'f1', name: 'Harare Central', count: 124, color: '#4F46E5' }, { id: 'f2', name: 'Bulawayo West', count: 86, color: '#4F46E5' }]
-      },
-      {
-        id: 'f-sbali', name: 'Sbali Roller Meal', module: 'sbali',
-        branches: [{ id: 's1', name: 'Msasa Factory', count: 215, color: '#EC4899' }, { id: 's2', name: 'Mbare Outlet', count: 42, color: '#EC4899' }]
-      },
-      {
-        id: 'f-mining', name: 'Continental Mining', module: 'mining',
-        branches: [{ id: 'm1', name: 'Kadoma Site A', count: 12, color: '#D97706' }]
-      },
-      {
-        id: 'f-fuel', name: 'Global Energies', module: 'fuel',
-        branches: [{ id: 'e1', name: 'Harare Filling Stn', count: 342, color: '#0EA5E9' }]
-      },
-      {
-        id: 'f-bakery', name: 'Granite Haven', module: 'bakery',
-        branches: [{ id: 'b1', name: 'Main Street Bakery', count: 56, color: '#F59E0B' }]
-      }
-    )
-  }
   return (
     <div className="min-h-screen bg-[#F0F2F5] p-2 sm:p-4 flex gap-4">
       
@@ -123,13 +98,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <h3 className="text-[10px] uppercase text-slate-400 font-bold mb-3 px-3 tracking-widest">Main Menu</h3>
             <nav className="space-y-0.5">
               <Link href="/admin" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <LayoutDashboard className="w-4 h-4" /> Global Dashboard
+                <LayoutDashboard className="w-4 h-4" /> Group Executive Overview
               </Link>
               <Link href="/admin/organizations" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <Building2 className="w-4 h-4" /> Main Companies
+                <Building2 className="w-4 h-4" /> Portfolio Companies
               </Link>
               <Link href="/admin/subsidiaries" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <Users className="w-4 h-4" /> Registered Branches
+                <Users className="w-4 h-4" /> Subsidiary Branches
               </Link>
               <Link href="/admin/analytics" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
                 <BarChart className="w-4 h-4" /> Global Analytics

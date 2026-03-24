@@ -81,7 +81,11 @@ export default async function SubsidiaryDetailPage({
         <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Latest Scan</p>
           <div className="flex items-baseline gap-2">
-            <span className="text-xl font-black text-slate-900">Mar 23, 2026</span>
+            <span className="text-xl font-black text-slate-900">
+              {customers.length > 0 
+                ? new Date(Math.max(...customers.map((c: any) => new Date(c.created_at).getTime()))).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                : 'No entries yet'}
+            </span>
           </div>
         </div>
       </div>
@@ -105,7 +109,7 @@ export default async function SubsidiaryDetailPage({
               {customers.map((customer: any) => (
                 <tr key={customer.id} className="hover:bg-slate-50 transition-colors">
                   <td className="px-8 py-5">
-                    <span className="text-slate-900 font-extrabold">{customer.full_name || `${customer.firstName} ${customer.surname}`}</span>
+                    <span className="text-slate-900 font-extrabold">{customer.full_name || `${customer.first_name} ${customer.surname}`}</span>
                   </td>
                   <td className="px-8 py-5 text-slate-500 font-semibold">{customer.phone}</td>
                   <td className="px-8 py-5 text-slate-400 font-medium">

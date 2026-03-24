@@ -40,21 +40,8 @@ export async function captureCustomer(prevState: ActionState, formData: FormData
     }
   })
 
-  // Handle Mock ID logic to satisfy PostgreSQL strict UUID / FK constraints
-  let validSubId = subsidiaryId
-  if (subsidiaryId === "1" || subsidiaryId === "2") {
-    const { data: existingSubs } = await supabase.from('subsidiaries').select('id').limit(1)
-    if (existingSubs && existingSubs.length > 0) {
-      validSubId = existingSubs[0].id
-    } else {
-      // Need to dynamically scaffold related hierarchies to respect Postgres ON DELETE RESTRICT foreign keys
-      const { data: org } = await supabase.from('organizations').insert([{ name: 'Mock HQ' }]).select().single()
-      if (org) {
-        const { data: sub } = await supabase.from('subsidiaries').insert([{ organization_id: org.id, name: 'Mock Branch' }]).select().single()
-        if (sub) validSubId = sub.id
-      }
-    }
-  }
+  // Enforce strict valid UUID for subsidiaryId
+  const validSubId = subsidiaryId
 
   const { error } = await supabase
     .from('customers')
