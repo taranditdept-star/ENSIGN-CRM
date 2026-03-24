@@ -54,12 +54,11 @@ export function DynamicCaptureForm({
         <div key={sIdx} className="space-y-6">
           
           {/* Section Divider with Title precisely matching UI lines */}
-          <div className="flex items-center gap-4">
-            <div className={`flex-1 h-px ${isDark ? 'bg-slate-700' : 'bg-slate-200'}`}></div>
-            <h3 className={`text-[10px] sm:text-xs font-bold ${isDark ? 'text-blue-400' : 'text-slate-500'} uppercase tracking-widest leading-none`}>
+          <div className="flex items-center gap-6">
+            <h3 className={`text-[11px] font-black ${isDark ? 'text-white' : 'text-slate-500'} uppercase tracking-[0.3em] leading-none whitespace-nowrap`}>
               {section.title}
             </h3>
-            <div className={`flex-1 h-px ${isDark ? 'bg-slate-700' : 'bg-slate-200'}`}></div>
+            <div className={`flex-1 h-px ${isDark ? 'bg-white/10' : 'bg-slate-200'}`}></div>
           </div>
 
           <div className="grid grid-cols-12 gap-x-6 gap-y-5 md:gap-y-6">
@@ -96,7 +95,7 @@ export function DynamicCaptureForm({
                       type={field.type} 
                       required={field.required} 
                       placeholder={field.placeholder}
-                      className={`h-12 md:h-11 rounded-xl border-0 ${isDark ? 'bg-[#334155] border-[#475569] text-white' : 'bg-slate-50 border border-slate-200 text-slate-900'} text-sm shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all`}
+                      className={`h-14 rounded-2xl border ${isDark ? 'bg-white/5 border-white/10 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900'} text-base shadow-inner focus:ring-2 focus:ring-orange-500/50 transition-all`}
                     />
                    ) : field.type === 'textarea' ? (
                     <Textarea 
@@ -104,16 +103,16 @@ export function DynamicCaptureForm({
                       name={field.id} 
                       required={field.required} 
                       placeholder={field.placeholder}
-                      className={`min-h-[120px] rounded-xl border-0 ${isDark ? 'bg-[#334155] border-[#475569] text-white' : 'bg-slate-50 border border-slate-200 text-slate-900'} text-sm shadow-sm resize-none focus:ring-2 focus:ring-indigo-500 transition-all`}
+                      className={`min-h-[140px] rounded-2xl border ${isDark ? 'bg-white/5 border-white/10 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900'} text-base shadow-inner resize-none focus:ring-2 focus:ring-orange-500/50 transition-all`}
                     />
                   ) : field.type === 'select' ? (
                     <Select name={field.id} required={field.required}>
-                      <SelectTrigger className={`h-12 md:h-11 rounded-xl border-0 ${isDark ? 'bg-[#334155] border-[#475569] text-white' : 'bg-slate-50 border border-slate-200 text-slate-900'} text-sm shadow-sm focus:ring-2 focus:ring-indigo-500 transition-all`}>
+                      <SelectTrigger className={`h-14 rounded-2xl border ${isDark ? 'bg-white/5 border-white/10 text-white focus:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900'} text-base shadow-inner focus:ring-2 focus:ring-orange-500/50 transition-all text-left`}>
                         <SelectValue placeholder="— Select —" />
                       </SelectTrigger>
-                      <SelectContent className={isDark ? 'bg-[#1E293B] border-slate-700 text-white' : ''}>
+                      <SelectContent className={isDark ? 'bg-[#0F172A] border-white/10 text-white backdrop-blur-3xl' : ''}>
                         {field.options?.map((opt) => (
-                          <SelectItem key={opt.value} value={opt.value} className={isDark ? 'focus:bg-[#334155] focus:text-white' : ''}>
+                          <SelectItem key={opt.value} value={opt.value} className={isDark ? 'focus:bg-white/10 focus:text-white py-3' : 'py-3'}>
                             {opt.label}
                           </SelectItem>
                         ))}

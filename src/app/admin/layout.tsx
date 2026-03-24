@@ -10,6 +10,7 @@ import {
   Plus,
   QrCode,
   Download,
+  Globe,
 } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -108,6 +109,25 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 <History className="w-4 h-4" />
               </div>
               Audit Trails
+            </Link>
+          </nav>
+        </div>
+
+        {/* Strategic Tools Section (New Tools requested) */}
+        <div className="px-3 pb-6">
+          <h3 className="text-[11px] uppercase text-slate-900 font-extrabold mb-4 px-3 tracking-[0.15em]">Strategic Tools</h3>
+          <nav className="space-y-1">
+            <Link href="/admin/tools/qr-manager" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
+              <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 font-bold shadow-sm group-hover:shadow-md transition-all">
+                <QrCode className="w-4 h-4" />
+              </div>
+              QR Code Manager
+            </Link>
+            <Link href="/admin/tools/capture-registry" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
+              <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold shadow-sm group-hover:shadow-md transition-all">
+                <Globe className="w-4 h-4" />
+              </div>
+              Capture Link Registry
             </Link>
           </nav>
         </div>
