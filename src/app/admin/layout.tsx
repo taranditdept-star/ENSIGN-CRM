@@ -15,6 +15,7 @@ import { LogoutButton } from '@/components/logout-button'
 import { SidebarSearch } from '@/components/sidebar-search'
 import { MobileNav } from '@/components/mobile-nav'
 import { AdminHeader } from '@/components/admin-header'
+import { BrandTheme } from '@/components/brand-theme'
 
 interface OrganizationWithSubs {
   id: string;
@@ -111,7 +112,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   )
 
   return (
-    <div className="min-h-screen bg-[#F0F2F5] p-2 sm:p-4 flex gap-4">
+    <div className="min-h-screen bg-[#F0F2F5] p-2 sm:p-4 flex gap-4" style={{ '--brand-accent': '#6366F1' } as React.CSSProperties}>
+      <BrandTheme />
       
       {/* Sidebar - Matching Uxerflow Light Sidebar exactly */}
       <aside className="w-[260px] bg-white border border-slate-200 flex flex-col hidden lg:flex shrink-0 rounded-2xl shadow-sm h-[calc(100vh-32px)]">

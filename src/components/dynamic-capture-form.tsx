@@ -38,10 +38,25 @@ export function DynamicCaptureForm({
   useEffect(() => {
     if (state.error) {
       toast.error(state.error)
+      // Haptic feedback for error (double pulse)
+      if (typeof window !== 'undefined' && window.navigator.vibrate) {
+        window.navigator.vibrate([50, 50, 50])
+      }
     }
     if (state.success) {
       toast.success("Customer Registered Successfully!")
-      formRef.current?.reset() // clear form immediately
+      
+      // Haptic feedback for success (short pulse)
+      if (typeof window !== 'undefined' && window.navigator.vibrate) {
+        window.navigator.vibrate(20)
+      }
+
+      // Play subtle success sound
+      const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2432/2432-preview.mp3')
+      audio.volume = 0.2
+      audio.play().catch(() => {}) // Ignore if browser blocks auto-play
+
+      formRef.current?.reset() 
     }
   }, [state])
 
@@ -89,14 +104,23 @@ export function DynamicCaptureForm({
                   </Label>
                   
                   {field.type === 'text' || field.type === 'number' || field.type === 'email' ? (
-                    <Input 
-                      id={field.id} 
-                      name={field.id} 
-                      type={field.type} 
-                      required={field.required} 
-                      placeholder={field.placeholder}
-                      className={`h-14 rounded-2xl border ${isDark ? 'bg-white/5 border-white/10 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900'} text-base shadow-inner focus:ring-2 focus:ring-orange-500/50 transition-all`}
-                    />
+                    <div className="relative group/input">
+                      <Input 
+                        id={field.id} 
+                        name={field.id} 
+                        type={field.type} 
+                        required={field.required} 
+                        placeholder={field.placeholder}
+                        className={`h-14 rounded-2xl border ${isDark ? 'bg-white/5 border-white/10 text-white placeholder:text-white/20 focus:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900'} text-base shadow-inner focus:ring-2 focus-visible:ring-[var(--brand-accent)] transition-all`}
+                        style={{'--brand-accent-glow': 'rgba(99, 102, 241, 0.2)'} as React.CSSProperties}
+                      />
+                      {/* Interactive Validation Visual (Conceptual) */}
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-focus-within/input:opacity-100 transition-opacity pointer-events-none">
+                         <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter ${isDark ? 'bg-white/10 text-white/40' : 'bg-slate-100 text-slate-400'}`}>
+                           Validated
+                         </div>
+                      </div>
+                    </div>
                    ) : field.type === 'textarea' ? (
                     <Textarea 
                       id={field.id} 
@@ -138,11 +162,11 @@ export function DynamicCaptureForm({
         <Button 
           type="submit" 
           disabled={isPending}
-          className={`h-14 sm:h-12 px-10 rounded-xl font-black shadow-lg flex items-center justify-center gap-2 transition-all active:scale-95 text-base sm:text-sm ${
-            isDark 
-              ? 'bg-[#6366F1] hover:bg-[#4F46E5] text-white shadow-indigo-500/20' 
-              : 'bg-[#EA580C] hover:bg-[#C2410C] text-white shadow-orange-500/20'
-          }`}
+          className={`h-14 sm:h-12 px-10 rounded-xl font-black shadow-lg flex items-center justify-center gap-2 transition-all active:scale-95 text-base sm:text-sm text-white shadow-[var(--brand-accent-glow)]`}
+          style={{ 
+            backgroundColor: 'var(--brand-accent, #6366F1)',
+            filter: isPending ? 'brightness(0.8)' : 'none'
+          }}
         >
           {isPending ? (
             <Loader2 className="w-5 h-5 animate-spin" />

@@ -25,15 +25,14 @@ export const subsidiarySchemas: Record<string, SectionDefinition[]> = {
       ]
     },
     {
-      title: "HOUSEHOLD & USAGE",
+      title: "GAS REFILL / PURCHASE",
       fields: [
-        { id: "familySize", label: "FAMILY SIZE", type: "select", required: true, options: [{label: "1-2", value:"1-2"}, {label: "3-5", value:"3-5"}, {label: "6+", value:"6+"}], colSpan: 4 },
-        { id: "cylinderSize", label: "CYLINDER SIZE", type: "select", required: true, options: [{label: "6kg", value: "6kg"}, {label: "9kg", value: "9kg"}, {label: "14kg", value: "14kg"}, {label: "19kg", value: "19kg"}, {label: "48kg", value: "48kg"}], colSpan: 4 },
-        { id: "quantity", label: "QUANTITY", type: "number", required: true, placeholder: "e.g. 1", colSpan: 4 },
-        { id: "usageFrequency", label: "GAS USAGE INTENSITY", type: "select", required: true, options: [
-          {label: "Daily Cooking", value: "Daily"}, 
-          {label: "Backup/Power Cuts", value: "Backup"}, 
-          {label: "Heating/Seasonal", value: "Seasonal"}
+        { id: "refillQuantityKg", label: "REFILL QUANTITY (KG)", type: "number", required: true, placeholder: "e.g. 1, 2.5, 77...", colSpan: 6 },
+        { id: "totalPriceUSD", label: "TOTAL PRICE (USD)", type: "number", required: true, placeholder: "e.g. 25.00", colSpan: 6 },
+        { id: "cylinderOwnership", label: "CYLINDER STATUS", type: "select", required: true, options: [
+          {label: "Refill Own Cylinder", value: "Refill"}, 
+          {label: "Exchange Empty", value: "Exchange"}, 
+          {label: "New Purchase", value: "New"}
         ], colSpan: 12 }
       ]
     },
@@ -85,9 +84,15 @@ export const subsidiarySchemas: Record<string, SectionDefinition[]> = {
       ]
     },
     {
-      title: "ORDER SPECIFICATIONS",
+      title: "SALES & QUANTITY",
       fields: [
-        { id: "quantity", label: "QUANTITY (KG)", type: "number", required: true, placeholder: "e.g. 10", colSpan: 12 }
+        { id: "quantityKg", label: "QUANTITY (KG)", type: "number", required: true, placeholder: "e.g. 10", colSpan: 6 },
+        { id: "totalPriceUSD", label: "TOTAL PRICE (USD)", type: "number", required: true, placeholder: "e.g. 12.50", colSpan: 6 },
+        { id: "paymentStatus", label: "PAYMENT STATUS", type: "select", required: true, options: [
+          {label: "Paid In Full", value: "Paid"},
+          {label: "On Credit", value: "Credit"},
+          {label: "Pending Verification", value: "Pending"}
+        ], colSpan: 12 }
       ]
     }
   ],
@@ -156,24 +161,18 @@ export const subsidiarySchemas: Record<string, SectionDefinition[]> = {
   // MountPlus / New Impetus - Branding & Design
   "branding": [
     {
-      title: "CLIENT & PROJECT SCOPE",
+      title: "PROJECT SCOPE & SERVICES",
       fields: [
-        { id: "firstName", label: "CONTACT PERSON", type: "text", required: true, colSpan: 6 },
-        { id: "phone", label: "CONTACT PHONE", type: "text", required: true, colSpan: 6 },
-        { id: "serviceType", label: "SERVICE REQUIRED", type: "select", required: true, options: [
+        { id: "serviceCategory", label: "SERVICE CATEGORY", type: "select", required: true, options: [
+          {label: "Embroidery / Apparels", value: "Embroidery"},
           {label: "Graphic Design", value: "Design"}, 
+          {label: "Photography", value: "Photography"},
+          {label: "Videography", value: "Videography"},
           {label: "Large Format Printing", value: "Printing"}, 
-          {label: "Corporate Branding / Signs", value: "Branding"},
-          {label: "Embroidery / Apparels", value: "Embroidery"}
-        ], colSpan: 12 }
-      ]
-    },
-    {
-      title: "PRODUCTION DETAILS",
-      fields: [
-        { id: "deadlineDate", label: "REQUIRED DEADLINE", type: "text", placeholder: "DD/MM/YYYY", colSpan: 6 },
-        { id: "quantity", label: "QUANTITY / UNITS", type: "number", placeholder: "e.g. 100", colSpan: 6 },
-        { id: "designSpecs", label: "DESIGN SPECIFICATIONS", type: "textarea", placeholder: "e.g. Resolution, Material type, Color codes...", colSpan: 12 }
+          {label: "Corporate Branding / Signs", value: "Branding"}
+        ], colSpan: 12 },
+        { id: "serviceDescription", label: "DETAILED PROJECT BRIEF / DESCRIPTION", type: "textarea", placeholder: "Describe the specific embroidery details, photography duration, or design requirements...", colSpan: 12 },
+        { id: "totalPriceUSD", label: "ESTIMATED TOTAL PRICE (USD)", type: "number", required: true, colSpan: 12 }
       ]
     }
   ],
@@ -188,15 +187,15 @@ export const subsidiarySchemas: Record<string, SectionDefinition[]> = {
       ]
     },
     {
-      title: "SYSTEM CONFIGURATION",
+      title: "PURCHASE & SYSTEM DETAILS",
       fields: [
-        { id: "systemSize", label: "REQUIRED SYSTEM SIZE", type: "select", options: [
-          {label: "3kVA (Small Home)", value: "3KVA"}, 
-          {label: "5kVA (Standard)", value: "5KVA"}, 
-          {label: "10kVA+ (Commercial)", value: "10KVA"}
-        ], colSpan: 6 },
-        { id: "batteryType", label: "BATTERY PREFERENCE", type: "select", options: [{label: "Lithium-Ion", value: "Lithium"}, {label: "Gel / Lead Acid", value: "Gel"}], colSpan: 6 },
-        { id: "requiresInstallation", label: "Full Professional Installation Required?", type: "switch", colSpan: 12 }
+        { id: "customerType", label: "TYPE OF CUSTOMER", type: "select", required: true, options: [
+          {label: "Individual / Home", value: "Individual"},
+          {label: "Corporate / Business", value: "Corporate"},
+          {label: "NGO / Institutional", value: "NGO"}
+        ], colSpan: 12 },
+        { id: "purchaseDescription", label: "DESCRIPTION OF PURCHASE / SERVICES", type: "textarea", placeholder: "e.g. 5kVA Inverter, 4x Lithium batteries, Installation work, cables, etc.", colSpan: 12 },
+        { id: "totalPriceUSD", label: "TOTAL ORDER VALUE (USD)", type: "number", required: true, colSpan: 12 }
       ]
     }
   ],

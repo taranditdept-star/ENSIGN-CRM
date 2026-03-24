@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Plus, Settings, Download, Search, Command } from 'lucide-react'
 import { Button } from './ui/button'
 import { toast } from 'sonner'
+import { Breadcrumbs } from './breadcrumbs'
 
 export function AdminHeader() {
   const handleExport = () => {
@@ -15,7 +16,8 @@ export function AdminHeader() {
 
   return (
     <header className="h-16 border-b border-slate-100 flex items-center justify-between px-8 bg-white/80 backdrop-blur-md sticky top-0 z-30">
-      <div className="flex items-center gap-4 flex-1 max-w-xl">
+      <div className="flex flex-col flex-1 max-w-xl">
+        <Breadcrumbs />
         <div className="relative group w-full hidden md:block">
            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 w-4 h-4 group-focus-within:text-indigo-600 transition-colors" />
            <input 

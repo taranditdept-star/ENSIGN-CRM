@@ -29,6 +29,18 @@ export async function captureCustomer(prevState: ActionState, formData: FormData
     return { error: 'Invalid Zimbabwe phone number format. Use 07... or +263...' }
   }
 
+  // Basic Sales Data Validation
+  const quantity = formData.get('quantityKg') as string || formData.get('refillQuantityKg') as string
+  const price = formData.get('totalPriceUSD') as string
+  
+  if (quantity && isNaN(Number(quantity))) {
+    return { error: 'Quantity must be a valid number.' }
+  }
+  
+  if (price && isNaN(Number(price))) {
+    return { error: 'Price must be a valid number.' }
+  }
+
   // Pack remaining subsidiary-specific fields into JSONB metadata
   const metadata: Record<string, unknown> = {}
   
