@@ -18,7 +18,7 @@ interface SidebarPortfolioProps {
   branches: Branch[];
 }
 
-export function SidebarPortfolio({ id, name, module, branches }: SidebarPortfolioProps) {
+export function SidebarPortfolio({ name, module, branches }: SidebarPortfolioProps) {
   const [isExpanded, setIsExpanded] = useState(true)
 
   const getModuleLabel = (mod: string) => {
@@ -42,16 +42,18 @@ export function SidebarPortfolio({ id, name, module, branches }: SidebarPortfoli
     <div className="space-y-1">
       <button 
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between px-3 py-2 group hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+        className="w-full flex items-center justify-between px-2 py-3 group hover:bg-slate-50/80 rounded-xl transition-all cursor-pointer border border-transparent hover:border-slate-100"
       >
-        <div className="flex flex-col items-start gap-1">
-          <h3 className="text-[12px] uppercase text-slate-900 font-black tracking-widest flex items-center gap-2 transition-colors group-hover:text-[#FF5A20]">
-            {isExpanded ? <ChevronDown className="w-4 h-4 text-[#FF5A20]" /> : <ChevronRight className="w-4 h-4 text-slate-400" />}
-            {name}
-          </h3>
-          <span className="text-[10px] bg-slate-900 text-white px-2 py-0.5 rounded-full font-black tracking-widest ml-6">
-            {getModuleLabel(module)}
-          </span>
+        <div className="flex flex-col items-start gap-1.5 w-full">
+          <div className="flex items-center justify-between w-full pr-2">
+            <h3 className="text-[13px] text-slate-900 font-extrabold flex items-center gap-2 transition-colors group-hover:text-indigo-600">
+              {isExpanded ? <ChevronDown className="w-4 h-4 text-indigo-500" /> : <ChevronRight className="w-4 h-4 text-slate-300" />}
+              {name}
+            </h3>
+            <span className="text-[9px] bg-slate-900/5 text-slate-500 border border-slate-200 px-2 py-0.5 rounded-md font-black tracking-widest uppercase">
+              {getModuleLabel(module)}
+            </span>
+          </div>
         </div>
       </button>
 
@@ -64,16 +66,16 @@ export function SidebarPortfolio({ id, name, module, branches }: SidebarPortfoli
             <Link 
               key={sub.id}
               href={`/admin/subsidiaries/${sub.id}`} 
-              className="group flex items-center justify-between px-3 py-2 text-sm font-extrabold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all"
+              className="group flex items-center justify-between px-3 py-2.5 text-sm font-bold text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm rounded-xl transition-all border border-transparent hover:border-slate-100"
             >
               <div className="flex items-center gap-3">
                 <span 
-                  className="w-2 h-2 rounded-full shadow-sm"
+                  className="w-2.5 h-2.5 rounded-full shadow-inner border border-white/20"
                   style={{ backgroundColor: sub.color }}
                 ></span> 
-                <span className="truncate max-w-[140px] transition-colors">{sub.name}</span>
+                <span className="truncate max-w-[140px] text-[13px]">{sub.name}</span>
               </div>
-              <div className="text-slate-400 text-xs font-black px-1.5 py-0.5 rounded-md transition-all group-hover:text-slate-900 group-hover:bg-white shadow-sm border border-transparent group-hover:border-slate-100">
+              <div className="text-[10px] text-slate-400 font-black px-1.5 py-0.5 rounded-md bg-slate-50 border border-slate-100 group-hover:bg-indigo-50 group-hover:text-indigo-600 group-hover:border-indigo-100 transition-all">
                 {sub.count}
               </div>
             </Link>

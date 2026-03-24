@@ -57,15 +57,15 @@ export function SidebarSearch({ portfolios }: SidebarSearchProps) {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Search Input Area */}
-      <div className="px-4 py-2 shrink-0">
+      <div className="px-4 py-3 shrink-0">
         <div className="relative group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 group-focus-within:text-[#FF5A20] transition-colors" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4.5 h-4.5 group-focus-within:text-indigo-600 transition-colors" />
           <input 
             type="text" 
             placeholder="Search branches..." 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full bg-slate-50 hover:bg-slate-100 border border-slate-200/60 rounded-xl pl-9 pr-10 py-2.5 text-sm font-bold focus:outline-none focus:ring-1 focus:ring-orange-200 focus:bg-white transition-all placeholder:text-slate-400 text-slate-900"
+            className="w-full bg-slate-50/50 hover:bg-slate-100 border-2 border-slate-200/50 rounded-xl pl-10 pr-10 py-3 text-sm font-extrabold focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500/50 focus:bg-white transition-all placeholder:text-slate-400 text-slate-900"
           />
           {query ? (
             <button 

@@ -1,21 +1,20 @@
 import Link from 'next/link'
 import {
-  HelpCircle,
-  MessageCircle,
   LayoutDashboard,
   Building2,
   Users,
   History,
   QrCode,
   Globe,
+  TrendingUp,
 } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { LogoutButton } from '@/components/logout-button'
 import { SidebarSearch } from '@/components/sidebar-search'
 import { MobileNav } from '@/components/mobile-nav'
 import { AdminHeader } from '@/components/admin-header'
 import { BrandTheme } from '@/components/brand-theme'
+import { SidebarFooter } from '@/components/sidebar-footer'
 
 interface OrganizationWithSubs {
   id: string;
@@ -87,6 +86,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </div>
           Audit Trails
         </Link>
+        <Link href="/admin/sales" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
+          <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600 font-bold shadow-sm group-hover:shadow-md transition-all shrink-0 border border-amber-100">
+            <TrendingUp className="w-4 h-4" />
+          </div>
+          Sales Performance
+        </Link>
       </nav>
     </div>
   )
@@ -152,21 +157,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         </div>
 
         {/* Sidebar Footer - Clean & Minimal */}
-        <div className="shrink-0 border-t border-slate-100 bg-white p-4 space-y-0.5">
-          <div className="grid grid-cols-2 gap-2 mb-2">
-            <Link href="#" className="flex items-center gap-2 px-3 py-1.5 text-slate-400 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all text-[11px] font-black uppercase tracking-wider">
-              <HelpCircle className="w-3.5 h-3.5" />
-              <span>Help</span>
-            </Link>
-            <Link href="#" className="flex items-center gap-2 px-3 py-1.5 text-slate-400 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all text-[11px] font-black uppercase tracking-wider">
-              <MessageCircle className="w-3.5 h-3.5" />
-              <span>Feedback</span>
-            </Link>
-          </div>
-          <div className="pt-2 border-t border-slate-50">
-            <LogoutButton />
-          </div>
-        </div>
+        <SidebarFooter />
       </aside>
 
       {/* Main Content Area */}

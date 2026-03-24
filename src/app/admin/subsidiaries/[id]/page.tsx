@@ -1,8 +1,39 @@
 import { createClient } from "@/utils/supabase/server"
 import { notFound } from "next/navigation"
-import { Building2, Users, MapPin, ChevronLeft, QrCode } from "lucide-react"
+import { Building2, Users, MapPin, ChevronLeft, Edit3, Trash2, Eye } from "lucide-react"
 import Link from "next/link"
 import { QRCodeTrigger } from "@/components/qr-trigger"
+
+// Define interfaces for better type safety
+interface CustomerMetadata {
+  quantityKg?: number;
+  refillQuantityKg?: number;
+  quantity?: number;
+  totalPriceUSD?: number;
+  orderValue?: number;
+  paymentStatus?: string;
+  customerType?: string;
+  visitPurpose?: string;
+  location?: string;
+  siteAddress?: string;
+  siteLocation?: string;
+}
+
+interface Customer {
+  id: string;
+  first_name: string;
+  surname: string;
+  phone: string;
+  created_at: string;
+  customer_metadata: CustomerMetadata | null;
+}
+
+interface Subsidiary {
+  id: string;
+  name: string;
+  location: string | null;
+  customers: Customer[];
+}
 
 export default async function SubsidiaryDetailPage({ 
   params 
@@ -13,16 +44,17 @@ export default async function SubsidiaryDetailPage({
   const supabase = await createClient()
 
   // Fetch subsidiary and its relative data
-  const { data: subsidiary } = await supabase
+  const { data: subsidiaryData } = await supabase
     .from('subsidiaries')
     .select('*, customers(*)')
     .eq('id', id)
     .single()
 
-  if (!subsidiary) {
+  if (!subsidiaryData) {
     notFound()
   }
 
+  const subsidiary = subsidiaryData as Subsidiary
   const customers = subsidiary.customers || []
 
   return (
@@ -30,10 +62,10 @@ export default async function SubsidiaryDetailPage({
       {/* Header */}
       <div className="flex flex-col gap-4">
         <Link 
-          href="/admin/subsidiaries" 
+          href="/admin/organizations" 
           className="flex items-center gap-2 text-slate-400 hover:text-slate-600 text-sm font-bold transition-colors w-max"
         >
-          <ChevronLeft className="w-4 h-4" /> Back to Branches
+          <ChevronLeft className="w-4 h-4" /> Back to Organizations
         </Link>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-5">
@@ -87,7 +119,7 @@ export default async function SubsidiaryDetailPage({
           <div className="flex items-baseline gap-2">
             <span className="text-xl font-black text-slate-900">
               {customers.length > 0 
-                ? new Date(Math.max(...customers.map((c: any) => new Date(c.created_at).getTime()))).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                ? new Date(Math.max(...customers.map((c) => new Date(c.created_at).getTime()))).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
                 : 'No entries yet'}
             </span>
           </div>
@@ -101,29 +133,74 @@ export default async function SubsidiaryDetailPage({
           <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Showing Latest {customers.length}</span>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full text-left border-collapse min-w-[1000px]">
             <thead>
               <tr className="bg-slate-50 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
                 <th className="px-8 py-4">Customer Name</th>
-                <th className="px-8 py-4">Contact</th>
-                <th className="px-8 py-4">Registered On</th>
+                <th className="px-8 py-4">Phone</th>
+                <th className="px-6 py-4">Location</th>
+                <th className="px-6 py-4 text-center">Type</th>
+                <th className="px-6 py-4 text-center">Qty (KG)</th>
+                <th className="px-6 py-4 text-center">Price (USD)</th>
+                <th className="px-6 py-4 text-center">Status</th>
+                <th className="px-8 py-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {customers.map((customer: any) => (
-                <tr key={customer.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="px-8 py-5">
-                    <span className="text-slate-900 font-extrabold">{customer.full_name || `${customer.first_name} ${customer.surname}`}</span>
-                  </td>
-                  <td className="px-8 py-5 text-slate-500 font-semibold">{customer.phone}</td>
-                  <td className="px-8 py-5 text-slate-400 font-medium">
-                    {new Date(customer.created_at).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))}
+              {customers.map((customer) => {
+                const meta = customer.customer_metadata || {}
+                const qty = meta.quantityKg || meta.refillQuantityKg || meta.quantity || '-'
+                const price = meta.totalPriceUSD || meta.orderValue || '-'
+                const status = meta.paymentStatus || 'Success' // Fallback
+                const customerType = meta.customerType || meta.visitPurpose || 'Retail'
+
+                return (
+                  <tr key={customer.id} className="hover:bg-slate-50 transition-colors group">
+                    <td className="px-8 py-5">
+                      <div className="flex flex-col">
+                        <span className="text-slate-900 font-extrabold">{customer.first_name} {customer.surname}</span>
+                        <span className="text-[10px] text-slate-400 font-bold uppercase">{customer.id.split('-')[0]}</span>
+                      </div>
+                    </td>
+                    <td className="px-8 py-5 text-slate-600 font-extrabold text-sm">{customer.phone}</td>
+                    <td className="px-6 py-5">
+                       <span className="text-slate-500 font-semibold">{meta.location || meta.siteAddress || meta.siteLocation || '-'}</span>
+                    </td>
+                    <td className="px-6 py-5 text-center">
+                       <span className="px-2 py-1 bg-slate-100 text-slate-500 text-[10px] font-black rounded-lg uppercase">{customerType}</span>
+                    </td>
+                    <td className="px-6 py-5 text-center text-slate-900 font-black">{qty}</td>
+                    <td className="px-6 py-5 text-center">
+                       <span className="text-emerald-600 font-black shadow-emerald-100">${price}</span>
+                    </td>
+                    <td className="px-6 py-5 text-center">
+                       <span className={`px-2 py-1 rounded-md text-[9px] font-black uppercase ${
+                         status?.toString().toLowerCase() === 'paid' ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' :
+                         status?.toString().toLowerCase() === 'pending' ? 'bg-amber-50 text-amber-600 border border-amber-200' :
+                         'bg-indigo-50 text-indigo-600 border border-indigo-200'
+                       }`}>
+                         {status}
+                       </span>
+                    </td>
+                    <td className="px-8 py-5">
+                      <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button className="p-2 hover:bg-white hover:shadow-md rounded-lg text-slate-400 hover:text-indigo-600 transition-all">
+                          <Eye className="w-4 h-4" />
+                        </button>
+                        <button className="p-2 hover:bg-white hover:shadow-md rounded-lg text-slate-400 hover:text-amber-600 transition-all">
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+                        <button className="p-2 hover:bg-white hover:shadow-md rounded-lg text-slate-400 hover:text-rose-600 transition-all">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
               {customers.length === 0 && (
                 <tr>
-                  <td colSpan={3} className="px-8 py-12 text-center text-slate-400 font-medium italic">
+                  <td colSpan={8} className="px-8 py-12 text-center text-slate-400 font-medium italic">
                     No customers registered for this branch yet.
                   </td>
                 </tr>
