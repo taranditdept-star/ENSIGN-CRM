@@ -13,14 +13,23 @@ import { SalesRegisterTable } from "@/components/dashboard/sales-register-table"
 import { BranchPerformancePanel } from "@/components/dashboard/branch-performance-panel"
 import { ActivityHeatmap } from "@/components/dashboard/activity-heatmap"
 import { getDailySalesStats, getBranchPerformance, getActivityHeatmapData } from "@/lib/sales-service"
+import Link from "next/link"
 
-export default async function AdminDashboard() {
+import { DateFilter } from "@/components/dashboard/date-filter"
+import { Suspense } from "react"
+
+export default async function AdminDashboard({
+  searchParams,
+}: {
+  searchParams: Promise<{ date?: string }>
+}) {
   const supabase = await createClient()
+  const { date } = await searchParams
 
   // Fetch Live Sales Stats, Branch Performance & Heatmap
   const [stats, branchPerformance, heatmapData, { data: orgs }] = await Promise.all([
-    getDailySalesStats(),
-    getBranchPerformance(),
+    getDailySalesStats(date),
+    getBranchPerformance(date),
     getActivityHeatmapData(),
     supabase.from('organizations').select('id, name').order('name')
   ])
@@ -43,6 +52,9 @@ export default async function AdminDashboard() {
         </div>
         
         <div className="flex items-center gap-3">
+          <Suspense fallback={<div className="w-[240px] h-10 bg-slate-100 animate-pulse rounded-2xl" />}>
+            <DateFilter />
+          </Suspense>
           <AdminSearchBar />
           <NewBranchDialog organizations={organizations} />
         </div>
@@ -57,24 +69,28 @@ export default async function AdminDashboard() {
           change={stats.revenue_change}
           icon={<DollarSign className="w-7 h-7" />}
           className="shadow-[#FF5A20]/5"
+          href="/admin/subsidiaries"
         />
         <KpiCard 
           title="Daily Transactions" 
           value={stats.total_transactions} 
           change={stats.transaction_change}
           icon={<Activity className="w-7 h-7" />}
+          href="/admin/subsidiaries"
         />
         <KpiCard 
           title="Active Branches" 
           value={stats.active_branches} 
           icon={<Building2 className="w-7 h-7" />}
           suffix={` / ${branchPerformance.length}`}
+          href="/admin/subsidiaries"
         />
         <KpiCard 
           title="Avg Transaction" 
           value={stats.avg_value.toFixed(2)} 
           prefix="$"
           icon={<Zap className="w-7 h-7" />}
+          href="/admin/subsidiaries"
         />
       </div>
 
@@ -101,10 +117,18 @@ export default async function AdminDashboard() {
 
       {/* Empty State / Porter Footer */}
       {branchPerformance.length === 0 && (
-        <div className="py-20 bg-slate-50 rounded-[40px] border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400">
-           <Building2 className="w-12 h-12 mb-4 opacity-20" />
-           <p className="font-black text-lg">No sales recorded today</p>
-           <p className="font-bold text-sm italic opacity-60">Open a capture portal to begin data collection.</p>
+        <div className="py-20 bg-slate-50 rounded-[40px] border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 gap-6">
+           <div className="flex flex-col items-center">
+             <Building2 className="w-12 h-12 mb-4 opacity-20" />
+             <p className="font-black text-lg text-slate-900">No sales recorded today</p>
+             <p className="font-bold text-sm italic opacity-60">Open a capture portal to begin data collection.</p>
+           </div>
+           <Link 
+             href="/admin/subsidiaries"
+             className="px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#FF5A20] transition-all shadow-xl hover:shadow-[#FF5A20]/20"
+           >
+             Open Capture Portal
+           </Link>
         </div>
       )}
     </div>

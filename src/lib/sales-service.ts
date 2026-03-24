@@ -20,22 +20,22 @@ export type BranchPerformance = {
   status: 'active' | 'warning' | 'inactive'
 }
 
-export async function getDailySalesStats() {
+export async function getDailySalesStats(dateStr?: string) {
   const supabase = await createClient()
-  const today = new Date().toISOString().split('T')[0]
-  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0]
+  const targetDate = dateStr || new Date().toISOString().split('T')[0]
+  const prevDate = new Date(new Date(targetDate).getTime() - 86400000).toISOString().split('T')[0]
 
-  // Fetch today's summary
-  const { data: todayData } = await supabase
+  // Fetch target date summary
+  const { data: currentData } = await supabase
     .from('sales_summary')
     .select('*')
-    .eq('sale_date', today)
+    .eq('sale_date', targetDate)
 
-  // Fetch yesterday's summary
-  const { data: yesterdayData } = await supabase
+  // Fetch previous date summary for comparison
+  const { data: previousData } = await supabase
     .from('sales_summary')
     .select('*')
-    .eq('sale_date', yesterday)
+    .eq('sale_date', prevDate)
 
   // Fetch active branches count from branch_health view
   const { count: activeCount } = await supabase
@@ -43,33 +43,33 @@ export async function getDailySalesStats() {
     .select('*', { count: 'exact', head: true })
     .eq('status', 'active')
 
-  const todayTotal = todayData?.reduce((acc, row) => acc + Number(row.total_revenue), 0) || 0
-  const yesterdayTotal = yesterdayData?.reduce((acc, row) => acc + Number(row.total_revenue), 0) || 0
-  const todayTransactions = todayData?.reduce((acc, row) => acc + Number(row.total_transactions), 0) || 0
-  const yesterdayTransactions = yesterdayData?.reduce((acc, row) => acc + Number(row.total_transactions), 0) || 0
+  const currentTotal = currentData?.reduce((acc, row) => acc + Number(row.total_revenue), 0) || 0
+  const previousTotal = previousData?.reduce((acc, row) => acc + Number(row.total_revenue), 0) || 0
+  const currentTransactions = currentData?.reduce((acc, row) => acc + Number(row.total_transactions), 0) || 0
+  const previousTransactions = previousData?.reduce((acc, row) => acc + Number(row.total_transactions), 0) || 0
 
-  const revenueChange = yesterdayTotal > 0 ? ((todayTotal - yesterdayTotal) / yesterdayTotal) * 100 : 0
-  const transactionChange = yesterdayTransactions > 0 ? ((todayTransactions - yesterdayTransactions) / yesterdayTransactions) * 100 : 0
+  const revenueChange = previousTotal > 0 ? ((currentTotal - previousTotal) / previousTotal) * 100 : 0
+  const transactionChange = previousTransactions > 0 ? ((currentTransactions - previousTransactions) / previousTransactions) * 100 : 0
 
   return {
-    total_revenue: todayTotal,
-    total_transactions: todayTransactions,
-    avg_value: todayTransactions > 0 ? todayTotal / todayTransactions : 0,
+    total_revenue: currentTotal,
+    total_transactions: currentTransactions,
+    avg_value: currentTransactions > 0 ? currentTotal / currentTransactions : 0,
     active_branches: activeCount || 0,
     revenue_change: revenueChange,
     transaction_change: transactionChange
   }
 }
 
-export async function getBranchPerformance(): Promise<BranchPerformance[]> {
+export async function getBranchPerformance(dateStr?: string): Promise<BranchPerformance[]> {
   const supabase = await createClient()
-  const today = new Date().toISOString().split('T')[0]
+  const targetDate = dateStr || new Date().toISOString().split('T')[0]
 
-  // Get today's activity from sales_summary
+  // Get targeted date activity from sales_summary
   const { data: summary } = await supabase
     .from('sales_summary')
     .select('*')
-    .eq('sale_date', today)
+    .eq('sale_date', targetDate)
 
   // Get health status for ALL branches
   const { data: health } = await supabase

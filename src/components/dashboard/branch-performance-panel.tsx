@@ -11,6 +11,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { BranchPerformance } from "@/lib/sales-service"
+import { formatRelativeTime } from "@/lib/utils/time"
 
 interface BranchPerformancePanelProps {
   branches: BranchPerformance[]
@@ -83,7 +84,7 @@ export function BranchPerformancePanel({ branches }: BranchPerformancePanelProps
               <div className="pt-4 border-t border-slate-50 flex items-center justify-between text-[11px] font-bold text-slate-400 italic">
                 <div className="flex items-center gap-2">
                   <Clock className="w-3.5 h-3.5" />
-                  <span>Last active: {branch.last_activity ? new Date(branch.last_activity).toLocaleTimeString() : 'No activity'}</span>
+                  <span>Last active: {branch.last_activity ? formatRelativeTime(branch.last_activity) : 'No activity'}</span>
                 </div>
               </div>
             </div>
