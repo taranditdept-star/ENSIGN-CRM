@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server"
-import { QRCodeCanvas } from "qrcode.react"
+import { QRCodeSVG } from "qrcode.react"
 import { Download, Search, Building2, MapPin, QrCode } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -62,7 +62,7 @@ export default async function QRManagerPage() {
             <div className="flex gap-6">
               {/* QR Code Section */}
               <div className="shrink-0 bg-slate-50 p-4 rounded-2xl border border-slate-100 group-hover:bg-white group-hover:border-orange-100 transition-colors">
-                <QRCodeCanvas 
+                <QRCodeSVG 
                   value={branch.url}
                   size={120}
                   level="H"
