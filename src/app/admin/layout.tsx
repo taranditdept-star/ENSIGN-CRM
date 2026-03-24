@@ -1,20 +1,13 @@
 import Link from 'next/link'
 import {
-  LayoutDashboard,
-  Users,
-  BarChart,
   HelpCircle,
   MessageCircle,
   Settings,
-  History,
-  Building2,
-  Search,
-  Command,
 } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { LogoutButton } from '@/components/logout-button'
-import { SidebarPortfolio } from '@/components/sidebar-portfolio'
+import { SidebarSearch } from '@/components/sidebar-search'
 
 interface OrganizationWithSubs {
   id: string;
@@ -81,61 +74,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </div>
         </div>
 
-        {/* Search */}
-        <div className="px-4 py-2">
-          <div className="relative group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 group-focus-within:text-slate-600" />
-            <input 
-              type="text" 
-              placeholder="Search" 
-              className="w-full bg-slate-50 hover:bg-slate-100 border border-slate-200/60 rounded-xl pl-9 pr-8 py-2 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-slate-300 focus:bg-white transition-all placeholder:text-slate-400"
-            />
-            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-0.5 text-[10px] font-bold text-slate-300 bg-white border border-slate-200 px-1 py-0.5 rounded uppercase">
-              <Command className="w-2.5 h-2.5"/> K
-            </div>
-          </div>
-        </div>
-
-        {/* Scrollable Nav Area */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-7 scrollbar-hide">
-          
-          {/* Main Menu */}
-          <div>
-            <h3 className="text-[10px] uppercase text-slate-400 font-bold mb-3 px-3 tracking-widest">Main Menu</h3>
-            <nav className="space-y-0.5">
-              <Link href="/admin" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <LayoutDashboard className="w-4 h-4" /> Group Executive Overview
-              </Link>
-              <Link href="/admin/organizations" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <Building2 className="w-4 h-4" /> Portfolio Companies
-              </Link>
-              <Link href="/admin/subsidiaries" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <Users className="w-4 h-4" /> Subsidiary Branches
-              </Link>
-              <Link href="/admin/analytics" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <BarChart className="w-4 h-4" /> Global Analytics
-              </Link>
-              <Link href="/admin/customers" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <Users className="w-4 h-4" /> Master Customer List
-              </Link>
-              <Link href="/admin/audit" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <History className="w-4 h-4" /> Audit Trails
-              </Link>
-            </nav>
-          </div>
-
-          {/* Portfolios (Modular Navigation) - Data driven and Collapsible */}
-          <div className="space-y-6">
-            {portfolios.map((portfolio) => (
-              <SidebarPortfolio 
-                key={portfolio.id}
-                id={portfolio.id}
-                name={portfolio.name}
-                module={portfolio.module}
-                branches={portfolio.branches}
-              />
-            ))}
-          </div>
+        {/* Real-Time Search & Modular Navigation */}
+        <div className="flex-1 overflow-hidden flex flex-col">
+          <SidebarSearch portfolios={portfolios} />
         </div>
 
         {/* Bottom Section */}
