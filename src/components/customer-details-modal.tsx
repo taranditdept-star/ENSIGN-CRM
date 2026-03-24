@@ -36,12 +36,12 @@ interface Note {
 interface Customer {
   id: string;
   first_name: string;
-  last_name: string;
+  surname: string;
   phone: string;
   email: string;
   created_at: string;
   subsidiaries?: { name: string };
-  customer_metadata?: any;
+  customer_metadata?: Record<string, unknown>;
 }
 
 export function CustomerDetailsModal({ customer }: { customer: Customer }) {
@@ -50,7 +50,7 @@ export function CustomerDetailsModal({ customer }: { customer: Customer }) {
   const [isPending, setIsPending] = useState(false)
   
   // Extract notes from metadata
-  const notes: Note[] = customer.customer_metadata?.notes || []
+  const notes = (customer.customer_metadata?.notes as Note[]) || []
   
   // For the demo, we show the notes in descending order
   const sortedNotes = [...notes].sort((a, b) => 
@@ -65,8 +65,9 @@ export function CustomerDetailsModal({ customer }: { customer: Customer }) {
       toast.success("Interaction log saved!")
       setNewNote("")
       setFollowUpDate("")
-    } catch (error: any) {
-      toast.error(error.message || "Failed to save note")
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Failed to save note"
+      toast.error(message)
     } finally {
       setIsPending(false)
     }
@@ -74,20 +75,18 @@ export function CustomerDetailsModal({ customer }: { customer: Customer }) {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="font-bold text-slate-400 hover:text-[#FF5A20]">
-          View Details
-        </Button>
+      <DialogTrigger render={<Button variant="ghost" size="sm" className="font-bold text-slate-400 hover:text-[#FF5A20]" />}>
+        View Details
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col p-0 rounded-3xl border-0 shadow-2xl">
         <DialogHeader className="p-8 bg-slate-900 text-white shrink-0">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center text-3xl font-black uppercase text-white shadow-xl backdrop-blur-md border border-white/20">
-                {customer.first_name?.[0]}{customer.last_name?.[0]}
+                {customer.first_name?.[0]}{customer.surname?.[0]}
               </div>
               <div>
-                <DialogTitle className="text-2xl font-black tracking-tight">{customer.first_name} {customer.last_name}</DialogTitle>
+                <DialogTitle className="text-2xl font-black tracking-tight">{customer.first_name} {customer.surname}</DialogTitle>
                 <div className="flex items-center gap-2 mt-1 opacity-70">
                   <Building2 className="w-3.5 h-3.5" />
                   <span className="text-sm font-bold uppercase tracking-wider">{customer.subsidiaries?.name || 'Main Branch'}</span>

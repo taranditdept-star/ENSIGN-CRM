@@ -2,12 +2,13 @@
 
 import { Input } from "@/components/ui/input"
 import { Search, X, Loader2 } from "lucide-react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { useTransition } from "react"
 
 export function AdminSearchBar() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const pathname = usePathname()
   const [isPending, startTransition] = useTransition()
 
   const currentSearch = searchParams.get('q') || ""
@@ -21,7 +22,9 @@ export function AdminSearchBar() {
     }
     
     startTransition(() => {
-      router.push(`/admin?${params.toString()}`)
+      // If we're on the main admin page, stay there. 
+      // If we're on a subpage, stay there.
+      router.push(`${pathname}?${params.toString()}`)
     })
   }
 
