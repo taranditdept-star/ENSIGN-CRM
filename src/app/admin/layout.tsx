@@ -8,14 +8,13 @@ import {
   Settings,
   History,
   Building2,
-  Fingerprint,
-  Download,
   Search,
   Command,
 } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { LogoutButton } from '@/components/logout-button'
+import { SidebarPortfolio } from '@/components/sidebar-portfolio'
 
 interface OrganizationWithSubs {
   id: string;
@@ -48,7 +47,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       color: org.module_type === 'lpg' ? '#4F46E5' : 
              org.module_type === 'sbali' ? '#EC4899' :
              org.module_type === 'mining' ? '#D97706' :
+             org.module_type === 'explosives' ? '#EF4444' :
              org.module_type === 'fuel' ? '#0EA5E9' :
+             org.module_type === 'solar' ? '#F59E0B' :
+             org.module_type === 'branding' ? '#6366F1' :
+             org.module_type === 'farming' ? '#10B981' :
+             org.module_type === 'meat' ? '#F43F5E' :
+             org.module_type === 'retail' ? '#8B5CF6' :
              org.module_type === 'bakery' ? '#F59E0B' : '#64748b'
     }))
   }))
@@ -119,60 +124,18 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </nav>
           </div>
 
-          {/* Tools */}
-          <div>
-            <h3 className="text-[10px] uppercase text-slate-400 font-bold mb-3 px-3 tracking-widest">Tools</h3>
-            <nav className="space-y-0.5">
-              <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <Fingerprint className="w-4 h-4" /> Data Deduplication
-              </Link>
-              <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <Download className="w-4 h-4" /> Export Engine
-              </Link>
-              <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <MessageCircle className="w-4 h-4 text-[#25D366]" /> WhatsApp Marketing
-              </Link>
-            </nav>
+          {/* Portfolios (Modular Navigation) - Data driven and Collapsible */}
+          <div className="space-y-6">
+            {portfolios.map((portfolio) => (
+              <SidebarPortfolio 
+                key={portfolio.id}
+                id={portfolio.id}
+                name={portfolio.name}
+                module={portfolio.module}
+                branches={portfolio.branches}
+              />
+            ))}
           </div>
-
-          {/* Portfolios (Modular Navigation) */}
-          {portfolios.map((portfolio) => (
-            <div key={portfolio.id}>
-              <h3 className="text-[10px] uppercase text-slate-400 font-bold mb-3 px-3 tracking-widest flex items-center justify-between">
-                <span>{portfolio.name} Portfolio</span>
-                <span className="text-[9px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase tracking-tighter">
-                  {portfolio.module === 'lpg' ? 'LPG' : 
-                   portfolio.module === 'sbali' ? 'Roller Meal' : 
-                   portfolio.module === 'mining' ? 'Mining' : 
-                   portfolio.module === 'fuel' ? 'Renewables' : 
-                   portfolio.module === 'bakery' ? 'Bakery' : 'Standard'}
-                </span>
-              </h3>
-              <nav className="space-y-0.5">
-                {portfolio.branches.length === 0 && (
-                  <p className="px-3 py-1 text-[11px] text-slate-400 italic">No active branches</p>
-                )}
-                {portfolio.branches.map((sub) => (
-                  <Link 
-                    key={sub.id}
-                    href={`/admin/subsidiaries/${sub.id}`} 
-                    className="group flex items-center justify-between px-3 py-2 text-[13px] font-medium text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span 
-                        className="w-2 h-2 rounded shadow-[0_0_8px_rgba(0,0,0,0.2)]"
-                        style={{ backgroundColor: sub.color }}
-                      ></span> 
-                      {sub.name}
-                    </div>
-                    <div className="bg-slate-50 text-slate-400 text-[10px] font-bold px-1.5 py-0.5 rounded-md border border-slate-100 group-hover:bg-white transition-colors">
-                      {sub.count}
-                    </div>
-                  </Link>
-                ))}
-              </nav>
-            </div>
-          ))}
         </div>
 
         {/* Bottom Section */}
