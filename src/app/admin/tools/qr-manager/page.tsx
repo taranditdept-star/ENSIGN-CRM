@@ -1,7 +1,6 @@
 import { createClient } from "@/utils/supabase/server"
-import { QRCodeSVG } from "qrcode.react"
-import { Download, Search, Building2, MapPin, QrCode } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Search, QrCode } from "lucide-react"
+import { QRCodeCard } from "@/components/qr-code-card"
 
 export default async function QRManagerPage() {
   const supabase = await createClient()
@@ -21,15 +20,18 @@ export default async function QRManagerPage() {
     `)
     .order('name')
 
-  const branches = (subsidiaries || []).map(sub => ({
-    id: sub.id,
-    name: sub.name,
-    location: sub.location || 'Unknown Location',
-    orgName: (sub.organizations as unknown as { name: string })?.name || 'Ensign Group',
-    module: (sub.organizations as unknown as { module_type: string })?.module_type || 'standard',
-    count: sub.customers?.[0]?.count || 0,
-    url: `https://ensign-crm.vercel.app/capture/${sub.id}`
-  }))
+  const branches = (subsidiaries || []).map((sub: unknown) => {
+    const s = sub as any
+    return {
+      id: s.id,
+      name: s.name,
+      location: s.location || 'Unknown Location',
+      orgName: (s.organizations as unknown as { name: string })?.name || 'Ensign Group',
+      module: (s.organizations as unknown as { module_type: string })?.module_type || 'standard',
+      count: s.customers?.[0]?.count || 0,
+      url: `https://ensign-crm.vercel.app/capture/${s.id}`
+    }
+  })
 
   return (
     <div className="space-y-8 animate-in fade-in duration-700">
@@ -49,64 +51,9 @@ export default async function QRManagerPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {branches.map((branch) => (
-          <div key={branch.id} className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm hover:shadow-xl transition-all group relative overflow-hidden">
-            {/* Industry Badge */}
-            <div className="absolute top-0 right-0 p-4">
-               <span className="text-[10px] font-black uppercase tracking-widest bg-slate-100 text-slate-500 px-3 py-1 rounded-full">
-                 {branch.module}
-               </span>
-            </div>
-
-            <div className="flex gap-6">
-              {/* QR Code Section */}
-              <div className="shrink-0 bg-slate-50 p-4 rounded-2xl border border-slate-100 group-hover:bg-white group-hover:border-orange-100 transition-colors">
-                <QRCodeSVG 
-                  value={branch.url}
-                  size={120}
-                  level="H"
-                  includeMargin={false}
-                  imageSettings={{
-                    src: "/favicon.ico",
-                    x: undefined,
-                    y: undefined,
-                    height: 24,
-                    width: 24,
-                    excavate: true,
-                  }}
-                />
-              </div>
-
-              {/* Branch Details */}
-              <div className="flex-1 flex flex-col justify-between py-1">
-                <div>
-                  <h3 className="text-lg font-black text-slate-900 leading-tight mb-1 group-hover:text-[#FF5A20] transition-colors line-clamp-2">
-                    {branch.name}
-                  </h3>
-                  <div className="flex items-center gap-1.5 text-slate-500 text-xs font-bold mb-3">
-                    <Building2 className="w-3.5 h-3.5" />
-                    {branch.orgName}
-                  </div>
-                  <div className="flex items-center gap-1.5 text-slate-400 text-[11px] font-medium">
-                    <MapPin className="w-3 h-3" />
-                    {branch.location}
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between mt-4">
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-black text-slate-300 uppercase tracking-tighter">Registrations</span>
-                    <span className="text-sm font-black text-slate-900">{branch.count}</span>
-                  </div>
-                  <Button variant="outline" size="sm" className="rounded-xl border-slate-200 font-bold hover:bg-slate-900 hover:text-white group-hover:border-slate-900 transition-all">
-                    <Download className="w-3.5 h-3.5 mr-2" />
-                    SVG
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <QRCodeCard key={branch.id} branch={branch} />
         ))}
       </div>
 

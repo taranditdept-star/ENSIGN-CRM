@@ -15,6 +15,7 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { LogoutButton } from '@/components/logout-button'
 import { SidebarSearch } from '@/components/sidebar-search'
 import { SidebarQuickActions } from '@/components/sidebar-quick-actions'
+import { MobileNav } from '@/components/mobile-nav'
 
 interface OrganizationWithSubs {
   id: string;
@@ -58,6 +59,58 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     }))
   }))
 
+  const commandCenter = (
+    <div className="px-3">
+      <h3 className="text-[11px] uppercase text-slate-900 font-extrabold mb-4 px-3 tracking-[0.15em]">Command Center</h3>
+      <nav className="space-y-1">
+        <Link href="/admin" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
+          <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center text-[#FF5A20] font-bold shadow-sm group-hover:shadow-md transition-all shrink-0">
+            <LayoutDashboard className="w-4 h-4" />
+          </div>
+          Executive Overview
+        </Link>
+        <Link href="/admin/organizations" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
+          <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold shadow-sm group-hover:shadow-md transition-all shrink-0">
+            <Building2 className="w-4 h-4" />
+          </div>
+          Group Organizations
+        </Link>
+        <Link href="/admin/customers" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
+          <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 font-bold shadow-sm group-hover:shadow-md transition-all shrink-0">
+            <Users className="w-4 h-4" />
+          </div>
+          Master Customer List
+        </Link>
+        <Link href="/admin/audit" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
+          <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 font-bold shadow-sm group-hover:shadow-md transition-all shrink-0">
+            <History className="w-4 h-4" />
+          </div>
+          Audit Trails
+        </Link>
+      </nav>
+    </div>
+  )
+
+  const strategicTools = (
+    <div className="px-3">
+      <h3 className="text-[11px] uppercase text-slate-900 font-extrabold mb-4 px-3 tracking-[0.15em]">Strategic Tools</h3>
+      <nav className="space-y-1">
+        <Link href="/admin/tools/qr-manager" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
+          <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 font-bold shadow-sm group-hover:shadow-md transition-all shrink-0">
+            <QrCode className="w-4 h-4" />
+          </div>
+          QR Code Manager
+        </Link>
+        <Link href="/admin/tools/capture-registry" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
+          <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold shadow-sm group-hover:shadow-md transition-all shrink-0">
+            <Globe className="w-4 h-4" />
+          </div>
+          Capture Link Registry
+        </Link>
+      </nav>
+    </div>
+  )
+
   return (
     <div className="min-h-screen bg-[#F0F2F5] p-2 sm:p-4 flex gap-4">
       
@@ -81,87 +134,52 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </div>
         </div>
 
-        {/* Command Center - Primary Navigation (High Readability) */}
-        <div className="px-3 pt-2 pb-6">
-          <h3 className="text-[11px] uppercase text-slate-900 font-extrabold mb-4 px-3 tracking-[0.15em]">Command Center</h3>
-          <nav className="space-y-1">
-            <Link href="/admin" className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
-              <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center text-[#FF5A20] font-bold shadow-sm group-hover:shadow-md transition-all">
-                <LayoutDashboard className="w-4 h-4" />
-              </div>
-              Executive Overview
-            </Link>
-            <Link href="/admin/organizations" className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
-              <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold shadow-sm group-hover:shadow-md transition-all">
-                <Building2 className="w-4 h-4" />
-              </div>
-              Group Organizations
-            </Link>
-            <Link href="/admin/customers" className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
-              <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 font-bold shadow-sm group-hover:shadow-md transition-all">
-                <Users className="w-4 h-4" />
-              </div>
-              Master Customer List
-            </Link>
-            <Link href="/admin/audit" className="flex items-center gap-3 px-3 py-2.5 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
-              <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 font-bold shadow-sm group-hover:shadow-md transition-all">
-                <History className="w-4 h-4" />
-              </div>
-              Audit Trails
-            </Link>
-          </nav>
-        </div>
-
-        {/* Strategic Tools Section (New Tools requested) */}
-        <div className="px-3 pb-6">
-          <h3 className="text-[11px] uppercase text-slate-900 font-extrabold mb-4 px-3 tracking-[0.15em]">Strategic Tools</h3>
-          <nav className="space-y-1">
-            <Link href="/admin/tools/qr-manager" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
-              <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 font-bold shadow-sm group-hover:shadow-md transition-all">
-                <QrCode className="w-4 h-4" />
-              </div>
-              QR Code Manager
-            </Link>
-            <Link href="/admin/tools/capture-registry" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
-              <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold shadow-sm group-hover:shadow-md transition-all">
-                <Globe className="w-4 h-4" />
-              </div>
-              Capture Link Registry
-            </Link>
-          </nav>
-        </div>
-
-        {/* Real-Time Search & Modular Navigation */}
-        <div className="flex-1 overflow-hidden flex flex-col border-t border-slate-100 pt-6">
-          <div className="px-6 mb-2">
-             <h3 className="text-[11px] uppercase text-slate-900 font-extrabold tracking-[0.15em]">Quick Branch Search</h3>
+        {/* Main Navigation - Single Scrollable Stream */}
+        <div className="flex-1 overflow-y-auto min-h-0 py-4 scrollbar-hide">
+          {commandCenter}
+          <div className="h-4" /> 
+          {strategicTools}
+          <div className="h-4" />
+          
+          {/* Real-Time Search & Branch Portfolios */}
+          <div className="border-t border-slate-50 pt-8">
+            <div className="px-6 mb-4">
+               <h3 className="text-[11px] uppercase text-slate-900 font-extrabold tracking-[0.15em]">Branch Navigation</h3>
+            </div>
+            <SidebarSearch portfolios={portfolios} />
           </div>
-          <SidebarSearch portfolios={portfolios} />
         </div>
 
-        {/* Quick Actions Card (Now as a Client Component) */}
-        <SidebarQuickActions />
-
-        {/* Bottom Section */}
-        <div className="p-4 space-y-0.5">
-          <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-500 hover:bg-slate-50 rounded-lg transition-colors">
-            <HelpCircle className="w-4 h-4" /> Help center
-          </Link>
-          <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-500 hover:bg-slate-50 rounded-lg transition-colors">
-            <MessageCircle className="w-4 h-4" /> Feedback
-          </Link>
-          <Link href="#" className="flex items-center gap-3 px-3 py-2 text-[13px] font-medium text-slate-500 hover:bg-slate-50 rounded-lg transition-colors">
-            <Settings className="w-4 h-4" /> Settings
-          </Link>
-          <div className="pt-2 mt-2 border-t border-slate-100 flex items-center px-1">
-            <LogoutButton />
+        {/* Fixed Footers & Quick Actions */}
+        <div className="shrink-0 border-t border-slate-100 bg-slate-50/50 backdrop-blur-md">
+          <SidebarQuickActions />
+          
+          <div className="p-4 space-y-0.5">
+            <div className="grid grid-cols-3 gap-1 mb-2">
+              <Link href="#" className="flex flex-col items-center justify-center p-2 text-slate-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all group">
+                <HelpCircle className="w-4 h-4 mb-1" />
+                <span className="text-[9px] font-black uppercase">Help</span>
+              </Link>
+              <Link href="#" className="flex flex-col items-center justify-center p-2 text-slate-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all group">
+                <MessageCircle className="w-4 h-4 mb-1" />
+                <span className="text-[9px] font-black uppercase">Feedback</span>
+              </Link>
+              <Link href="#" className="flex flex-col items-center justify-center p-2 text-slate-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all group">
+                <Settings className="w-4 h-4 mb-1" />
+                <span className="text-[9px] font-black uppercase">Setup</span>
+              </Link>
+            </div>
+            <div className="pt-2 border-t border-slate-200/50">
+              <LogoutButton />
+            </div>
           </div>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col h-[calc(100vh-32px)] bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden relative">
-        <div className="flex-1 overflow-y-auto px-8 py-8">
+      <main className="flex-1 flex flex-col h-[calc(100vh-32px)] bg-white border border-slate-200 lg:rounded-2xl shadow-sm overflow-hidden relative">
+        <MobileNav portfolios={portfolios} commandCenter={commandCenter} strategicTools={strategicTools} />
+        <div className="flex-1 overflow-y-auto px-4 sm:px-8 py-8">
           {children}
         </div>
       </main>
