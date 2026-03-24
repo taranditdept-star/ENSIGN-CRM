@@ -7,28 +7,32 @@ import { LogoutButton } from './logout-button'
 
 export function SidebarFooter() {
   return (
-    <div className="shrink-0 border-t border-slate-100 bg-white p-4 space-y-0.5 mt-auto">
-      <div className="grid grid-cols-2 gap-2 mb-2">
+    <div className="shrink-0 bg-transparent p-4 space-y-4">
+      <div className="flex flex-col gap-2">
         <button 
-          onClick={() => toast.info("Help Center: Documentation is being prepared.", { 
-            description: "Detailed tutorials and FAQs will be available here soon." 
+          onClick={() => toast.info("Help Center", { 
+            description: "Documentation is being prepared for Ensign Holdings." 
           })}
-          className="flex items-center gap-2 px-3 py-1.5 text-slate-400 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all text-[11px] font-black uppercase tracking-wider"
+          className="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 border border-transparent hover:border-slate-100 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 rounded-2xl transition-all text-[12px] font-bold"
         >
-          <HelpCircle className="w-3.5 h-3.5" />
-          <span>Help</span>
+          <div className="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-slate-600 transition-colors">
+            <HelpCircle className="w-4 h-4" />
+          </div>
+          <span>Help Center</span>
         </button>
         <button 
-          onClick={() => toast.success("Feedback: Opening submission form...", { 
-            description: "Thank you for helping us improve the Ensign CRM!" 
+          onClick={() => toast.success("Feedback Requested", { 
+            description: "Opening the Ensign CRM feedback portal..." 
           })}
-          className="flex items-center gap-2 px-3 py-1.5 text-slate-400 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-all text-[11px] font-black uppercase tracking-wider"
+          className="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 border border-transparent hover:border-slate-100 hover:bg-white hover:shadow-xl hover:shadow-slate-200/50 rounded-2xl transition-all text-[12px] font-bold"
         >
-          <MessageCircle className="w-3.5 h-3.5" />
-          <span>Feedback</span>
+          <div className="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-slate-600 transition-colors">
+            <MessageCircle className="w-4 h-4" />
+          </div>
+          <span>Send Feedback</span>
         </button>
       </div>
-      <div className="pt-2 border-t border-slate-50">
+      <div className="pt-4 border-t border-slate-100/50">
         <LogoutButton />
       </div>
     </div>

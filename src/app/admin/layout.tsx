@@ -59,105 +59,97 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }))
 
   const commandCenter = (
-    <div className="px-3">
-      <h3 className="text-[11px] uppercase text-slate-900 font-extrabold mb-4 px-3 tracking-[0.15em]">Command Center</h3>
-      <nav className="space-y-1">
-        <Link href="/admin" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
-          <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center text-[#FF5A20] font-bold shadow-sm group-hover:shadow-md transition-all shrink-0">
-            <LayoutDashboard className="w-4 h-4" />
-          </div>
-          Executive Overview
-        </Link>
-        <Link href="/admin/organizations" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
-          <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold shadow-sm group-hover:shadow-md transition-all shrink-0">
-            <Building2 className="w-4 h-4" />
-          </div>
-          Group Organizations
-        </Link>
-        <Link href="/admin/customers" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
-          <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 font-bold shadow-sm group-hover:shadow-md transition-all shrink-0">
-            <Users className="w-4 h-4" />
-          </div>
-          Master Customer List
-        </Link>
-        <Link href="/admin/audit" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
-          <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 font-bold shadow-sm group-hover:shadow-md transition-all shrink-0">
-            <History className="w-4 h-4" />
-          </div>
-          Audit Trails
-        </Link>
-        <Link href="/admin/sales" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
-          <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600 font-bold shadow-sm group-hover:shadow-md transition-all shrink-0 border border-amber-100">
-            <TrendingUp className="w-4 h-4" />
-          </div>
-          Sales Performance
-        </Link>
+    <div className="px-4">
+      <h3 className="text-[10px] uppercase text-slate-400 font-black mb-4 px-2 tracking-[0.25em]">Command Center</h3>
+      <nav className="space-y-1.5">
+        {[
+          { href: "/admin", label: "Executive Overview", icon: LayoutDashboard, color: "text-[#FF5A20]", bg: "bg-orange-50/50" },
+          { href: "/admin/organizations", label: "Group Organizations", icon: Building2, color: "text-slate-600", bg: "bg-slate-100/50" },
+          { href: "/admin/customers", label: "Master Customer List", icon: Users, color: "text-slate-600", bg: "bg-slate-100/50" },
+          { href: "/admin/audit", label: "Audit Trails", icon: History, color: "text-slate-500", bg: "bg-slate-100/50" },
+          { href: "/admin/sales", label: "Sales Performance", icon: TrendingUp, color: "text-[#FF5A20]", bg: "bg-orange-100/50" },
+        ].map((item) => (
+          <Link 
+            key={item.href}
+            href={item.href} 
+            className="flex items-center gap-3 px-3 py-2.5 text-[13px] font-bold text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm rounded-2xl transition-all border border-transparent hover:border-slate-100 group"
+          >
+            <div className={`w-8 h-8 rounded-xl ${item.bg} flex items-center justify-center ${item.color} shadow-sm group-hover:scale-110 transition-all shrink-0`}>
+              <item.icon className="w-4 h-4" />
+            </div>
+            {item.label}
+          </Link>
+        ))}
       </nav>
     </div>
   )
 
   const strategicTools = (
-    <div className="px-3">
-      <h3 className="text-[11px] uppercase text-slate-900 font-extrabold mb-4 px-3 tracking-[0.15em]">Strategic Tools</h3>
-      <nav className="space-y-1">
-        <Link href="/admin/tools/qr-manager" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
-          <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 font-bold shadow-sm group-hover:shadow-md transition-all shrink-0">
-            <QrCode className="w-4 h-4" />
-          </div>
-          QR Code Manager
-        </Link>
-        <Link href="/admin/tools/capture-registry" className="flex items-center gap-3 px-3 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-all group">
-          <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold shadow-sm group-hover:shadow-md transition-all shrink-0">
-            <Globe className="w-4 h-4" />
-          </div>
-          Capture Link Registry
-        </Link>
+    <div className="px-4">
+      <h3 className="text-[10px] uppercase text-slate-400 font-black mb-4 px-2 tracking-[0.25em]">Strategic Tools</h3>
+      <nav className="space-y-1.5">
+        {[
+          { href: "/admin/tools/qr-manager", label: "QR Code Manager", icon: QrCode, color: "text-orange-600", bg: "bg-orange-100/50" },
+          { href: "/admin/tools/capture-registry", label: "Capture Link Registry", icon: Globe, color: "text-emerald-600", bg: "bg-emerald-100/50" },
+        ].map((item) => (
+          <Link 
+            key={item.href}
+            href={item.href} 
+            className="flex items-center gap-3 px-3 py-2.5 text-[13px] font-bold text-slate-600 hover:text-slate-900 hover:bg-white hover:shadow-sm rounded-2xl transition-all border border-transparent hover:border-slate-100 group"
+          >
+            <div className={`w-8 h-8 rounded-xl ${item.bg} flex items-center justify-center ${item.color} shadow-sm group-hover:scale-110 transition-all shrink-0`}>
+              <item.icon className="w-4 h-4" />
+            </div>
+            {item.label}
+          </Link>
+        ))}
       </nav>
     </div>
   )
 
   return (
-    <div className="min-h-screen bg-[#F0F2F5] p-2 sm:p-4 flex gap-4" style={{ '--brand-accent': '#6366F1' } as React.CSSProperties}>
+    <div className="min-h-screen bg-[#F0F2F5] p-2 sm:p-4 flex gap-4" style={{ '--brand-accent': '#FF5A20' } as React.CSSProperties}>
       <BrandTheme />
       
-      {/* Sidebar - Matching Uxerflow Light Sidebar exactly */}
-      <aside className="w-[260px] bg-white border border-slate-200 flex flex-col hidden lg:flex shrink-0 rounded-2xl shadow-sm h-[calc(100vh-32px)]">
+      {/* Sidebar - Redesigned for Premium Look */}
+      <aside className="w-[280px] bg-white/70 backdrop-blur-2xl border border-white/50 flex flex-col hidden lg:flex shrink-0 rounded-[40px] shadow-2xl h-[calc(100vh-32px)] overflow-hidden relative">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-slate-200/20 pointer-events-none" />
+        
         {/* Header */}
-        <div className="p-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold tracking-tighter">
+        <div className="p-8 pb-4 relative z-10">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-slate-900 rounded-[20px] flex items-center justify-center text-white font-black text-xl shadow-2xl shadow-slate-900/20 transform -rotate-12">
               EN
             </div>
             <div>
-              <h2 className="text-sm font-bold text-slate-900 leading-none mb-1">Ensign Holdings</h2>
-              <div className="flex items-center gap-2">
-                <p className="text-[10px] text-slate-400 font-semibold bg-slate-100 dark:bg-slate-800 w-max px-1.5 py-0.5 rounded-sm tracking-tight">Centralized CRM</p>
-                <div className="scale-75 origin-left">
-                  <ThemeToggle />
-                </div>
-              </div>
+              <h2 className="text-lg font-black text-slate-900 leading-none tracking-tight">Ensign</h2>
+              <p className="text-[10px] text-[#FF5A20] font-black uppercase tracking-widest mt-1">Intelligence CRM</p>
             </div>
+          </div>
+          <div className="mt-6 flex items-center justify-between px-1">
+            <span className="text-[10px] font-black text-slate-400">THEME</span>
+            <ThemeToggle />
           </div>
         </div>
 
-        {/* Main Navigation - Single Scrollable Stream */}
-        <div className="flex-1 overflow-y-auto min-h-0 py-4 scrollbar-hide">
+        {/* Main Navigation */}
+        <div className="flex-1 overflow-y-auto min-h-0 py-6 space-y-10 scrollbar-hide relative z-10">
           {commandCenter}
-          <div className="h-4" /> 
           {strategicTools}
-          <div className="h-4" />
           
-          {/* Real-Time Search & Branch Portfolios */}
-          <div className="border-t border-slate-50 pt-8">
+          {/* Branch Navigation */}
+          <div className="pt-2 border-t border-slate-100/50">
             <div className="px-6 mb-4">
-               <h3 className="text-[11px] uppercase text-slate-900 font-extrabold tracking-[0.15em]">Branch Navigation</h3>
+               <h3 className="text-[10px] uppercase text-slate-400 font-black tracking-[0.25em]">Branch Navigation</h3>
             </div>
             <SidebarSearch portfolios={portfolios} />
           </div>
         </div>
 
-        {/* Sidebar Footer - Clean & Minimal */}
-        <SidebarFooter />
+        {/* Sidebar Footer */}
+        <div className="relative z-10 p-4">
+          <SidebarFooter />
+        </div>
       </aside>
 
       {/* Main Content Area */}

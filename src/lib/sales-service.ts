@@ -110,3 +110,49 @@ export async function getActivityHeatmapData() {
 
   return Object.entries(heatmap).map(([date, count]) => ({ date, count }))
 }
+
+export async function getMonthlySalesStats() {
+  const supabase = await createClient()
+  
+  const { data } = await supabase
+    .from('sales_summary')
+    .select('*')
+    .order('sale_date', { ascending: false })
+    .limit(30)
+
+  const monthly = (data || []).reduce((acc: Record<string, { month: string; revenue: number; transactions: number }>, curr) => {
+    const month = curr.sale_date.substring(0, 7)
+    if (!acc[month]) {
+      acc[month] = { month, revenue: 0, transactions: 0 }
+    }
+    acc[month].revenue += Number(curr.total_revenue)
+    acc[month].transactions += Number(curr.total_transactions)
+    return acc
+  }, {})
+
+  return Object.values(monthly)
+}
+
+export async function getOrgPerformance() {
+  const supabase = await createClient()
+  
+  const { data } = await supabase
+    .from('sales_summary')
+    .select('*, organizations(id, name)')
+
+  const orgs = (data || []).reduce((acc: Record<string, { name: string; revenue: number; transactions: number; branches: Set<string> }>, curr) => {
+    const orgName = curr.organizations?.name || 'Unknown'
+    if (!acc[orgName]) {
+      acc[orgName] = { name: orgName, revenue: 0, transactions: 0, branches: new Set() }
+    }
+    acc[orgName].revenue += Number(curr.total_revenue)
+    acc[orgName].transactions += Number(curr.total_transactions)
+    acc[orgName].branches.add(curr.branch_id)
+    return acc
+  }, {})
+
+  return Object.values(orgs).map((o) => ({
+    ...o,
+    branches: o.branches.size
+  }))
+}

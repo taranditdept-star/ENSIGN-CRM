@@ -57,25 +57,26 @@ export function SidebarSearch({ portfolios }: SidebarSearchProps) {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Search Input Area */}
-      <div className="px-4 py-3 shrink-0">
-        <div className="relative group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4.5 h-4.5 group-focus-within:text-indigo-600 transition-colors" />
+      <div className="px-5 py-4 shrink-0">
+        <div className="relative group/search">
+          <div className="absolute inset-0 bg-slate-900/[0.02] rounded-2xl group-hover/search:bg-slate-900/[0.04] transition-all duration-300" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 group-focus-within/search:text-[#FF5A20] transition-colors duration-300" />
           <input 
             type="text" 
-            placeholder="Search branches..." 
+            placeholder="Quick search..." 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full bg-slate-50/50 hover:bg-slate-100 border-2 border-slate-200/50 rounded-xl pl-10 pr-10 py-3 text-sm font-extrabold focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500/50 focus:bg-white transition-all placeholder:text-slate-400 text-slate-900"
+            className="w-full bg-transparent border-0 rounded-2xl pl-11 pr-10 py-3 text-[13px] font-bold focus:outline-none focus:ring-0 transition-all placeholder:text-slate-400 text-slate-900 relative z-10"
           />
           {query ? (
             <button 
               onClick={() => setQuery('')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-600 relative z-20"
             >
               <X className="w-4 h-4" />
             </button>
           ) : (
-            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-0.5 text-[10px] font-black text-slate-300 bg-white border border-slate-200 px-1 py-0.5 rounded uppercase">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-0.5 text-[9px] font-black text-slate-300 bg-white shadow-sm border border-slate-100 px-1.5 py-0.5 rounded-lg uppercase tracking-wider relative z-20">
               <Command className="w-2.5 h-2.5"/> K
             </div>
           )}
@@ -83,9 +84,9 @@ export function SidebarSearch({ portfolios }: SidebarSearchProps) {
       </div>
 
       {/* Results Area */}
-      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-8 scrollbar-hide">
+      <div className="flex-1 overflow-y-auto px-4 py-2 space-y-6 scrollbar-hide">
         {filteredPortfolios.length > 0 ? (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {filteredPortfolios.map((portfolio) => (
               <SidebarPortfolio 
                 key={portfolio.id}
@@ -97,8 +98,11 @@ export function SidebarSearch({ portfolios }: SidebarSearchProps) {
             ))}
           </div>
         ) : (
-          <div className="px-4 py-8 text-center bg-slate-50 rounded-2xl mx-1 border border-dashed border-slate-300">
-            <p className="text-sm font-black text-slate-700 italic">No results for &quot;{query}&quot;</p>
+          <div className="px-6 py-12 text-center rounded-[32px] border-2 border-dashed border-slate-100/50 flex flex-col items-center gap-4">
+            <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-300">
+               <Search className="w-6 h-6" />
+            </div>
+            <p className="text-xs font-bold text-slate-400 italic leading-relaxed"> No results found for<br/><span className="text-slate-900">&quot;{query}&quot;</span></p>
           </div>
         )}
       </div>
