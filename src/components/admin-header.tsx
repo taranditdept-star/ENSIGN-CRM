@@ -2,10 +2,12 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { Plus, Settings, Download, Search, Command } from 'lucide-react'
+import { Plus, Download } from 'lucide-react'
 import { Button } from './ui/button'
 import { toast } from 'sonner'
 import { Breadcrumbs } from './breadcrumbs'
+
+import { AdminSearchBar } from './admin-search-bar'
 
 export function AdminHeader() {
   const handleExport = () => {
@@ -15,21 +17,11 @@ export function AdminHeader() {
   }
 
   return (
+    <>
     <header className="h-16 border-b border-slate-100 flex items-center justify-between px-8 bg-white/80 backdrop-blur-md sticky top-0 z-30">
-      <div className="flex flex-col flex-1 max-w-xl">
-        <Breadcrumbs />
-        <div className="relative group w-full hidden md:block">
-           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300 w-4 h-4 group-focus-within:text-indigo-600 transition-colors" />
-           <input 
-             type="text" 
-             placeholder="Search anything..." 
-             className="w-full bg-slate-50 border-none rounded-xl pl-10 pr-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all"
-           />
-           <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 text-[10px] font-bold text-slate-300 pointer-events-none uppercase">
-             <Command className="w-3 h-3" /> F
-           </div>
+        <div className="flex-1 max-w-xl group relative">
+          <AdminSearchBar />
         </div>
-      </div>
 
       <div className="flex items-center gap-3">
         {/* Horizontal Quick Actions */}
@@ -59,12 +51,11 @@ export function AdminHeader() {
           </Button>
         </div>
 
-        <div className="h-8 w-px bg-slate-100 mx-2" />
-        
-        <Button variant="ghost" size="icon" className="h-10 w-10 text-slate-400 hover:text-slate-900 rounded-xl">
-           <Settings className="w-5 h-5" />
-        </Button>
       </div>
     </header>
+    <div className="px-8 py-2 bg-slate-50/50 border-b border-slate-100 flex items-center">
+       <Breadcrumbs />
+    </div>
+    </>
   )
 }

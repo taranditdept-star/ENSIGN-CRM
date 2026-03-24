@@ -3,7 +3,8 @@
 import { Input } from "@/components/ui/input"
 import { Search, X, Loader2 } from "lucide-react"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
-import { useTransition } from "react"
+import { useTransition, useEffect, useState } from "react"
+import { useDebounce } from "@/hooks/use-debounce"
 
 export function AdminSearchBar() {
   const router = useRouter()
@@ -12,20 +13,24 @@ export function AdminSearchBar() {
   const [isPending, startTransition] = useTransition()
 
   const currentSearch = searchParams.get('q') || ""
+  const [value, setValue] = useState(currentSearch)
+  const debouncedValue = useDebounce(value, 400)
 
-  function handleSearch(val: string) {
+  useEffect(() => {
     const params = new URLSearchParams(searchParams.toString())
-    if (val) {
-      params.set('q', val)
+    if (debouncedValue) {
+      params.set('q', debouncedValue)
     } else {
       params.delete('q')
     }
     
     startTransition(() => {
-      // If we're on the main admin page, stay there. 
-      // If we're on a subpage, stay there.
       router.push(`${pathname}?${params.toString()}`)
     })
+  }, [debouncedValue, pathname, router, searchParams])
+
+  function handleSearch(val: string) {
+    setValue(val)
   }
 
   return (
@@ -35,11 +40,7 @@ export function AdminSearchBar() {
         placeholder="Search subsidiaries or customers..." 
         className="pl-10 h-10 rounded-xl border-slate-200 bg-white focus:ring-[#FF5A20] focus:border-[#FF5A20] transition-all shadow-sm"
         defaultValue={currentSearch}
-        onChange={(e) => {
-          const val = e.target.value
-          const timeout = setTimeout(() => handleSearch(val), 500)
-          return () => clearTimeout(timeout)
-        }}
+        onChange={(e) => handleSearch(e.target.value)}
       />
       {isPending && <Loader2 className="absolute right-10 top-1/2 -translate-y-1/2 w-3.5 h-3.5 animate-spin text-slate-300" />}
       {currentSearch && !isPending && (

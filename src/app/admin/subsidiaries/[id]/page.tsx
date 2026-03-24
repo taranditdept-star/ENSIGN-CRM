@@ -1,8 +1,9 @@
 import { createClient } from "@/utils/supabase/server"
 import { notFound } from "next/navigation"
-import { Building2, Users, MapPin, ChevronLeft, Edit3, Trash2, Eye } from "lucide-react"
+import { Building2, Users, MapPin, ChevronLeft, Edit3, Trash2 } from "lucide-react"
 import Link from "next/link"
 import { QRCodeTrigger } from "@/components/qr-trigger"
+import { CustomerDetailsModal } from "@/components/customer-details-modal"
 
 // Define interfaces for better type safety
 interface CustomerMetadata {
@@ -36,26 +37,38 @@ interface Subsidiary {
 }
 
 export default async function SubsidiaryDetailPage({ 
-  params 
+  params,
+  searchParams
 }: { 
-  params: Promise<{ id: string }> 
+  params: Promise<{ id: string }>,
+  searchParams: Promise<{ q?: string }>
 }) {
   const { id } = await params
+  const { q } = await searchParams
   const supabase = await createClient()
 
-  // Fetch subsidiary and its relative data
-  const { data: subsidiaryData } = await supabase
-    .from('subsidiaries')
-    .select('*, customers(*)')
-    .eq('id', id)
-    .single()
+  // Build the customers query with optional filtering
+  let customersQuery = supabase
+    .from('customers')
+    .select('*')
+    .eq('subsidiary_id', id)
+
+  if (q) {
+    customersQuery = customersQuery.or(`first_name.ilike.%${q}%,surname.ilike.%${q}%,phone.ilike.%${q}%`)
+  }
+
+  // Fetch subsidiary and customers
+  const [{ data: subsidiaryData }, { data: customersData }] = await Promise.all([
+    supabase.from('subsidiaries').select('*').eq('id', id).single(),
+    customersQuery.order('created_at', { ascending: false })
+  ])
 
   if (!subsidiaryData) {
     notFound()
   }
 
   const subsidiary = subsidiaryData as Subsidiary
-  const customers = subsidiary.customers || []
+  const customers = customersData as Customer[] || []
 
   return (
     <div className="space-y-8">
@@ -183,10 +196,8 @@ export default async function SubsidiaryDetailPage({
                        </span>
                     </td>
                     <td className="px-8 py-5">
-                      <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button className="p-2 hover:bg-white hover:shadow-md rounded-lg text-slate-400 hover:text-indigo-600 transition-all">
-                          <Eye className="w-4 h-4" />
-                        </button>
+                      <div className="flex items-center justify-end gap-2 transition-opacity">
+                        <CustomerDetailsModal customer={customer as any} />
                         <button className="p-2 hover:bg-white hover:shadow-md rounded-lg text-slate-400 hover:text-amber-600 transition-all">
                           <Edit3 className="w-4 h-4" />
                         </button>

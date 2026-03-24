@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server"
-import { Search, Filter, Download, Building2, Zap, ArrowUpRight } from "lucide-react"
+import { Search, Filter, Download, Building2, Zap, Edit3, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { CustomerDetailsModal } from "@/components/customer-details-modal"
 import { AdminSearchBar } from "@/components/admin-search-bar"
@@ -25,6 +25,7 @@ interface Customer {
   email: string | null;
   created_at: string;
   subsidiaries: Subsidiary;
+  customer_metadata: any;
 }
 
 export default async function MasterCustomerList({ searchParams }: { searchParams: SearchParams }) {
@@ -131,14 +132,19 @@ export default async function MasterCustomerList({ searchParams }: { searchParam
               <tr>
                 <th className="px-8 py-5">Customer Name</th>
                 <th className="px-8 py-5">Contact Info</th>
-                <th className="px-8 py-5">Organization & Subsidiary</th>
-                <th className="px-8 py-5">Global Insights</th>
+                <th className="px-6 py-5">Location</th>
+                <th className="px-6 py-5 text-center">Qty</th>
+                <th className="px-6 py-5 text-center">Price</th>
+                <th className="px-6 py-5 text-center">Status</th>
                 <th className="px-8 py-5 text-right pr-12">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50 text-slate-700 font-bold">
               {(customers || []).map((customer) => {
-                const isCrossSelling = customer.phone && crossSellingPhones.has(customer.phone)
+                const meta = (customer.customer_metadata as any) || {}
+                const qty = meta.quantityKg || meta.refillQuantityKg || meta.quantity || '-'
+                const price = meta.totalPriceUSD || meta.orderValue || '-'
+                const status = meta.paymentStatus || 'Success'
                 
                 return (
                   <tr key={customer.id} className="group hover:bg-slate-50/50 transition-all duration-300">
@@ -170,22 +176,33 @@ export default async function MasterCustomerList({ searchParams }: { searchParam
                          </span>
                       </div>
                     </td>
-                    <td className="px-8 py-6">
-                       {isCrossSelling ? (
-                         <div className="flex items-center gap-2 bg-orange-50 text-[#FF5A20] px-3 py-1.5 rounded-xl w-max border border-orange-100 shadow-sm animate-pulse-subtle">
-                            <Zap className="w-3.5 h-3.5" />
-                            <span className="text-[11px] font-black uppercase tracking-widest">Cross-Selling VIP</span>
-                         </div>
-                       ) : (
-                         <span className="text-[11px] text-slate-300 font-black uppercase tracking-widest">Standard Profile</span>
-                       )}
+                    <td className="px-6 py-6 font-semibold text-slate-500">
+                      {meta.location || meta.siteAddress || '-'}
+                    </td>
+                    <td className="px-6 py-6 text-center text-slate-900 font-black">
+                      {qty}
+                    </td>
+                    <td className="px-6 py-6 text-center">
+                      <span className="text-emerald-600 font-black">${price}</span>
+                    </td>
+                    <td className="px-6 py-6 text-center">
+                      <span className={`px-2 py-1 rounded-md text-[9px] font-black uppercase ${
+                        status?.toString().toLowerCase() === 'paid' ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' :
+                        status?.toString().toLowerCase() === 'pending' ? 'bg-amber-50 text-amber-600 border border-amber-200' :
+                        'bg-indigo-50 text-indigo-600 border border-indigo-200'
+                      }`}>
+                        {status}
+                      </span>
                     </td>
                     <td className="px-8 py-6 text-right pr-12">
                       <div className="flex items-center justify-end gap-2">
-                        <CustomerDetailsModal customer={customer as unknown as any} />
-                        <Button variant="ghost" className="w-9 h-9 p-0 rounded-xl text-slate-300 hover:text-slate-900 hover:bg-slate-100 transition-all opacity-0 group-hover:opacity-100">
-                           <ArrowUpRight className="w-4 h-4" />
-                        </Button>
+                        <CustomerDetailsModal customer={customer as any} />
+                        <button className="p-2 hover:bg-white hover:shadow-md rounded-lg text-slate-400 hover:text-amber-600 transition-all">
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+                        <button className="p-2 hover:bg-white hover:shadow-md rounded-lg text-slate-400 hover:text-rose-600 transition-all">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </td>
                   </tr>
