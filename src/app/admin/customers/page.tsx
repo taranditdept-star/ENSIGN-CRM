@@ -1,7 +1,8 @@
 import { createClient } from "@/utils/supabase/server"
-import { Users, Search, Filter, Download, Building2 } from "lucide-react"
+import { Search, Filter, Download, Building2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { CustomerDetailsModal } from "@/components/customer-details-modal"
 
 export default async function MasterCustomerList() {
   const supabase = await createClient()
@@ -52,7 +53,7 @@ export default async function MasterCustomerList() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50 text-slate-700 font-bold">
-              {(customers || []).map((customer) => (
+              {(customers || []).map((customer: any) => (
                 <tr key={customer.id} className="group hover:bg-slate-50/50 transition-colors">
                   <td className="px-8 py-5">
                     <div className="flex items-center gap-3">
@@ -78,9 +79,7 @@ export default async function MasterCustomerList() {
                     {new Date(customer.created_at).toLocaleDateString()}
                   </td>
                   <td className="px-8 py-5 text-right pr-12">
-                    <Button variant="ghost" size="sm" className="font-bold text-slate-400 hover:text-[#FF5A20]">
-                      View Details
-                    </Button>
+                    <CustomerDetailsModal customer={customer as any} />
                   </td>
                 </tr>
               ))}

@@ -49,3 +49,42 @@ export async function createSubsidiary(state: SubsidiaryActionState, formData: F
   revalidatePath('/admin', 'layout')
   return { success: true, error: "" }
 }
+
+export async function addInteractionNote(customerId: string, content: string, followUpDate?: string) {
+  const supabase = await createClient()
+  
+  // 1. Fetch current metadata
+  const { data: customer } = await supabase
+    .from('customers')
+    .select('customer_metadata')
+    .eq('id', customerId)
+    .single()
+
+  const currentMetadata = customer?.customer_metadata || {}
+  const currentNotes = currentMetadata.notes || []
+
+  // 2. Add new note
+  const newNote = {
+    id: crypto.randomUUID(),
+    content,
+    timestamp: new Date().toISOString(),
+    author: "Admin User", // Placeholder until full auth session is passed
+    followUpDate: followUpDate || null
+  }
+
+  const updatedMetadata = {
+    ...currentMetadata,
+    notes: [...currentNotes, newNote]
+  }
+
+  // 3. Save
+  const { error } = await supabase
+    .from('customers')
+    .update({ customer_metadata: updatedMetadata })
+    .eq('id', customerId)
+
+  if (error) throw new Error(error.message)
+  
+  revalidatePath('/admin/customers')
+  return { success: true }
+}
