@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server"
-import { Building2, TrendingUp, Users, DollarSign, ArrowLeft, Download, Calendar } from "lucide-react"
+import { TrendingUp, Users, DollarSign, ArrowLeft, Download, Calendar, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { KpiCard } from "@/components/dashboard/kpi-card"
@@ -31,7 +31,7 @@ export default async function BranchReportPage({
 
   // 3. Simple Aggregations for Branch KPIs
   const totalRevenue = (transactions || []).reduce((acc, curr) => acc + (curr.customer_metadata?.totalPriceUSD || 0), 0)
-  const totalQty = (transactions || []).reduce((acc, curr) => acc + (curr.customer_metadata?.requestedQuantity || 0), 0)
+  // const totalQty = (transactions || []).reduce((acc, curr) => acc + (curr.customer_metadata?.requestedQuantity || 0), 0)
   const avgValue = transactions?.length ? totalRevenue / transactions.length : 0
 
   return (
@@ -79,27 +79,23 @@ export default async function BranchReportPage({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <KpiCard 
           title="Branch Revenue" 
-          value={`$${totalRevenue.toLocaleString()}`}
-          description="Total revenue from latest 50 logs"
-          icon={DollarSign}
-          trend={+12}
-          color="bg-[#FF5A20]"
+          value={totalRevenue.toLocaleString()}
+          prefix="$"
+          icon={<DollarSign className="w-7 h-7" />}
+          change={12}
         />
         <KpiCard 
           title="Capture Volume" 
           value={transactions?.length?.toString() || '0'}
-          description="Number of transactions captured"
-          icon={TrendingUp}
-          trend={0}
-          color="bg-slate-900"
+          icon={<TrendingUp className="w-7 h-7" />}
+          change={0}
         />
         <KpiCard 
           title="Avg Transaction" 
-          value={`$${avgValue.toFixed(0)}`}
-          description="Average price per capture"
-          icon={Users}
-          trend={-5}
-          color="bg-slate-600"
+          value={avgValue.toFixed(0)}
+          prefix="$"
+          icon={<Users className="w-7 h-7" />}
+          change={-5}
         />
       </div>
 
