@@ -1,5 +1,4 @@
-'use client'
-
+import { useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { 
@@ -12,12 +11,21 @@ import {
 import Link from "next/link"
 import { BranchPerformance } from "@/lib/sales-service"
 import { formatRelativeTime } from "@/lib/utils/time"
+import { BranchDetailModal } from "./branch-detail-modal"
 
 interface BranchPerformancePanelProps {
   branches: BranchPerformance[]
 }
 
 export function BranchPerformancePanel({ branches }: BranchPerformancePanelProps) {
+  const [selectedBranch, setSelectedBranch] = useState<BranchPerformance | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const handleBranchClick = (branch: BranchPerformance) => {
+    setSelectedBranch(branch)
+    setIsModalOpen(true)
+  }
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between px-2">
@@ -35,7 +43,11 @@ export function BranchPerformancePanel({ branches }: BranchPerformancePanelProps
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {branches.map((branch) => (
-          <Card key={branch.branch_id} className="group relative overflow-hidden rounded-[32px] border-0 bg-white shadow-xl hover:shadow-2xl hover:shadow-[#FF5A20]/10 transition-all duration-500 flex flex-col">
+          <Card 
+            key={branch.branch_id} 
+            className="group relative overflow-hidden rounded-[32px] border-0 bg-white shadow-xl hover:shadow-2xl hover:shadow-[#FF5A20]/10 transition-all duration-500 flex flex-col cursor-pointer"
+            onClick={() => handleBranchClick(branch)}
+          >
             {/* Health Indicator Stripe */}
             <div className={`absolute left-0 top-0 bottom-0 w-2 transition-all group-hover:w-3 ${
               branch.status === 'active' ? 'bg-emerald-500' : 
@@ -89,16 +101,21 @@ export function BranchPerformancePanel({ branches }: BranchPerformancePanelProps
               </div>
             </div>
 
-            <Link 
-              href={`/admin/subsidiaries/${branch.branch_id}`}
-              className="p-5 bg-slate-50 group-hover:bg-[#FF5A20] text-slate-400 group-hover:text-white transition-all flex items-center justify-center font-black text-[12px] uppercase tracking-widest gap-2"
-            >
-              View Management Portal
+            <div className="p-5 bg-slate-50 group-hover:bg-[#FF5A20] text-slate-400 group-hover:text-white transition-all flex items-center justify-center font-black text-[12px] uppercase tracking-widest gap-2">
+              View Detailed Analytics
               <ChevronRight className="w-4 h-4 translate-x-0 group-hover:translate-x-1 transition-transform" />
-            </Link>
+            </div>
           </Card>
         ))}
       </div>
+
+      <BranchDetailModal 
+        branch={selectedBranch}
+        isOpen={isModalOpen}
+        onOpenChange={setIsModalOpen}
+      />
     </div>
+  )
+}
   )
 }

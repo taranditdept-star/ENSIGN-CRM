@@ -184,3 +184,22 @@ export async function getActivityVolume() {
     count
   }))
 }
+
+export async function getBranchHistory(branchId: string, days: number = 7) {
+  const supabase = await createClient()
+  const startDate = new Date(Date.now() - days * 86400000).toISOString().split('T')[0]
+
+  const { data, error } = await supabase
+    .from('sales_summary')
+    .select('sale_date, total_revenue, total_transactions')
+    .eq('branch_id', branchId)
+    .gte('sale_date', startDate)
+    .order('sale_date', { ascending: true })
+
+  if (error) {
+    console.error('Error fetching branch history:', error)
+    return []
+  }
+
+  return data
+}
